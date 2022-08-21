@@ -10,13 +10,67 @@ namespace _3일차_복습
     {
         static void Main(string[] args)
         {
-            //int sumResult = Sum(10, 20); 
+            //int sumResult = Sum(10, 20);
             //Console.WriteLine($"SumResult : {sumResult}");
             //Print();
-            Test_Function();
+            //Test_Function();
+            //Test_GuGudan();
+
+
+
+            Character human1 = new Character(); // 메모리 할당 완료(Instance화). 객체(Object) 생성 완료(객체의 인스턴스를 만들었다.)
+            Character human2 = new Character("개굴맨맨"); // Character 타입으로 하나 더 만든것. human1과 human2는 서로 다른 개체이다.
+
+            human1.Attack(human2);
+            human1.TestPrintStatus();
+            human2.TestPrintStatus();
+            human2.Attack(human1);
+            human1.TestPrintStatus();
+            human2.TestPrintStatus();
+
+            //Console.WriteLine($"{human1.HP}");
+            //human1.TestPrintStatus();
+            
+
+            //human1.TestPrintStatus();
+            //human1.Attack();
 
             Console.ReadLine();                // 키 입력 대기하는 코드
         }   //main 함수의 끝
+
+        private static void Test_GuGudan()
+        {
+            Console.Write("출력할 구구단을 입력하세요(2~9) :");
+            string temp = Console.ReadLine();
+            int dan;
+            int.TryParse(temp, out dan);
+            GuGuDan(dan);
+
+            bool b1 = true;
+            bool b2 = false;
+            // 논리 연산자
+            // && (and) - t && t = t, t && f = f, f && t = f, f && f = f   // 둘 다 참일 때만 참이다.
+            // || (or)  - t || t = t, t || f = t, f || t = t, f || f = f   // 둘 중 하나만 참이면 참이다. 
+            // ~  (not) - ~t = f               //ture는 false. false는 true
+        }
+
+        static void GuGuDan(int dan)
+        {
+            if( 1 < dan && dan < 10)
+            {
+                Console.WriteLine($"구구단 {dan}단 출력");
+                for(int i = 1; i<10; i++)
+                {
+                    Console.WriteLine($"{dan} * {i} = {dan * i}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+        }
+
+
 
         private static void Test_Function()
         {
