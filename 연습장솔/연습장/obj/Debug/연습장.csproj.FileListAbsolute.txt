@@ -1,0 +1,8 @@
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\bin\Debug\연습장.exe.config
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\bin\Debug\연습장.exe
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\bin\Debug\연습장.pdb
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\obj\Debug\연습장.csproj.AssemblyReference.cache
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\obj\Debug\연습장.csproj.SuggestedBindingRedirects.cache
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\obj\Debug\연습장.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\obj\Debug\연습장.exe
+C:\Users\user\Documents\GitHub\Atents-Repository\연습장솔\연습장\obj\Debug\연습장.pdb
