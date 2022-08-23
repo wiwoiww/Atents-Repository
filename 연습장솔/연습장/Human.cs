@@ -30,7 +30,7 @@ namespace 연습장
             if(rand.NextDouble() < 0.3f) // 이 조건이 참이면 30% 안쪽으로 들어왔다.
             {
                 damage *= 2;   // damage = damage * 2;
-                Console.WriteLine("키리티컬 히트!");
+                Console.WriteLine("크리티컬 히트!");
             }
 
             Console.WriteLine($"{name}이 {target.Name}에게 공격을 합니다.(공격력 : {damage})");

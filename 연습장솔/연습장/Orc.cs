@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace 연습장
 {
-    internal class orc
+    internal class Orc : Character
     {
     }
 }
