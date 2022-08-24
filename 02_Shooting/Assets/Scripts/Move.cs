@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Move : MonoBehaviour
 {
@@ -38,15 +39,29 @@ public class Move : MonoBehaviour
         // Time.deltaTime : 이전 프레임에서 지금 프레임까지 걸린시간 => 1프레임당 걸린시간 
         //transform.position += (Vector3.down * speed * Time.deltaTime); // 아래쪽 방향으로 speed만 큼 움직여라(매 초마다)
         //transform.position += (speed * Time.deltaTime * Vector3.down);
-        
 
+
+        //Test_OldInputManager();
+        //transform.position += (speed * Time.deltaTime * dir);
+
+        // Input System
+        // Event-driven(이벤트 드리븐) 방식으로 구현 -> 일이 있을 때만 동작한다.(전력을 아끼기에 적합한 구조)
+    }
+
+    public  void MoveInput(InputAction.CallbackContext context)
+    {
+        Debug.Log("입력들어옴");
+    }
+
+    private void Test_OldInputManager()
+    {
         // Input Manager를 이용한 입력 처리
         // Busy wait이 발생.( 하는일은 없지만 사용되고 있는 상태 => 전력 세이빙을 방해 => 전력 커짐)
         if (Input.GetKeyDown(KeyCode.W))
         {
             Debug.Log("W가 눌러졌다.");
-            dir = Vector3.up
-;        }
+            dir = Vector3.up;        
+        }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -65,9 +80,5 @@ public class Move : MonoBehaviour
             Debug.Log("D가 눌러졌다.");
             dir = Vector3.right;
         }
-        transform.position += (speed * Time.deltaTime * dir);
-
-        // Input System
-        // Event-driven(이벤트 드리븐) 방식으로 구현 -> 일이 있을 때만 동작한다.(전력을 아끼기에 적합한 구조)
     }
 }
