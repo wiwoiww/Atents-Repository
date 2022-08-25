@@ -1,5 +1,5 @@
 {
-    "name": "PlyerInputAction",
+    "name": "PlayerInputAction",
     "maps": [
         {
             "name": "Player",
@@ -18,6 +18,15 @@
                     "name": "Fire",
                     "type": "Button",
                     "id": "57ca0423-f62f-4276-a3dd-bf913a007eac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Boost",
+                    "type": "Button",
+                    "id": "d9246b11-33bd-4db3-a2c1-11f66c5e94ff",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -88,6 +97,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc48e93b-69d5-41fb-a0ae-497cb696c654",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Boost",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
