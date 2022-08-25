@@ -42,7 +42,7 @@ public class Move : MonoBehaviour
 
 
         //Test_OldInputManager();
-        //transform.position += (speed * Time.deltaTime * dir);
+        transform.position += (speed * Time.deltaTime * dir); // dir방향으로 초당 speed 움직여라
 
         // Input System
         // Event-driven(이벤트 드리븐) 방식으로 구현 -> 일이 있을 때만 동작한다.(전력을 아끼기에 적합한 구조)
@@ -50,7 +50,34 @@ public class Move : MonoBehaviour
 
     public  void MoveInput(InputAction.CallbackContext context)
     {
-        Debug.Log("입력들어옴");
+        //if (context.started)    // 매핑된 키가 누른 직후
+        //{
+        //    Debug.Log("입력들어옴. started");
+        //}
+
+        //if (context.performed)  // 매핑된 키가 확실하게 눌러졌다.
+        //{
+        //    Debug.Log("입력들어옴. performed");
+        //}
+
+        //if (context.canceled)   // 매핑된 키가 떨어졌을 때
+        //{
+        //    Debug.Log("입력들어옴. canceled");
+        //}
+        Vector2 inputDir = context.ReadValue<Vector2>();  // 어느 방향으로 움직여야 하는지를 입력받음
+        Debug.Log(inputDir);
+        dir = inputDir;     // dir.x = inputDir.x;  dir.y = inputDir.y;  dir.z = 0.0f
+        // vector : 방향과 크기
+        // vector2 : 유니티에서 제공하는 구조체(struct). 2차원 벡터를 표현하기 위한 구조체(x,y)
+        // vector3 : 유니티에서 제공하는 구조체(struct). 3차원 벡터를 표현하기 위한 구조체(x,y,z)
+    }
+
+    public void FireInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("발사!");
+        }
     }
 
     private void Test_OldInputManager()
