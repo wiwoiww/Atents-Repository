@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     float boost = 1.0f;
 
     Rigidbody2D rigid;
+    Animator anim;
 
     PlayerInputAction inputActions;
     // Awake -> OnEnable -> Start : 대체적으로 이 순서
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour
     {
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();    // 한번만 찾고 저장해서 계속 쓰기(메모리 더 쓰고 성능 아끼기)
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -90,6 +92,35 @@ public class Player : MonoBehaviour
         rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("OnCollisionEnter2D");
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Debug.Log("OnCollisionStay2D");
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("OnCollisionExit2D");
+    }
+
+    private void OnTriggerEnter2D(Collision2D collision)
+    {
+        Debug.Log("OnTriggerEnter2D");
+    }
+
+    private void OnTriggerStay2D(Collision2D collision)
+    {
+        Debug.Log("OnTriggerStay2D");
+    }
+
+    private void OnTriggerExit2D(Collision collision)
+    {
+        Debug.Log("OnTriggerExit2D");
+    }
     private void OnMove(InputAction.CallbackContext context)
     {
         // Exception : 예외 상황( 무엇을 해야 할지 지정이 안되어있는 예외 일때 )
@@ -99,6 +130,12 @@ public class Player : MonoBehaviour
         //Debug.Log("이동 입력");
         Vector2 inputDir = context.ReadValue<Vector2>();  // 어느 방향으로 움직여야 하는지를 입력받음
         dir = inputDir;
+        dir = context.ReadValue<Vector2>(); // 어느 방향으로 움직여야 하는지를 입력받음
+
+        //dri.y > 0 //W를 눌럿다.
+        //dir.y == 0 //W,S 중 아무것도 안눌렀다.
+        //dir.y < 0 // S를 눌렀따.
+        anim.SetFloat("InputY", dir.y);
     }
     private void OnFire(InputAction.CallbackContext context)
     {
