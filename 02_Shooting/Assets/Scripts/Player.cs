@@ -13,8 +13,9 @@ public class Player : MonoBehaviour
     //Func<int, float> del4;                // 리턴타입이 int고 파라메터는 float 하나인 델리게이트 del4를 만듬
 
     public float speed = 1.0f;            // 플레이어의 이동 속도
+    public GameObject bullet;
 
-    Vector3 dir;
+    Vector3 dir;                          // 이동 방향(입력에 따라 변경됨)
     float boost = 1.0f;
 
     Rigidbody2D rigid;
@@ -119,7 +120,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerExit2D(Collision collision)
     {
-        Debug.Log("OnTriggerExit2D");           // 트리거에서 나갓을 때 
+        Debug.Log("OnTriggerExit2D");           // 트리거에서 나갔을 때 
     }
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -140,6 +141,7 @@ public class Player : MonoBehaviour
     private void OnFire(InputAction.CallbackContext context)
     {
         Debug.Log("발사!");
+        Instantiate(bullet, transform.position, Quaternion.identity);
     }
 
     private void OnBoostOn(InputAction.CallbackContext context)
