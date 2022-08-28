@@ -94,32 +94,32 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("OnCollisionEnter2D");
+        Debug.Log("OnCollisionEnter2D");         // Collider와 부딪쳤을 때 실행
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log("OnCollisionStay2D");
+        Debug.Log("OnCollisionStay2D");          // Collider와 계속 접촉하면서 움직일 때(매 프레임마다 호출)
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("OnCollisionExit2D");
+        Debug.Log("OnCollisionExit2D");         // Collider와 접촉이 떨어지는 순간 실행
     }
 
     private void OnTriggerEnter2D(Collision2D collision)
     {
-        Debug.Log("OnTriggerEnter2D");
+        Debug.Log("OnTriggerEnter2D");          // 트리거에 들어갔을 때 실행
     }
 
     private void OnTriggerStay2D(Collision2D collision)
     {
-        Debug.Log("OnTriggerStay2D");
+        Debug.Log("OnTriggerStay2D");           // 트리거와 계속 겹쳐있으면서 움직일 때 (매 프레임마다 호출)
     }
 
     private void OnTriggerExit2D(Collision collision)
     {
-        Debug.Log("OnTriggerExit2D");
+        Debug.Log("OnTriggerExit2D");           // 트리거에서 나갓을 때 
     }
     private void OnMove(InputAction.CallbackContext context)
     {
