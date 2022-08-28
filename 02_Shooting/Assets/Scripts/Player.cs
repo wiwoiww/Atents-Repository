@@ -93,35 +93,35 @@ public class Player : MonoBehaviour
         rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("OnCollisionEnter2D");         // Collider와 부딪쳤을 때 실행
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnCollisionEnter2D");         // Collider와 부딪쳤을 때 실행
+    //}
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        Debug.Log("OnCollisionStay2D");          // Collider와 계속 접촉하면서 움직일 때(매 프레임마다 호출)
-    }
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnCollisionStay2D");          // Collider와 계속 접촉하면서 움직일 때(매 프레임마다 호출)
+    //}
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        Debug.Log("OnCollisionExit2D");         // Collider와 접촉이 떨어지는 순간 실행
-    }
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnCollisionExit2D");         // Collider와 접촉이 떨어지는 순간 실행
+    //}
 
-    private void OnTriggerEnter2D(Collision2D collision)
-    {
-        Debug.Log("OnTriggerEnter2D");          // 트리거에 들어갔을 때 실행
-    }
+    //private void OnTriggerEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnTriggerEnter2D");          // 트리거에 들어갔을 때 실행
+    //}
 
-    private void OnTriggerStay2D(Collision2D collision)
-    {
-        Debug.Log("OnTriggerStay2D");           // 트리거와 계속 겹쳐있으면서 움직일 때 (매 프레임마다 호출)
-    }
+    //private void OnTriggerStay2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnTriggerStay2D");           // 트리거와 계속 겹쳐있으면서 움직일 때 (매 프레임마다 호출)
+    //}
 
-    private void OnTriggerExit2D(Collision collision)
-    {
-        Debug.Log("OnTriggerExit2D");           // 트리거에서 나갔을 때 
-    }
+    //private void OnTriggerExit2D(Collision collision)
+    //{
+    //    Debug.Log("OnTriggerExit2D");           // 트리거에서 나갔을 때 
+    //}
     private void OnMove(InputAction.CallbackContext context)
     {
         // Exception : 예외 상황( 무엇을 해야 할지 지정이 안되어있는 예외 일때 )
