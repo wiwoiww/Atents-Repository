@@ -132,9 +132,9 @@ public class Player : MonoBehaviour
         dir = inputDir;
         dir = context.ReadValue<Vector2>(); // 어느 방향으로 움직여야 하는지를 입력받음
 
-        //dri.y > 0 //W를 눌럿다.
+        //dri.y > 0 //W를 눌렀다.
         //dir.y == 0 //W,S 중 아무것도 안눌렀다.
-        //dir.y < 0 // S를 눌렀따.
+        //dir.y < 0 // S를 눌렀다.
         anim.SetFloat("InputY", dir.y);
     }
     private void OnFire(InputAction.CallbackContext context)
