@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 1973246311871948199, guid: 311eb022547fb3d4cb34d73f17d119ca, type: 3}
-  speed: 5
+  speed: 7
   fireInterval: 0.5
 --- !u!50 &144381238
 Rigidbody2D:

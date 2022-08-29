@@ -6,6 +6,11 @@ public class Asteroid : MonoBehaviour
 {
     public float rotateSpeed = 360.0f;
     public float speed = 1.0f;
+
+    
+
+    float minY = -4.0f;   
+    float maxY = 4.0f;      
     void Update()
     {
         //transform.rotation *= Quaternion.Euler(new(0, 0, 90));    // 계속 90도씩 회전
@@ -14,10 +19,11 @@ public class Asteroid : MonoBehaviour
         transform.Translate(speed * Time.deltaTime * Vector3.left, Space.World);
 
     }
+
     //private void OnDrawGizmos()
     //{
     //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(transform.position, new(1, Random.Range(1, 0), 1));
+    //    Gizmos.DrawLine(transform.position, new(-11, Random.Range(minY, maxY), 0));
     //}
 }
 // 운석이 화면 오른쪽 바깥의 랜덤한 지점에서 생성되서 화면 왼쪽 바깥의 랜덤한 지점으로 이동한다.
