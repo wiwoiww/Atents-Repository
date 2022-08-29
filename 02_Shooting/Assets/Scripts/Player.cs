@@ -20,8 +20,10 @@ public class Player : MonoBehaviour
     Vector3 dir;                    // 이동 방향(입력에 따라 변경됨)
     float boost = 1.0f;
 
-    bool isFiring = false;
-    float fireTimeCount = 0.0f;
+    //bool isFiring = false;
+    //float fireTimeCount = 0.0f;
+
+    IEnumerator fireCoroutine;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();    // 한번만 찾고 저장해서 계속 쓰기(메모리 더 쓰고 성능 아끼기)
         anim = GetComponent<Animator>();
+        fireCoroutine = Fire();
     }
 
     /// <summary>
@@ -100,14 +103,14 @@ public class Player : MonoBehaviour
         // Rigidbody2D rigid = GetComponent<Rigidbody2D>();    
 
         // rigid.AddForce(speed * Time.fixedDeltaTime * dir); // 관성이 있는 움직임을 할 때 유용
-        rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
+        //rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
 
-        fireTimeCount += Time.fixedDeltaTime;
-        if (isFiring && fireTimeCount > fireInterval)
-        {
-            Instantiate(bullet, transform.position, Quaternion.identity);
-            fireTimeCount = 0.0f;
-        }
+        //fireTimeCount += Time.fixedDeltaTime;
+        //if (isFiring && fireTimeCount > fireInterval)
+        //{
+        //    Instantiate(bullet, transform.position, Quaternion.identity);
+        //    fireTimeCount = 0.0f;
+        //}
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -151,15 +154,27 @@ public class Player : MonoBehaviour
         //float value = Random.Range(0.0f, 10.0f);  // value에는 0.0 ~ 10.0의 랜덤값이 들어간다.
 
         //Instantiate(bullet, transform.position, Quaternion.identity);
-
-        isFiring = true;
+        //isFiring = true;
+        StartCoroutine(Fire());
     }
 
     private void OnFireStop(InputAction.CallbackContext _)
     {
-        isFiring = false;
+       // isFiring = false;
+       //StopAllCoroutines();
+       StopCoroutine(Fire());
     }
 
+    IEnumerator Fire()
+    {
+        //yield return null;      // 다음 프레임에서 이어서 시작해라
+        //yield return new WaitForSeconds(1.0f);  //  1초 후에 이어서 시작해라
+        while (true)
+        {
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(fireInterval);
+        }    
+    }
     private void OnBoostOn(InputAction.CallbackContext context)
     {
         boost *= 2.0f;
