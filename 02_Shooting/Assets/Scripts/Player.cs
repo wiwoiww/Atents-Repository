@@ -103,10 +103,10 @@ public class Player : MonoBehaviour
         // Rigidbody2D rigid = GetComponent<Rigidbody2D>();    
 
         // rigid.AddForce(speed * Time.fixedDeltaTime * dir); // 관성이 있는 움직임을 할 때 유용
-        //rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
+        rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
 
         //fireTimeCount += Time.fixedDeltaTime;
-        //if (isFiring && fireTimeCount > fireInterval)
+        //if ( isFiring && fireTimeCount > fireInterval )
         //{
         //    Instantiate(bullet, transform.position, Quaternion.identity);
         //    fireTimeCount = 0.0f;
@@ -152,29 +152,30 @@ public class Player : MonoBehaviour
     {
         //Debug.Log("발사!");
         //float value = Random.Range(0.0f, 10.0f);  // value에는 0.0 ~ 10.0의 랜덤값이 들어간다.
-
-        //Instantiate(bullet, transform.position, Quaternion.identity);
         //isFiring = true;
-        StartCoroutine(Fire());
+        StartCoroutine(fireCoroutine);
+
     }
 
     private void OnFireStop(InputAction.CallbackContext _)
     {
-       // isFiring = false;
-       //StopAllCoroutines();
-       StopCoroutine(Fire());
+        //isFiring = false;
+        //StopAllCoroutines();
+        StopCoroutine(fireCoroutine);
     }
 
     IEnumerator Fire()
     {
-        //yield return null;      // 다음 프레임에서 이어서 시작해라
-        //yield return new WaitForSeconds(1.0f);  //  1초 후에 이어서 시작해라
+        //yield return null;      // 다음 프레임에 이어서 시작해라
+        //yield return new WaitForSeconds(1.0f);  // 1초 후에 이어서 시작해라
+
         while (true)
         {
             Instantiate(bullet, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(fireInterval);
-        }    
+        }
     }
+
     private void OnBoostOn(InputAction.CallbackContext context)
     {
         boost *= 2.0f;
