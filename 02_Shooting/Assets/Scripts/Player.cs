@@ -1,4 +1,5 @@
 //using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,10 @@ public class Player : MonoBehaviour
 
     Vector3 dir;                          // 이동 방향(입력에 따라 변경됨)
     float boost = 1.0f;
+
+    bool isFiring = false;
+    public float fireInterval = 0.5f;
+    float fireTimeCount = 0.0f;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -42,18 +47,23 @@ public class Player : MonoBehaviour
         inputActions.Player.Enable();   // 오브젝트가 생성되면 입력을 받도록 활성화
         inputActions.Player.Move.performed += OnMove;   // performed 일 때 OnMove 함수 실행하도록 연결
         inputActions.Player.Move.canceled += OnMove;    // canceled 일 때 OnMove 함수 실행하도록 연결
-        inputActions.Player.Fire.performed += OnFire;
+        inputActions.Player.Fire.performed += OnFireStart;
+        inputActions.Player.Fire.canceled += OnFireStop;
         inputActions.Player.Boost.performed += OnBoostOn;
         inputActions.Player.Boost.canceled += OnBoostOff;
 
     }
+
 
     /// <summary>
     /// 이 스크립트가 들어있는 게임 오브젝트가 비활성화 되었을 때 호출
     /// </summary>
     private void OnDisable()
     {
-        inputActions.Player.Fire.performed -= OnFire;
+        inputActions.Player.Fire.canceled -= OnFireStop;
+        inputActions.Player.Boost.performed -= OnBoostOn;
+        inputActions.Player.Boost.canceled -= OnBoostOff;
+        inputActions.Player.Fire.performed -= OnFireStart;
         inputActions.Player.Move.canceled -= OnMove;    // 연결해 놓은 함수 해제(안전을 위해)
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Disable();  // 오브젝트가 사라질때 더 이상 입력을 받지 않도록 비활성화
@@ -91,37 +101,34 @@ public class Player : MonoBehaviour
 
         //rigid.AddForce(speed * Time.fixedDeltaTime * dir); // 관성이 있는 움직임을 할 때 유용
         rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir); // 관성이 없는 움직임을 처리할 때 유용
+
+        fireTimeCount += Time.fixedDeltaTime;
+        if( isFiring && fireTimeCount > fireInterval )
+        {
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            fireTimeCount = 0.0f;
+        }
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("OnCollisionEnter2D");         // Collider와 부딪쳤을 때 실행
-    //}
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("OnCollisionEnter2D");         // Collider와 부딪쳤을 때 실행
+    }
 
-    //private void OnCollisionStay2D(Collision2D collision)
-    //{
-    //    Debug.Log("OnCollisionStay2D");          // Collider와 계속 접촉하면서 움직일 때(매 프레임마다 호출)
-    //}
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("OnCollisionExit2D");         // Collider와 접촉이 떨어지는 순간 실행
+    }
 
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    Debug.Log("OnCollisionExit2D");         // Collider와 접촉이 떨어지는 순간 실행
-    //}
+    private void OnTriggerEnter2D(Collision2D collision)
+    {
+        Debug.Log("OnTriggerEnter2D");          // 트리거에 들어갔을 때 실행
+    }
 
-    //private void OnTriggerEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("OnTriggerEnter2D");          // 트리거에 들어갔을 때 실행
-    //}
-
-    //private void OnTriggerStay2D(Collision2D collision)
-    //{
-    //    Debug.Log("OnTriggerStay2D");           // 트리거와 계속 겹쳐있으면서 움직일 때 (매 프레임마다 호출)
-    //}
-
-    //private void OnTriggerExit2D(Collision collision)
-    //{
-    //    Debug.Log("OnTriggerExit2D");           // 트리거에서 나갔을 때 
-    //}
+    private void OnTriggerExit2D(Collision collision)
+    {
+        Debug.Log("OnTriggerExit2D");           // 트리거에서 나갔을 때 
+    }
     private void OnMove(InputAction.CallbackContext context)
     {
         // Exception : 예외 상황( 무엇을 해야 할지 지정이 안되어있는 예외 일때 )
@@ -138,11 +145,17 @@ public class Player : MonoBehaviour
         //dir.y < 0 // S를 눌렀다.
         anim.SetFloat("InputY", dir.y);
     }
-    private void OnFire(InputAction.CallbackContext context)
+    private void OnFireStart(InputAction.CallbackContext _)
     {
         //Debug.Log("발사!");
         //float value = Random.Range(0.0f, 10.0f);     // value에는 0.0 ~ 10.0의 랜덤값이 들어간다.
-        Instantiate(bullet, transform.position, Quaternion.identity);
+        //Instantiate(bullet, transform.position, Quaternion.identity);
+
+        isFiring = true;
+    }
+    private void OnFireStop(InputAction.CallbackContext _)
+    {
+        isFiring = false;
     }
 
     private void OnBoostOn(InputAction.CallbackContext context)
