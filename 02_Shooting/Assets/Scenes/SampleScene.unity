@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1418997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Asteroid: {fileID: 4579370739898373313, guid: 37a03485df4f67b43841c7ada6883e04, type: 3}
   interval: 0.5
+  speed: 1
 --- !u!1 &920777260
 GameObject:
   m_ObjectHideFlags: 0
