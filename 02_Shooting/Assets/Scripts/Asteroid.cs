@@ -5,26 +5,24 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour
 {
     public float rotateSpeed = 360.0f;
-    public float speed = 1.0f;
-
-    
-
-    float minY = -4.0f;   
-    float maxY = 4.0f;      
+    public float moveSpeed = 3.0f;
+    public Vector3 direction = Vector3.left;
+         
     void Update()
     {
         //transform.rotation *= Quaternion.Euler(new(0, 0, 90));    // 계속 90도씩 회전
         //transform.rotation *= Quaternion.Euler(new(0, 0, rotateSpeed * Time.deltaTime));    // 1초에 360도씩 회전
         transform.Rotate(rotateSpeed * Time.deltaTime * Vector3.forward);   // Vector3.forward 축을 기준으로 1초에 rotateSpeed도씩 회전
-        transform.Translate(speed * Time.deltaTime * Vector3.left, Space.World);
+
+        transform.Translate(moveSpeed * Time.deltaTime * direction, Space.World);
 
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(transform.position, new(-11, Random.Range(minY, maxY), 0));
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position,transform.position + direction * 1.5f);
+    }
 }
 // 운석이 화면 오른쪽 바깥의 랜덤한 지점에서 생성되서 화면 왼쪽 바깥의 랜덤한 지점으로 이동한다.
 // - AsteroidSpawner 클래스를 생성한다.
