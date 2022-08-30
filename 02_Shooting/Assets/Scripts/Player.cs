@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     //bool isFiring = false;
     //float fireTimeCount = 0.0f;
 
+    Transform[] firePosition;   // 트랜스폼을 여러개 가지는 배열([]가 배열)
+
     IEnumerator fireCoroutine;
 
     Rigidbody2D rigid;
@@ -39,6 +41,12 @@ public class Player : MonoBehaviour
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();    // 한번만 찾고 저장해서 계속 쓰기(메모리 더 쓰고 성능 아끼기)
         anim = GetComponent<Animator>();
+
+        firePosition = new Transform[transform.childCount];
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            firePosition[i] = transform.GetChild(i);
+        }
         fireCoroutine = Fire();
     }
 
@@ -171,7 +179,13 @@ public class Player : MonoBehaviour
 
         while (true)
         {
-            Instantiate(bullet, transform.position, Quaternion.identity);
+            for (int i = 0; i < firePosition.Length; i++)
+            {
+                GameObject obj = Instantiate(bullet, firePosition[i].position, Quaternion.identity);
+                //obj.transform;
+                // 힌트1. Instantiate의 파라메터가 가지는 의미를 생각할 것
+                // 힌트2. Instantiate의 결과로 받아오는 GameObject를 활용하는 방법을 생각할 것   // 힌트1과 힌트2는 서로 다른 방법
+            }
             yield return new WaitForSeconds(fireInterval);
         }
     }
