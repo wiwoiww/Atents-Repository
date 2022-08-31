@@ -123,6 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   hitEffect: {fileID: 3188232334686129031}
+  lifeTime: 3
 --- !u!70 &-3026361938944765555
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

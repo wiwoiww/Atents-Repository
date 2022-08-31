@@ -124,25 +124,25 @@ public class Player : MonoBehaviour
         //}
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("OnCollisionEnter2D");    // Collider와 부딪쳤을 때 실행
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnCollisionEnter2D");    // Collider와 부딪쳤을 때 실행
+    //}
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        Debug.Log("OnCollisionExit2D");     // Collider와 접촉이 떨어지는 순간 실행
-    }
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    Debug.Log("OnCollisionExit2D");     // Collider와 접촉이 떨어지는 순간 실행
+    //}
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("OnTriggerEnter2D");      // 트리거에 들어갔을 때 실행
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Debug.Log("OnTriggerEnter2D");      // 트리거에 들어갔을 때 실행
+    //}
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        Debug.Log("OnTriggerExit2D");       // 트리거에서 나갔을 때 실행
-    }
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    Debug.Log("OnTriggerExit2D");       // 트리거에서 나갔을 때 실행
+    //}
 
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -192,7 +192,7 @@ public class Player : MonoBehaviour
                                                       
                 // Instantiate(생성할 프리팹);    // 프리팹이 (0,0,0) 위치에 (0,0,0) 회전에 (1,1,1) 스케일로 만들어짐
                 // Instantiate(생성할 프리팹(프리팹), 생성할 위치(포지션), 생성될 때의 회전(회전))
-
+                
                 //obj.transform;
                 // 힌트1. Instantiate의 파라메터가 가지는 의미를 생각할 것
                 // 힌트2. Instantiate의 결과로 받아오는 GameObject를 활용하는 방법을 생각할 것   // 힌트1과 힌트2는 서로 다른 방법

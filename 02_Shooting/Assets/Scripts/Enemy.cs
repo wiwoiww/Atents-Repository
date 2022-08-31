@@ -22,7 +22,8 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            //GameObject obj = Instantiate(explosion, transform.position, Quaternion.identity);
+            //Instantiate는 오브젝트를 생성하는 애,그리고 메모리를 할당(여기에선explosion메모리)받게해서느림
+            //GameObject obj = Instantiate(explosion, transform.position, Quaternion.identity);  
             //Destroy(obj, 0.22f);
             explosion.SetActive(true);  // 총알에 맞았을 때 익스플로젼을 활성화 시키고
             explosion.transform.parent = null;  // 익스플로전의 부모(Enemy) 연결을 제거한다.
