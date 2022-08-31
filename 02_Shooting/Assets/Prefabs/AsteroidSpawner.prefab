@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPrefab: {fileID: 0}
-  interval: 0.5
+  interval: 0
 --- !u!1 &8977248235612556809
 GameObject:
   m_ObjectHideFlags: 0

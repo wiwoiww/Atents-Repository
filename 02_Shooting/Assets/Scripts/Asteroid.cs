@@ -7,7 +7,15 @@ public class Asteroid : MonoBehaviour
     public float rotateSpeed = 360.0f;
     public float moveSpeed = 3.0f;
     public Vector3 direction = Vector3.left;
-         
+    public int hitPoint = 3;
+
+    private GameObject explosion;
+
+    private void Start()
+    {
+        explosion = transform.GetChild(0).gameObject;
+        
+    }
     void Update()
     {
         //transform.rotation *= Quaternion.Euler(new(0, 0, 90));    // 계속 90도씩 회전
@@ -23,11 +31,19 @@ public class Asteroid : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position,transform.position + direction * 1.5f);
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            hitPoint--;
+
+            if (hitPoint <= 0)
+            {
+                explosion.SetActive(true);
+                explosion.transform.parent = null;
+                Destroy(this.gameObject);
+            }
+        }
+    }
 }
-// 운석이 화면 오른쪽 바깥의 랜덤한 지점에서 생성되서 화면 왼쪽 바깥의 랜덤한 지점으로 이동한다.
-// - AsteroidSpawner 클래스를 생성한다.
-// - AsteroidSpawner 클래스는 주기적으로 Asteroid 프리팹을 생성한다.
-// - AsteroidSpawner가 Asteroid를 생성하는 위치는 y만 랜덤.
-// - AsteroidSpawner는 Asteroid를 생성한 직후 화면 왼쪽의 랜덤한 지역을 목표로 지정한다.
-// - Asteroid는 지정된 지점을 향해 직선으로 움직인다.
-// - Asteroid는 자신의 진행방향을 기즈모(DrawLine)로표시한다.
+

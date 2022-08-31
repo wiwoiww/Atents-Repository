@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     //float fireTimeCount = 0.0f;
 
     Transform[] firePosition;   // 트랜스폼을 여러개 가지는 배열([]가 배열)
+    public GameObject flash;
 
     IEnumerator fireCoroutine;
 
@@ -42,11 +43,13 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();    // 한번만 찾고 저장해서 계속 쓰기(메모리 더 쓰고 성능 아끼기)
         anim = GetComponent<Animator>();
 
-        firePosition = new Transform[transform.childCount];
-        for (int i = 0; i < transform.childCount; i++)
+        firePosition = new Transform[transform.childCount-1];
+        for (int i = 0; i < transform.childCount-1; i++)
         {
             firePosition[i] = transform.GetChild(i);
         }
+        //flash = transform.GetChild(transform.childCount - 1).gameObject;
+
         fireCoroutine = Fire();
     }
 
@@ -186,23 +189,31 @@ public class Player : MonoBehaviour
 
                 // bullet이라는 프리팹을 firePosition[i]의 위치에 firePosition[i]의 회전으로 만들어라
                 GameObject bulletInstance = Instantiate(bullet, firePosition[i].position, firePosition[i].rotation);
-
+                                                      
                 // Instantiate(생성할 프리팹);    // 프리팹이 (0,0,0) 위치에 (0,0,0) 회전에 (1,1,1) 스케일로 만들어짐
-                // Instantiate(생성할 프리팹, 생성할 위치, 생성될 때의 회전)
+                // Instantiate(생성할 프리팹(프리팹), 생성할 위치(포지션), 생성될 때의 회전(회전))
 
                 //obj.transform;
                 // 힌트1. Instantiate의 파라메터가 가지는 의미를 생각할 것
                 // 힌트2. Instantiate의 결과로 받아오는 GameObject를 활용하는 방법을 생각할 것   // 힌트1과 힌트2는 서로 다른 방법
 
 
-
                 // 총알의 회전 값으로 firePosition[i]의 회전값을 그대로 사용한다.
                 //bulletInstance.transform.rotation = firePosition[i].rotation;
-                //Vector3 angle = firePosition[i].rotation.eulerAngles; // 현재 회전 값을 x,y,z축별로 몇도씩 회전했는지 확인 가능
 
+                //Vector3 angle = firePosition[i].rotation.eulerAngles; // 현재 회전 값을 x,y,z축별로 몇도씩 회전했는지 확인 가능
+                //Quaternion.Euler(10, 20, 30);  // x축으로 10도, y축으로 20도, z축으로 30도 회전하는 코드
             }
+            flash.SetActive(true);
+            StartCoroutine(FlashOff());
             yield return new WaitForSeconds(fireInterval);
         }
+    }
+
+    IEnumerator FlashOff()
+    {
+        yield return new WaitForSeconds(0.1f);
+        flash.SetActive(false);
     }
 
     private void OnBoostOn(InputAction.CallbackContext context)
