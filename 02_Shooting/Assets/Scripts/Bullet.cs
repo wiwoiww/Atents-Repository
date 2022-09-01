@@ -47,7 +47,7 @@ public class Bullet : MonoBehaviour
     // 충돌한 대상이 트리거일 때 실행
     private void OnTriggerEnter2D(Collider2D collision)// 마지막 콜리젼이 충돌한 대상
     {
-        Debug.Log($"Trigger : {collision.gameObject.name}");
+       // Debug.Log($"Trigger : {collision.gameObject.name}");
     }
 
     // 충돌한 대상이 트리거일때 실행
