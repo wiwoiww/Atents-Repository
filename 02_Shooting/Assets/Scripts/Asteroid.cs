@@ -10,6 +10,19 @@ public class Asteroid : MonoBehaviour
     public Vector3 direction = Vector3.left;    // 운석이 이동할 방향
     public int hitPoint = 3;
 
+    public float minMoveSpeed = 2.0f;
+    public float maxMoveSpeed = 4.0f;
+    public float minRotateSpeed = 30.0f;
+    public float maxRotateSpeed = 360.0f;
+
+    float lifeTime = 3.0f;
+    public float minLifeTime = 3.0f;
+    public float maxLifeTime = 5.0f;
+
+    public GameObject small;
+    [Range(1,16)]
+    public int splitCount = 3;
+
     private GameObject explosion;
 
     SpriteRenderer sprite;
@@ -17,9 +30,9 @@ public class Asteroid : MonoBehaviour
     private void Awake()
     {
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-        sprite.flipX = true;
-        sprite.flipY = false;
 
+        //sprite.flipX = true;
+        //sprite.flipY = false;
         //int rand = Random.Range(0, 100) & 2;
         ////if(rand == 0)
         ////{
@@ -41,15 +54,30 @@ public class Asteroid : MonoBehaviour
         //((rand & 0b_10) != 0) : rand의 제일 오른쪽에서 두번째 비트가 1이면 true, 0이면 false를 리턴
         sprite.flipY = ((rand & 0b_10) != 0);
 
-        moveSpeed = Random.Range(2.0f, 4.0f);
-        rotateSpeed = Random.Range(30.0f, 360.0f);
+        moveSpeed = Random.Range(minMoveSpeed,maxMoveSpeed);
+        float ratio =(moveSpeed - minMoveSpeed) / (maxMoveSpeed - minMoveSpeed);
+        //rotateSpeed = ratio * (maxRotateSpeed - minRotateSpeed) + minRotateSpeed;
+        rotateSpeed = Mathf.Lerp(minRotateSpeed, maxRotateSpeed, ratio);
+        //rotateSpeed = Random.Range(30.0f, 360.0f);
+        //Debug.Log($"calc : {rotateSpeed}");
+        //Debug.Log($"Larp : {Mathf.Lerp(minRotateSpeed, maxRotateSpeed, ratio)}");
 
+        lifeTime = Random.Range(minLifeTime,maxLifeTime);
     }
 
     private void Start()
     {
         explosion = transform.GetChild(0).gameObject;
+
+        StartCoroutine(SelfCrush());
         
+    }
+
+    IEnumerator SelfCrush()
+    {
+        yield return new WaitForSeconds(lifeTime);
+
+        Crush();
     }
     void Update()
     {
@@ -74,11 +102,23 @@ public class Asteroid : MonoBehaviour
 
             if (hitPoint <= 0)
             {
-                explosion.SetActive(true);
-                explosion.transform.parent = null;
-                Destroy(this.gameObject);
+                Crush();
             }
         }
+    }
+    void Crush()
+    {
+        explosion.SetActive(true);
+        explosion.transform.parent = null;
+
+        float angleGap = 360.0f / (float)splitCount;  // 작은 운석들의 진행 방향의 사이각
+        float rand = Random.Range(0.0f, 360.0f);      // 첫 운석 방향 변화용
+        for(int i=0;i<splitCount;i++)
+        {
+            Instantiate(small, transform.position, Quaternion.Euler(0, 0, (angleGap * i) + rand)); 
+        }
+
+        Destroy(this.gameObject);
     }
 }
 
