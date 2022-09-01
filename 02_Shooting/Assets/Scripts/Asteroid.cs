@@ -20,7 +20,7 @@ public class Asteroid : MonoBehaviour
     public float maxLifeTime = 5.0f;
 
     public GameObject small;
-    [Range(1,16)]
+    [Range(1,16)] // 컴포넌트창에 자유롭게 숫자를 쓰던게 1~16만 쓸수잇게끔 바꿔줌
     public int splitCount = 3;
 
     private GameObject explosion;

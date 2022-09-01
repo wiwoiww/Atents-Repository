@@ -109,6 +109,8 @@ MonoBehaviour:
   maxMoveSpeed: 4
   minRotateSpeed: 30
   maxRotateSpeed: 360
+  minLifeTime: 3
+  maxLifeTime: 5
   small: {fileID: 2388632144941822108, guid: 9492510cea3d5bc4b83fbb41a1988d17, type: 3}
   splitCount: 3
 --- !u!50 &1799408231390219480
