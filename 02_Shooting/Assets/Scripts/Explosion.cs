@@ -16,7 +16,7 @@ public class Explosion : MonoBehaviour
     {
         // 이 게임 오브젝트가 활성화가 되면
         // anim.GetCurrentAnimatorClipInfo(0)[0].clip.length초 후에 이 게임 오브젝트를 삭제하라
-        //Debug.Log(anim);
+        // Debug.Log(anim);
         Destroy(this.gameObject, anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
         
     }

@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 1.0f;
+    public float speed = 0.0f;
     private GameObject explosion;
 
     float spawnY;       // 생성 되었을 때의 기준 높이
     float timeElapsed;  // 게임 시작부터 얼마나 시간이 지났나를 기록해놓는 변수
+
+    public float amplitude = 1;    // 사인으로 변경되는 위아래 차이. 원래 sin은 -1 ~ +1인데 그것을 변경하는 변수
+    public float frequency = 1;    // 사인 그래프가 한번 도는데 걸리는 시간
 
     private void Start()
     {
@@ -20,8 +23,8 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //Time.deltaTime : 이전 프레임에서 현재 프레임까지의 시간
-        timeElapsed += Time.deltaTime;
-        float newY = spawnY + Mathf.Sin(timeElapsed); // Mathf.Sin의 결과는 0에서 시작해서 +1까지 증가하다가 -1까지 감소. 다시 +1까지 증가(반복)
+        timeElapsed += Time.deltaTime * frequency;
+        float newY = spawnY + Mathf.Sin(timeElapsed) * amplitude; // Mathf.Sin의 결과는 0에서 시작해서 +1까지 증가하다가 -1까지 감소. 다시 +1까지 증가(반복)
         float newX = transform.position.x - speed * Time.deltaTime;
 
         transform.position = new Vector3 (newX, newY, 0.0f); // 마지막 0.0f는 생략가능 생략하면 0으로 댐
@@ -34,7 +37,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            //Instantiate는 오브젝트를 생성하는 애,그리고 메모리를 할당(여기에선explosion메모리)받게해서느림
+            //Instantiate는 오브젝트를 생성하는 얘,그리고 메모리를 할당(여기에선explosion메모리)받게해서느림
             //GameObject obj = Instantiate(explosion, transform.position, Quaternion.identity);  
             //Destroy(obj, 0.22f);
             explosion.SetActive(true);  // 총알에 맞았을 때 익스플로젼을 활성화 시키고
