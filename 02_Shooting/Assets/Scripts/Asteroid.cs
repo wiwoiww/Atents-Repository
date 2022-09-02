@@ -16,8 +16,8 @@ public class Asteroid : MonoBehaviour
     public float maxRotateSpeed = 360.0f;
 
     float lifeTime = 3.0f;
-    public float minLifeTime = 3.0f;
-    public float maxLifeTime = 5.0f;
+    public float minLifeTime = 4.0f;
+    public float maxLifeTime = 6.0f;
 
     public GameObject small;
     [Range(1,16)] // 컴포넌트창에 자유롭게 숫자를 쓰던게 1~16만 쓸수잇게끔 바꿔줌
@@ -110,6 +110,27 @@ public class Asteroid : MonoBehaviour
     {
         explosion.SetActive(true);
         explosion.transform.parent = null;
+
+        //// 5%, 10%, 85%
+        //float randTest = Random.Range(0.0f, 1.0f);
+        //if( randTest < 0.05f)
+        //{
+        //}
+        //else if ( randTest < 0.15f)
+        //{
+        //}
+
+        // 5%의 확률 확인하기
+        if(Random.Range(0.0f,1.0f) < 0.05f)
+        {
+            // 5% 확률에 당첨되었다.
+            splitCount = 20;
+        }
+        else
+        {
+            splitCount = Random.Range(3, 6);             // 1/3 확률로 3~5가 나온다.
+            // 95% 확률에 당첨되었다.
+        }
 
         float angleGap = 360.0f / (float)splitCount;  // 작은 운석들의 진행 방향의 사이각
         float rand = Random.Range(0.0f, 360.0f);      // 첫 운석 방향 변화용
