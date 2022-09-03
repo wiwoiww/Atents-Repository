@@ -827,6 +827,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PowerUp
       objectReference: {fileID: 0}
+    - target: {fileID: 5801755038471363288, guid: 5d45ee2cb0594e341b0ed640a3f8613b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5801755038471363290, guid: 5d45ee2cb0594e341b0ed640a3f8613b, type: 3}
       propertyPath: m_RootOrder
       value: 6
