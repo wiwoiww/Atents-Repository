@@ -8,13 +8,15 @@ public class Player : MonoBehaviour
 {
     PlayerInputAction inputActions;
     public float speed = 1.0f;
+    float boost = 1.0f;
     Vector3 dir;
     Rigidbody2D rigid;
-
+    Animator anim;
     private void Awake()
     {
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -23,11 +25,15 @@ public class Player : MonoBehaviour
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
         inputActions.Player.Fire.performed += OnFire;
+        inputActions.Player.Boost.performed += OnBoostOn;
+        inputActions.Player.Boost.canceled += OnBoostOff;
     }
 
 
     private void OnDisable()
     {
+        inputActions.Player.Boost.canceled -= OnBoostOff;
+        inputActions.Player.Boost.performed -= OnBoostOn;
         inputActions.Player.Fire.performed -= OnFire;
         inputActions.Player.Move.canceled -= OnMove;
         inputActions.Player.Move.performed -= OnMove;
@@ -46,13 +52,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigid.MovePosition(transform.position + speed * Time.fixedDeltaTime * dir);
+        rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir);
     }
 
     private void OnMove(InputAction.CallbackContext context)
     {
         Vector2 inputDir = context.ReadValue<Vector2>();
         dir = inputDir;
+
+        anim.SetFloat("InputY", dir.y);
     }
 
     private void OnFire(InputAction.CallbackContext context)
@@ -60,4 +68,12 @@ public class Player : MonoBehaviour
         Debug.Log("Fire!!!");
     }
 
+    private void OnBoostOn(InputAction.CallbackContext context)
+    {
+        boost *= 2.0f;
+    }
+    private void OnBoostOff(InputAction.CallbackContext context)
+    {
+        boost = 1.0f;
+    }
 }

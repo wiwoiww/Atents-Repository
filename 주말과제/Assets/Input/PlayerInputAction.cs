@@ -46,7 +46,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Shift"",
+                    ""name"": ""Boost"",
                     ""type"": ""Button"",
                     ""id"": ""3a244240-0e15-4317-bbab-806aab123aed"",
                     ""expectedControlType"": ""Button"",
@@ -129,7 +129,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Shift"",
+                    ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -154,7 +154,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_Shift = m_Player.FindAction("Shift", throwIfNotFound: true);
+        m_Player_Boost = m_Player.FindAction("Boost", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -216,14 +216,14 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_Shift;
+    private readonly InputAction m_Player_Boost;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
-        public InputAction @Shift => m_Wrapper.m_Player_Shift;
+        public InputAction @Boost => m_Wrapper.m_Player_Boost;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -239,9 +239,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                @Shift.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
-                @Shift.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
-                @Shift.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
+                @Boost.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoost;
+                @Boost.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoost;
+                @Boost.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoost;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -252,9 +252,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
-                @Shift.started += instance.OnShift;
-                @Shift.performed += instance.OnShift;
-                @Shift.canceled += instance.OnShift;
+                @Boost.started += instance.OnBoost;
+                @Boost.performed += instance.OnBoost;
+                @Boost.canceled += instance.OnBoost;
             }
         }
     }
@@ -272,6 +272,6 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
-        void OnShift(InputAction.CallbackContext context);
+        void OnBoost(InputAction.CallbackContext context);
     }
 }
