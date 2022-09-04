@@ -7,17 +7,21 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     PlayerInputAction inputActions;
+    public float fireInterval = 0.5f;
     public GameObject bullet;
     public float speed = 1.0f;
     float boost = 1.0f;
     Vector3 dir;
     Rigidbody2D rigid;
     Animator anim;
+    IEnumerator fireCoroutine;
+
     private void Awake()
     {
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        fireCoroutine = Fire();
     }
 
     private void OnEnable()
@@ -25,7 +29,8 @@ public class Player : MonoBehaviour
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
-        inputActions.Player.Fire.performed += OnFire;
+        inputActions.Player.Fire.performed += OnFireStart;
+        inputActions.Player.Fire.canceled += OnFireStop;
         inputActions.Player.Boost.performed += OnBoostOn;
         inputActions.Player.Boost.canceled += OnBoostOff;
     }
@@ -35,7 +40,8 @@ public class Player : MonoBehaviour
     {
         inputActions.Player.Boost.canceled -= OnBoostOff;
         inputActions.Player.Boost.performed -= OnBoostOn;
-        inputActions.Player.Fire.performed -= OnFire;
+        inputActions.Player.Fire.canceled -= OnFireStop;
+        inputActions.Player.Fire.performed -= OnFireStart;
         inputActions.Player.Move.canceled -= OnMove;
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Disable();
@@ -55,7 +61,22 @@ public class Player : MonoBehaviour
     {
         rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir);
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        
+    }
     private void OnMove(InputAction.CallbackContext context)
     {
         Vector2 inputDir = context.ReadValue<Vector2>();
@@ -64,10 +85,22 @@ public class Player : MonoBehaviour
         anim.SetFloat("InputY", dir.y);
     }
 
-    private void OnFire(InputAction.CallbackContext context)
+    private void OnFireStart(InputAction.CallbackContext _)
     {
-        Debug.Log("Fire!!!");
-        Instantiate(bullet, transform.position, Quaternion.identity);
+        StartCoroutine(fireCoroutine);
+    }
+    private void OnFireStop(InputAction.CallbackContext _)
+    {
+        StopCoroutine(fireCoroutine);
+    }
+
+    IEnumerator Fire()
+    {
+        while (true)
+        {
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(fireInterval);
+        }
     }
 
     private void OnBoostOn(InputAction.CallbackContext context)
