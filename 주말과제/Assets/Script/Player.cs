@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     PlayerInputAction inputActions;
+    public GameObject bullet;
     public float speed = 1.0f;
     float boost = 1.0f;
     Vector3 dir;
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour
     private void OnFire(InputAction.CallbackContext context)
     {
         Debug.Log("Fire!!!");
+        Instantiate(bullet, transform.position, Quaternion.identity);
     }
 
     private void OnBoostOn(InputAction.CallbackContext context)
