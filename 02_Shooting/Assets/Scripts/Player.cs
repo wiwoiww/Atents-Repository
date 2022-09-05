@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("PowerUp"))
         {
-            power++;
+            Power++;
             Destroy(collision.gameObject);
         }
     }

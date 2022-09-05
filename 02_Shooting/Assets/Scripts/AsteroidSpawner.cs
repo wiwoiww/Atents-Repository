@@ -25,7 +25,7 @@ public class AsteroidSpawner : EnemySpawner
     {
         while (true)     
         {
-            GameObject obj = Instantiate(spawnPrefab, transform);  
+            GameObject obj = Instantiate(spawnPrefab_Normal, transform);  
             obj.transform.Translate(0, Random.Range(minY, maxY), 0);
 
             Vector3 destPosition = destination.position + new Vector3(0.0f, Random.Range(minY, maxY), 0.0f);    // 목적지 위치 결정
