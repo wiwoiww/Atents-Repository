@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public float speed = 1.0f;      // 플레이어의 이동 속도(초당 이동 속도)
     public float fireInterval = 0.5f;
     public GameObject explosionPrefab;
-
+    
     bool isDead = false;
 
     Vector3 dir;                    // 이동 방향(입력에 따라 변경됨)
