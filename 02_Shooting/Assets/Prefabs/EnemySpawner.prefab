@@ -47,5 +47,5 @@ MonoBehaviour:
   spawnPrefab_Normal: {fileID: 3301093255717283707, guid: 6b9e4505ae220534f85d28fc61cb5931, type: 3}
   spawnPrefab_Special: {fileID: 5529870120814793163, guid: 7a68baf43d27fbe42b9a3ec489705e3f, type: 3}
   interval: 0.4
-  minY: -4
-  maxY: 4
+  minY: -3
+  maxY: 3

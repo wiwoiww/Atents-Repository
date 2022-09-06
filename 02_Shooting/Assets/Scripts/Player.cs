@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
                 Destroy(temp.gameObject);   // 삭제 시키기
             }
 
-            // 파워 등급에 맞기 새로 배치
+            // 파워 등급에 맞게 새로 배치
             for (int i = 0; i < power; i++)
             {
                 GameObject firePos = new GameObject();  // 빈 오브젝트 생성하기

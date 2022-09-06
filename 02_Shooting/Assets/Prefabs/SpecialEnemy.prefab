@@ -159,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f19a488b7c82d45a5e64a4a70fa4be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  amplitude: 1
-  frequency: 1
+  speed: 3
+  amplitude: 2
+  frequency: 1.5
   powerUp: {fileID: 7526399620411922120}
 --- !u!1001 &5734468000895583634
 PrefabInstance:

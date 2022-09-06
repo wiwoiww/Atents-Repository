@@ -8,7 +8,7 @@ public class PowerUp : MonoBehaviour
     public float moveSpeed = 0.5f;              // 이동 속도
     public float selfDestroyTime = 10.0f;       // 스스로 없어지는데 걸리는 시간
 
-    Player player;           // 파워업 아이템이 이동방향 설정에 필요한 플레이어
+    Player player;           // 파워업 아이템의 이동방향 설정에 필요한 플레이어
     Vector2 dir;             // 현재 이동 방향
     WaitForSeconds waitTime; // 코루틴에서 사용하기 위한 기다리는 시간 간격
 

@@ -85,8 +85,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db77ca6963e97e84c9a9a37b40fd7cfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dirChangeTime: 1
-  moveSpeed: 0.5
+  dirChangeTime: 5
+  moveSpeed: 2
   selfDestroyTime: 10
 --- !u!1 &2986858214486418743
 GameObject:
