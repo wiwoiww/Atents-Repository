@@ -186,18 +186,19 @@ public class Player : MonoBehaviour
         
         if( collision.gameObject.CompareTag("Enemy"))
         {
-            Dead();         
+            Dead();   // 적이랑 부딧치면 죽이기
         }
     }
 
     void Dead()
     {
-        isDead = true;
-        GetComponent<Collider2D>().enabled = false;
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        InputDisable();
-        rigid.gravityScale = 1.0f;
-        rigid.freezeRotation = false;
+        isDead = true;  // 죽었다고 표시
+        GetComponent<Collider2D>().enabled = false;     // 더 이상 충돌 안일어나게 만들기
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);  // 폭팔 이팩트 생성
+        InputDisable();                              // 입력 막고
+        rigid.gravityScale = 1.0f;                   // 중력으로 떨어지게 만들기
+        rigid.freezeRotation = false;                // 회전 막아놓은 것 풀기
+        StopCoroutine(fireCoroutine);                // 총을 쏘던 중이면 더이상 쏘지 않게 처리
     }    
     //private void OnCollisionExit2D(Collision2D collision)
     //{
