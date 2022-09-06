@@ -20,4 +20,5 @@ public class Explosion : MonoBehaviour
         Destroy(this.gameObject, anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
         
     }
+
 }
