@@ -23,7 +23,7 @@ public class LifePanel : MonoBehaviour
 
     private void Refresh(int life)
     {
-        lifeText.text = life.ToString();  // 입력받은 LIfe               //life.ToString();를 $"{life}";로 바꿔도댐 같음
+        lifeText.text = life.ToString();  // 입력받은 Life값으로 화면 갱신               //life.ToString();를 $"{life}";로 바꿔도댐 같음
     }
 
 
