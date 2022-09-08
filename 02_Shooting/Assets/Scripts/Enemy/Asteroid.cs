@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
+    public int score = 50;
     public float rotateSpeed = 360.0f;          // 회전 속도
     public float moveSpeed = 3.0f;              // 이동 속도
     public Vector3 direction = Vector3.left;    // 운석이 이동할 방향

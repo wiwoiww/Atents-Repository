@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float speed = 0.0f;
+    public int score = 10;
     private GameObject explosion;
 
     float spawnY;       // 생성 되었을 때의 기준 높이

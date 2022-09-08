@@ -109,6 +109,11 @@ public class Player : MonoBehaviour
     private int power = 0;
 
     /// <summary>
+    /// 플레이어가 획득한 점수
+    /// </summary>
+    int totalScore = 0;
+
+    /// <summary>
     /// 총알 연사용 코루틴
     /// </summary>
     private IEnumerator fireCoroutine;
@@ -206,6 +211,10 @@ public class Player : MonoBehaviour
 
 
     // 함수(메서드) ------------------------------------------------------------------------------------    
+    public void AddScore(int score)
+    {
+        totalScore += score;
+    }
 
     /// <summary>
     /// 플레이어가 죽었을 때 실행될 일들

@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  score: 15
   amplitude: 2
   frequency: 1.5
   powerUp: {fileID: 7526399620411922120}
