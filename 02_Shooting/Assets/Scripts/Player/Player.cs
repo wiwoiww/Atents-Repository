@@ -118,11 +118,14 @@ public class Player : MonoBehaviour
     /// </summary>
     private IEnumerator fireCoroutine;
 
+    private int extraPowerBonus = 1000;
+
     // 컴포넌트들 --------------------------------------------------------------------------------------
     private Rigidbody2D rigid;
     private Animator anim;
     private Collider2D bodyCollider;
     private SpriteRenderer spriteRenderer;
+    private AudioSource shootAudio;
 
     // 델리게이트 --------------------------------------------------------------------------------------
     public Action<int> onLifeChange;
@@ -153,6 +156,8 @@ public class Player : MonoBehaviour
                 if (life > value)
                 {
                     // life가 감소한 상황( 새로운 값(value)이 옛날 값(life)보다 작다 => 감소했다 )
+
+                    Power--;
                     StartCoroutine(EnterInvincibleMode());
                 }
 
@@ -180,8 +185,13 @@ public class Player : MonoBehaviour
         set
         {
             power = value;  // 들어온 값으로 파워 설정
-            if (power > 3)  // 파워가 3을 벗어나면 3을 제한
-                power = 3;
+            if (power > 3)
+                AddScore(extraPowerBonus);
+            //if (power > 3)  // 파워가 3을 벗어나면 3을 제한
+            //    power = 3;
+            //if (power < 1)
+            //    power = 1;   
+            power = Mathf.Clamp(power, 1, 3);  // 위에 if두개 합친거
 
             // 기존에 있는 파이어 포지션 제거
             while (firePositionRoot.childCount > 0)
@@ -291,6 +301,7 @@ public class Player : MonoBehaviour
                 // Instantiate(생성할 프리팹);    // 프리팹이 (0,0,0)위치에 (0,0,0)회전에 (1,1,1)스케일로 만들어짐 
                 // Instantiate(생성할 프리팹, 생성할 위치, 생성될 때의 회전)
             }
+            shootAudio.Play();
             flash.SetActive(true);      // flash 켜고
             StartCoroutine(FlashOff()); // 0.1초 후에 flash를 끄는 코루틴 실행
 
@@ -383,6 +394,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         bodyCollider = GetComponent<Collider2D>();  // CapsuleCollider2D가 Collider2D의 자식이라서 가능
         spriteRenderer = GetComponent<SpriteRenderer>();
+        shootAudio = GetComponent<AudioSource>();
 
         firePositionRoot = transform.GetChild(0);   // 발사 트랜스폼 찾기
         flash = transform.GetChild(1).gameObject;   // flash 가져오기
