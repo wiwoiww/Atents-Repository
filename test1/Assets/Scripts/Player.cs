@@ -1,3 +1,4 @@
+//using System;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +7,18 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public float speed = 5.0f;
+    public GameObject bullet;
+    public float fireInterval = 0.5f;
     float boost = 1.0f;
+
+    //bool isFiring = false;
+    //float fireTimeCount = 0.0f;
 
     Vector3 dir;
 
     PlayerInputAction inputActions;
+
+    IEnumerator fireCoroutine;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -20,6 +28,7 @@ public class Player : MonoBehaviour
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        fireCoroutine = Fire();
     }
 
     private void OnEnable()
@@ -27,7 +36,8 @@ public class Player : MonoBehaviour
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
-        inputActions.Player.Fire.performed += OnFire;
+        inputActions.Player.Fire.performed += OnFireStart;
+        inputActions.Player.Fire.canceled += OnFireStop;
         inputActions.Player.Boost.performed += BoostOn;
         inputActions.Player.Boost.canceled += BoostOff;
     }
@@ -36,7 +46,7 @@ public class Player : MonoBehaviour
     {
         inputActions.Player.Boost.canceled -= BoostOff;
         inputActions.Player.Boost.performed -= BoostOn;
-        inputActions.Player.Fire.performed -= OnFire;
+        inputActions.Player.Fire.performed -= OnFireStart;
         inputActions.Player.Move.canceled -= OnMove;
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Disable();
@@ -50,6 +60,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rigid.MovePosition(transform.position + boost * speed * Time.fixedDeltaTime * dir);
+
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -60,9 +71,25 @@ public class Player : MonoBehaviour
         anim.SetFloat("InputY", dir.y);
     }
 
-    private void OnFire(InputAction.CallbackContext context)
+    private void OnFireStart(InputAction.CallbackContext _)
     {
-        Debug.Log("Fire!!");
+        //Instantiate(bullet, transform.position, Quaternion.identity);
+        //isFiring = true;
+        StartCoroutine(fireCoroutine);
+    }
+    private void OnFireStop(InputAction.CallbackContext _)
+    {
+        //isFiring = false;
+        StopCoroutine(fireCoroutine);
+    }
+
+    IEnumerator Fire()
+    {
+        while (true)
+        {
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(fireInterval);
+        }
     }
 
     private void BoostOn(InputAction.CallbackContext context)
@@ -74,4 +101,5 @@ public class Player : MonoBehaviour
     {
         boost = 1.0f;
     }
+
 }
