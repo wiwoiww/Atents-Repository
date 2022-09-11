@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
-    public float speed = 10.0f;
+    public float speed = 5.0f;
     float boost = 1.0f;
 
     Vector3 dir;
@@ -13,11 +13,13 @@ public class Player : MonoBehaviour
     PlayerInputAction inputActions;
 
     Rigidbody2D rigid;
+    Animator anim;
 
     private void Awake()
     {
         inputActions = new PlayerInputAction();
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -54,6 +56,8 @@ public class Player : MonoBehaviour
     {
         Vector2 inputDir = context.ReadValue<Vector2>();
         dir = inputDir;
+
+        anim.SetFloat("InputY", dir.y);
     }
 
     private void OnFire(InputAction.CallbackContext context)
