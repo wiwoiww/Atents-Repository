@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject asteroid;
+    public float interval = 0.5f;
+
+    float minY = -4.0f;
+    float maxY = 4.0f;
+
+    private void Start()
     {
-        
+        StartCoroutine(Spawn());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator Spawn()
     {
-        
+        while (true)
+        {
+            GameObject obj = Instantiate(asteroid, transform);
+            obj.transform.Translate(0, Random.Range(minY, maxY), 0);
+            yield return new WaitForSeconds(interval);
+        }
     }
 }

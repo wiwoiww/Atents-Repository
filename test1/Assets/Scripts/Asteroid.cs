@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float rotateSpeed = 360.0f;
+    public float speed = 2.0f;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        //transform.rotation *= Quaternion.Euler(new(0, 0, rotateSpeed * Time.deltaTime));
+        transform.Rotate(rotateSpeed * Time.deltaTime * Vector3.forward);
+        transform.Translate(speed * Time.deltaTime * Vector3.left, Space.World);
     }
 }
