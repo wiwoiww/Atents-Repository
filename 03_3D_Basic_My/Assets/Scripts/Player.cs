@@ -15,16 +15,20 @@ public class Player : MonoBehaviour
     float rotateDir = 0.0f;
     bool isJumping = false;
 
+
     GroundChecker checker;
 
     //Vector3 dir;
     Rigidbody rigid;
+    Animator anim;
+
     PlayerInputActions inputActions;                //PlayerInputActions타입이고 inputActions 이름을 가진 변수를 선언.
 
     private void Awake()
     {
         inputActions = new PlayerInputActions();     // 인스턴스 생성. 실제 메모리를 할당 받고 사용할 수 있도록 만드는 것.
         rigid = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
         checker = GetComponentInChildren<GroundChecker>();
         checker.onGrounded += OnGround;
     }
@@ -73,6 +77,9 @@ public class Player : MonoBehaviour
         //dir = inputDir;
         moveDir = input.y;      // w : +1, s : -1     전진인지 후진인지 결정
         rotateDir = input.x;    // a : -1, d : +1     좌회전인지 우회전인지 결정
+
+
+        anim.SetBool("IsMove", !context.canceled);
     }
     private void OnJumpInput(InputAction.CallbackContext _)
     {
