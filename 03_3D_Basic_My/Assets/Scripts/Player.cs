@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
 
     float moveDir = 0.0f;
     float rotateDir = 0.0f;
+    bool isJumping = false;
+
+    GroundChecker checker;
+
     //Vector3 dir;
     Rigidbody rigid;
     PlayerInputActions inputActions;                //PlayerInputActions타입이고 inputActions 이름을 가진 변수를 선언.
@@ -21,6 +25,8 @@ public class Player : MonoBehaviour
     {
         inputActions = new PlayerInputActions();     // 인스턴스 생성. 실제 메모리를 할당 받고 사용할 수 있도록 만드는 것.
         rigid = GetComponent<Rigidbody>();
+        checker = GetComponentInChildren<GroundChecker>();
+        checker.onGrounded += OnGround;
     }
 
     private void OnEnable()
@@ -45,7 +51,20 @@ public class Player : MonoBehaviour
         Move();
         Rotate();
         //rigid.MovePosition(transform.position +  moveSpeed * Time.fixedDeltaTime * dir);
+
+        if( isJumping )
+        {
+            if(rigid.velocity.y < 0)
+            {
+                checker.gameObject.SetActive(true);
+            }
+        }
     }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    isJumping = false;
+    //}
 
     private void OnMoveInput(InputAction.CallbackContext context)
     {
@@ -57,8 +76,11 @@ public class Player : MonoBehaviour
     }
     private void OnJumpInput(InputAction.CallbackContext _)
     {
-        // 플레이어의 위쪽 방향(Up)으로 jumpPower만큼 즉시 힘을 추가한다.(질량 영향있음)
-        rigid.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+        if (!isJumping) // 점프 중이 아닐 때만 점프
+        {
+            isJumping = true;
+            JumpStart();
+        }
     }
 
     void Move()
@@ -77,4 +99,16 @@ public class Player : MonoBehaviour
 
     }
 
+    void JumpStart()
+    {
+        // 플레이어의 위쪽 방향(Up)으로 jumpPower만큼 즉시 힘을 추가한다.(질량 영향있음)
+        rigid.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+        
+        checker.gameObject.SetActive(false);
+    }
+
+    void OnGround()
+    {
+        isJumping = false;
+    }
 }
