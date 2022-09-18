@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
         rotateDir = input.x;    // a : -1, d : +1     좌회전인지 우회전인지 결정
 
 
-        anim.SetBool("IsMove", !context.canceled);
+        anim.SetBool("IsMove", !context.canceled);   // 이동키를 눌렀으면 true, 아니면 false
     }
     private void OnJumpInput(InputAction.CallbackContext _)
     {
