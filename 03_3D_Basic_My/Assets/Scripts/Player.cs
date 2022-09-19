@@ -134,9 +134,9 @@ public class Player : MonoBehaviour
         if(colliders.Length > 0)  // 캡슐에 겹쳐진 UseableObject 컬라이더가 한개 이상이다.
         {
             IUseableObject useable = colliders[0].GetComponent<IUseableObject>();  // 여러개가 있어도 하나만 처리
-            if(useable != null)
+            if(useable != null)   // IUseableObject를 가진 오브젝트이면
             {
-                useable.Use();
+                useable.Use();    // 사용하기
             }
         }
     }
