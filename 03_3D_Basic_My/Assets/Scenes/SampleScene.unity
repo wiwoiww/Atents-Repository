@@ -2729,6 +2729,37 @@ PrefabInstance:
       objectReference: {fileID: 111890958}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106711da5cf60784883ec52e77d6503e, type: 3}
+--- !u!1 &1027897680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1027897681}
+  m_Layer: 0
+  m_Name: Destination
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1027897681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027897680}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7, y: 5, z: -14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1155739793 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8986141097002009244, guid: 13ad8303b23fb554ba463704a6c23f0a, type: 3}
@@ -3410,6 +3441,8 @@ GameObject:
   - component: {fileID: 1512621538}
   - component: {fileID: 1512621543}
   - component: {fileID: 1512621542}
+  - component: {fileID: 1512621545}
+  - component: {fileID: 1512621544}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -3527,6 +3560,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eac1d0a113e251449bebccdbbee7d9b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 1027897681}
+  moveSpeed: 1
+--- !u!54 &1512621544
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512621537}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!65 &1512621545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512621537}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 1, z: 0.7}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1535391856
 GameObject:
   m_ObjectHideFlags: 0

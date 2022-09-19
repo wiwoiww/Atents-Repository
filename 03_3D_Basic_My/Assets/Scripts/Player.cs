@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
 
     PlayerInputActions inputActions;                //PlayerInputActions타입이고 inputActions 이름을 가진 변수를 선언.
 
+    public Action onObjectUse;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();     // 인스턴스 생성. 실제 메모리를 할당 받고 사용할 수 있도록 만드는 것.
@@ -39,11 +41,13 @@ public class Player : MonoBehaviour
         inputActions.Player.Move.performed += OnMoveInput; // Move 액션에 연결된 키가 눌러졌을 때 실행되는 함수를 연결(바인딩)
         inputActions.Player.Move.canceled += OnMoveInput;
         inputActions.Player.Jump.performed += OnJumpInput;
+        inputActions.Player.Use.performed += OnUseInput;
 
     }
 
     private void OnDisable()
     {
+        inputActions.Player.Use.performed -= OnUseInput;
         inputActions.Player.Jump.performed -= OnJumpInput;
         inputActions.Player.Move.canceled -= OnMoveInput;
         inputActions.Player.Move.performed -= OnMoveInput; // 바인딩 해제
@@ -65,10 +69,23 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    isJumping = false;
-    //}
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Platform"))
+        {
+            Elevator platform = collision.gameObject.GetComponent<Elevator>();
+            platform.onMove += OnMovingObject;     // 델리게이트 연결
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            Elevator platform = collision.gameObject.GetComponent<Elevator>();
+            platform.onMove -= OnMovingObject;     // 델리게이트 해제
+        }
+    }
 
     private void OnMoveInput(InputAction.CallbackContext context)
     {
@@ -88,6 +105,12 @@ public class Player : MonoBehaviour
             isJumping = true;
             JumpStart();
         }
+    }
+
+    private void OnUseInput(InputAction.CallbackContext _)
+    {
+        anim.SetTrigger("Use");
+        onObjectUse?.Invoke();
     }
 
     void Move()
@@ -118,4 +141,11 @@ public class Player : MonoBehaviour
     {
         isJumping = false;
     }
+
+    void OnMovingObject(Vector3 delta)
+    {
+        rigid.velocity = Vector3.zero;              // 원래 플레이어의 벨로시티 제거
+        rigid.MovePosition(rigid.position + delta); // 엘베가 이동한만큼 이동시키기
+    }
+
 }
