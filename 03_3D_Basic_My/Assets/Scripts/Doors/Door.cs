@@ -15,7 +15,7 @@ public class Door : MonoBehaviour
     {
         if( other.CompareTag("Player"))
         {
-            anim.SetBool("IsOpen", true);
+            Open();
         }
     }
 
@@ -23,7 +23,17 @@ public class Door : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anim.SetBool("IsOpen", false);
+            Close();
         }
+    }
+
+    public virtual void Open()
+    {
+        anim.SetBool("IsOpen", true);
+    }
+
+    public virtual void Close()
+    {
+        anim.SetBool("IsOpen", false);
     }
 }
