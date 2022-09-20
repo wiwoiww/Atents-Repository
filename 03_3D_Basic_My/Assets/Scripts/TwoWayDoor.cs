@@ -2,20 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class TwoWayDoor : Door
 {
-    public Animator anim;
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if( other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            anim.SetBool("IsOpen", true);
+            anim.SetTrigger("OpenInFront");
         }
     }
 
@@ -23,7 +16,7 @@ public class Door : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anim.SetBool("IsOpen", false);
+            anim.SetTrigger("Close");
         }
     }
 }
