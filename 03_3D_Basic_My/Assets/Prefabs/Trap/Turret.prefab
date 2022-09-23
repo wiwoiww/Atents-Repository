@@ -176,9 +176,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6614624118755765354}
-  - component: {fileID: 5662950416424228317}
   - component: {fileID: 5497529524606681236}
   - component: {fileID: 8013907080378882317}
+  - component: {fileID: 6956623570036179835}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -204,20 +204,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5662950416424228317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4896128291541489957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53cd347fc1dee749aadb24fd5338fec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turnSpeed: 360
-  sightRadius: 5
 --- !u!136 &5497529524606681236
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -245,6 +231,20 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6956623570036179835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4896128291541489957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f53cd347fc1dee749aadb24fd5338fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeed: 360
+  sightRadius: 5
 --- !u!1 &5646364465635531087
 GameObject:
   m_ObjectHideFlags: 0
