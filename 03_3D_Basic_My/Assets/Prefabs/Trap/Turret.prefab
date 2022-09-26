@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7692329229734380233}
   - component: {fileID: 7312298719398427635}
   m_Layer: 0
-  m_Name: Top
+  m_Name: BarrelBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8816141555744580179}
+  - {fileID: 5167095978472824047}
   m_Father: {fileID: 6614624118755765354}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -245,6 +246,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnSpeed: 360
   sightRadius: 5
+  bulletPrefab: {fileID: 9055217470006233460, guid: 114b985d538f4bb4581801596976e571, type: 3}
+  fireInterval: 0.5
+--- !u!1 &4952148145811045238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5167095978472824047}
+  m_Layer: 0
+  m_Name: Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5167095978472824047
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952148145811045238}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.14, y: -0.36984587, z: 1.402}
+  m_LocalScale: {x: 1.6666666, y: 2, z: 0.8333333}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3382555599515210993}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5646364465635531087
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,7 +40,8 @@ public class Blade : MonoBehaviour
         // 새로운 위치가 도착지점에 거의 근접하면
         if ((target.position - newPos).sqrMagnitude < 0.0025f)
         {
-            target = waypoints.MoveToNextWaypoint();  // 다음 웨이포인트로 목적지 설정
+            //target = waypoints.MoveToNextWaypoint();  // 다음 웨이포인트로 목적지 설정
+            SetTarget(waypoints.MoveToNextWaypoint()); // 위꺼랑 동일
         }
     }
 
