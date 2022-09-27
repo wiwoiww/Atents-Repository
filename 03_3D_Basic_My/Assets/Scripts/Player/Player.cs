@@ -103,6 +103,8 @@ public class Player : MonoBehaviour, IFly, IDead
 
     private void OnMoveInput(InputAction.CallbackContext context)
     {
+        GameManager.Inst.GameStart();
+
         Vector2 input = context.ReadValue<Vector2>();       // 입력된 값을 읽어오기
         //Vector3 inputDir = context.ReadValue<Vector2>();
         //dir = inputDir;
