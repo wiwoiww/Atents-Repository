@@ -28,18 +28,14 @@ public class Timer : MonoBehaviour
         //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    //private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-    //{
-    //    StartTimer();
-    //}
-
     private void Start()
     {
         Goal goal = FindObjectOfType<Goal>();
         goal.onGoalIn += StopTimer;
 
-        //CurrentTime = 0.0f;
-        StartTimer();
+        CurrentTime = 0.0f;
+        GameManager.Inst.onGameStart += StartTimer;
+        //StartTimer();
     }
 
     private void Update()
