@@ -18,6 +18,7 @@ public class StartScreen : MonoBehaviour, IPointerClickHandler
         // 현재 사용중인 키보드에서 어떤 키든 이프레임에 눌러졌을 때 true다.
         if( Keyboard.current.anyKey.wasPressedThisFrame)
         {
+            Close();
             GameManager.Inst.GameStart();
         }
     }

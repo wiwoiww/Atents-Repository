@@ -127,14 +127,14 @@ public class Turret : MonoBehaviour
 
 
 
-            //if (!isFiring && IsInFireAngle())
-            //{
-            //    FireStart();
-            //}
-            //if( isFiring && !IsInFireAngle())
-            //{
-            //    FireStop();
-            //}
+            if (!isFiring && IsInFireAngle())
+            {
+                FireStart();
+            }
+            if (isFiring && !IsInFireAngle())
+            {
+                FireStop();
+            }
         }
     }
 
