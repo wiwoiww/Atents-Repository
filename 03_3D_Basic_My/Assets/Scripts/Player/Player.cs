@@ -103,7 +103,6 @@ public class Player : MonoBehaviour, IFly, IDead
 
     private void OnMoveInput(InputAction.CallbackContext context)
     {
-        GameManager.Inst.GameStart();
 
         Vector2 input = context.ReadValue<Vector2>();       // 입력된 값을 읽어오기
         //Vector3 inputDir = context.ReadValue<Vector2>();
@@ -116,6 +115,7 @@ public class Player : MonoBehaviour, IFly, IDead
     }
     private void OnJumpInput(InputAction.CallbackContext _)
     {
+
         if (!isJumping) // 점프 중이 아닐 때만 점프
         {
             isJumping = true;
@@ -125,6 +125,7 @@ public class Player : MonoBehaviour, IFly, IDead
 
     private void OnUseInput(InputAction.CallbackContext _)
     {
+
         anim.SetTrigger("Use"); // 아이템 사용 애니메이션 재생
 
         Vector3 newUsePosition = transform.rotation * usePosition;
