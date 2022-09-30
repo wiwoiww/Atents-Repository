@@ -1070,7 +1070,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_53
+      name: Pipe_Top
       rect:
         serializedVersion: 2
         x: 56
@@ -1091,7 +1091,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_54
+      name: Pipe_Bottom
       rect:
         serializedVersion: 2
         x: 84
@@ -1700,7 +1700,6 @@ TextureImporter:
       Flappy_47: -1710268963
       Flappy_12: 435265464
       Flappy_14: -6132594
-      Flappy_53: 1966894741
       Flappy_7: 535851652
       Flappy_50: -409449613
       Flappy_30: -310897052
@@ -1723,6 +1722,7 @@ TextureImporter:
       Flappy_41: -207885118
       Flappy_39: -175727
       Flappy_26: -1972916739
+      Pipe_Bottom: 1668754263
       Flappy_18: -2041536031
       Flappy_36: 257826115
       Flappy_10: 920810274
@@ -1744,7 +1744,7 @@ TextureImporter:
       Flappy_3: 537550226
       Flappy_19: 482689785
       Flappy_27: -826813570
-      Flappy_54: 1668754263
+      Pipe_Top: 1966894741
       Flappy_28: 1753466319
       Flappy_45: -1170527857
       Bird1_3: -1781440847
