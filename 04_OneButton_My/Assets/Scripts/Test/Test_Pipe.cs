@@ -9,10 +9,10 @@ public class Test_Pipe : MonoBehaviour
 
     private void Update()
     {
-        if( Keyboard.current.digit1Key.wasPressedThisFrame)
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
             pipe.transform.position = Vector3.zero;
-            pipe.ResetRandomHeight();
+            //pipe.ResetRandomHeight();
         }
     }
 }
