@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,5 +45,13 @@ public class PipeRotator : MonoBehaviour
                 pipe.transform.position = new Vector3(startPointX, pipe.RandomHeight, 0);
             }
         }
+    }
+
+    public void AddPipeScoredDelegate(Action<int> del)
+    {
+        foreach(Pipe pipe in pipes)
+        {
+            pipe.onScored += del;
+        }    
     }
 }
