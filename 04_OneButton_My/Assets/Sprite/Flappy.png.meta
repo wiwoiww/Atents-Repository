@@ -188,7 +188,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_4
+      name: Number_Middle_4
       rect:
         serializedVersion: 2
         x: 502
@@ -209,7 +209,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_5
+      name: Number_Middle_5
       rect:
         serializedVersion: 2
         x: 502
@@ -251,7 +251,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_7
+      name: Number_Middle_6
       rect:
         serializedVersion: 2
         x: 505
@@ -293,7 +293,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_9
+      name: Number_Middle_7
       rect:
         serializedVersion: 2
         x: 505
@@ -587,7 +587,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_30
+      name: Button_Next
       rect:
         serializedVersion: 2
         x: 354
@@ -608,7 +608,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_31
+      name: Button_Rank
       rect:
         serializedVersion: 2
         x: 414
@@ -860,7 +860,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_43
+      name: Number_Middle_9
       rect:
         serializedVersion: 2
         x: 311
@@ -902,7 +902,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_45
+      name: Number_Middle_8
       rect:
         serializedVersion: 2
         x: 293
@@ -923,7 +923,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_46
+      name: ResultPanel
       rect:
         serializedVersion: 2
         x: 3
@@ -944,7 +944,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_47
+      name: Medal_Platinum
       rect:
         serializedVersion: 2
         x: 121
@@ -965,7 +965,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_48
+      name: Medal_Gold
       rect:
         serializedVersion: 2
         x: 121
@@ -1007,7 +1007,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_50
+      name: Number_Middle_0
       rect:
         serializedVersion: 2
         x: 137
@@ -1028,7 +1028,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_51
+      name: Pipe2
       rect:
         serializedVersion: 2
         x: 0
@@ -1133,13 +1133,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_56
+      name: Number_Small_0
       rect:
         serializedVersion: 2
         x: 138
-        y: 168
+        y: 182
         width: 6
-        height: 21
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1175,7 +1175,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_58
+      name: Number_Small_2
       rect:
         serializedVersion: 2
         x: 138
@@ -1196,13 +1196,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_59
+      name: Number_Small_3
       rect:
         serializedVersion: 2
         x: 138
-        y: 141
+        y: 147
         width: 6
-        height: 13
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1238,7 +1238,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_61
+      name: Number_Small_4
       rect:
         serializedVersion: 2
         x: 138
@@ -1259,7 +1259,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_62
+      name: Number_Small_5
       rect:
         serializedVersion: 2
         x: 138
@@ -1322,7 +1322,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_65
+      name: Number_Small_6
       rect:
         serializedVersion: 2
         x: 138
@@ -1343,7 +1343,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_66
+      name: Number_Small_7
       rect:
         serializedVersion: 2
         x: 138
@@ -1385,7 +1385,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_68
+      name: Number_Small_8
       rect:
         serializedVersion: 2
         x: 138
@@ -1406,7 +1406,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_69
+      name: Number_Small_9
       rect:
         serializedVersion: 2
         x: 138
@@ -1427,7 +1427,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_70
+      name: Medal_Silver
       rect:
         serializedVersion: 2
         x: 112
@@ -1469,7 +1469,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_72
+      name: Medal_Bronze
       rect:
         serializedVersion: 2
         x: 112
@@ -1490,12 +1490,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_73
+      name: Number_Middle_1
       rect:
         serializedVersion: 2
-        x: 139
+        x: 138
         y: 25
-        width: 5
+        width: 7
         height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1595,7 +1595,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_78
+      name: Number_Middle_2
       rect:
         serializedVersion: 2
         x: 137
@@ -1616,7 +1616,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_79
+      name: Mark_New
       rect:
         serializedVersion: 2
         x: 112
@@ -1637,7 +1637,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_80
+      name: Number_Middle_3
       rect:
         serializedVersion: 2
         x: 131
@@ -1657,6 +1657,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Number_Small_1
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 173
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccadd1abc3083624e92db50c3cc65247
+      internalID: -1690118235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1668,87 +1689,89 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Flappy_80: 541011559
-      Flappy_69: -938320476
       Flappy_60: 1515382778
       Flappy_67: -1728452449
       Background_Night: 967706007
       Number_Big_0: -6132594
       Flappy_16: -1396192716
-      Flappy_73: 1583495139
+      Number_Big_6: -1255479772
       Flappy_17: -125587819
       Flappy_22: 1529562356
-      Number_Big_6: -1255479772
+      Number_Middle_0: -409449613
+      Number_Small_4: -364834686
+      Number_Middle_5: -116167429
+      Pipe2: 2078219719
       Flappy_6: -2019932684
       Bird1_2: 1347132639
-      Flappy_56: -1389019007
-      Flappy_79: -592890852
       Number_Big_3: 809195781
-      Flappy_59: -680812479
-      Flappy_23: -37216368
       Text_GameOver: 1299884379
+      Flappy_23: -37216368
       Number_Big_9: -207885118
+      Medal_Platinum: -1710268963
       Flappy_21: -1363911081
       Text_GetReady: -544982799
-      Flappy_9: -770042654
-      Flappy_43: -1585458204
-      Flappy_61: -364834686
-      Flappy_62: -1132186
-      Flappy_65: 684115028
-      Background_Day: -1211856261
-      Flappy_15: -397849175
-      Flappy_70: -1098949476
-      Background_Ground: 1765845965
-      Number_Big_5: 941329786
+      Number_Middle_8: -1170527857
+      Number_Small_7: 1119762562
       Number_Big_4: 257826115
+      Background_Ground: 1765845965
+      Background_Day: -1211856261
+      Number_Small_0: -1389019007
+      Flappy_15: -397849175
+      Number_Middle_6: 535851652
+      Number_Big_5: 941329786
+      Button_Rank: 1308467525
+      Number_Small_5: -1132186
       Flappy_57: 503974142
-      Flappy_47: -1710268963
+      Medal_Silver: -1098949476
+      Number_Small_1: -1690118235
+      Mark_New: -592890852
+      Medal_Gold: 131956436
       Flappy_12: 435265464
-      Flappy_7: 535851652
-      Flappy_50: -409449613
-      Flappy_51: 2078219719
-      Flappy_30: -310897052
+      Number_Middle_2: 1181309550
+      Number_Small_2: 1903557157
       Flappy_29: 873457230
-      Flappy_31: 1308467525
-      Flappy_48: 131956436
+      Number_Middle_4: -1712875902
       Flappy_24: -357384958
       Flappy_25: 1386300671
       Flappy_52: -1206292919
-      Flappy_64: 44608510
       Flappy_77: 1893262298
-      Flappy_44: -1921996149
-      Flappy_46: -689805594
       Number_Big_7: -175727
-      Flappy_78: 1181309550
+      Flappy_44: -1921996149
+      Flappy_64: 44608510
+      Number_Middle_7: -770042654
       Flappy_32: -329197160
-      Flappy_5: -116167429
+      Number_Small_9: -938320476
+      Number_Middle_9: -1585458204
       Number_Big_2: -2113102150
       Number_Big_8: -1647531709
       Flappy_26: -1972916739
       Pipe_Bottom: 1668754263
+      Number_Small_8: 1576602071
       Flappy_18: -2041536031
+      Number_Middle_1: 1583495139
       Flappy_10: 920810274
       Bird1_1: -583588326
       Flappy_8: 1858976771
       Flappy_20: 2074189394
       Flappy_55: -158412341
-      Flappy_58: 1903557157
+      Number_Small_3: -680812479
       Flappy_42: 854254537
       Flappy_33: -1003115810
       Flappy_63: -1339877229
-      Flappy_4: -1712875902
-      Flappy_68: 1576602071
+      ResultPanel: -689805594
       Number_Big_1: -596456048
-      Flappy_66: 1119762562
+      Medal_Bronze: 1550312281
+      Button_Next: -310897052
       Flappy_49: 197127530
       Flappy_3: 537550226
       Flappy_19: 482689785
       Flappy_27: -826813570
       Pipe_Top: 1966894741
+      Number_Small_6: 684115028
       Flappy_28: 1753466319
-      Flappy_45: -1170527857
       Bird1_3: -1781440847
-      Flappy_72: 1550312281
+      Number_Middle_3: 541011559
+      Flappy_0: 1500467382
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
