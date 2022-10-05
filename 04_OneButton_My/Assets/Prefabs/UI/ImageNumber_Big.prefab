@@ -58,8 +58,8 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 4
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
   - {fileID: -175727, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
   - {fileID: -1647531709, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
   - {fileID: -207885118, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
+  isInstanceSet: 0
   numberChangeSpeed: 20
 --- !u!1001 &6470463854683954811
 PrefabInstance:
