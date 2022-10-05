@@ -298,6 +298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b255859ee5fff9429c0e78142a6df51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  medalSprits:
+  - {fileID: -1710268963, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
+  - {fileID: 131956436, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
+  - {fileID: -1098949476, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
+  - {fileID: 1550312281, guid: 5c6ebabdcf64e894881da53c88b0a339, type: 3}
 --- !u!1001 &393717652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1207,6 +1212,14 @@ PrefabInstance:
     - target: {fileID: 5732599451822125641, guid: 4ea12d0f76a49fc45bb918530bcafafa, type: 3}
       propertyPath: m_ChildAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732599451822125641, guid: 4ea12d0f76a49fc45bb918530bcafafa, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732599451822125641, guid: 4ea12d0f76a49fc45bb918530bcafafa, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5732599451822125643, guid: 4ea12d0f76a49fc45bb918530bcafafa, type: 3}
       propertyPath: m_Name
@@ -2654,6 +2667,14 @@ PrefabInstance:
     - target: {fileID: 5732599451822125641, guid: 894a31dbe22520e40bb721e24a6b9765, type: 3}
       propertyPath: m_ChildAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732599451822125641, guid: 894a31dbe22520e40bb721e24a6b9765, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732599451822125641, guid: 894a31dbe22520e40bb721e24a6b9765, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5732599451822125643, guid: 894a31dbe22520e40bb721e24a6b9765, type: 3}
       propertyPath: m_Name
