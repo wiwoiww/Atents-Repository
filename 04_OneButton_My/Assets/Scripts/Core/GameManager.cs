@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -12,6 +13,8 @@ public class GameManager : Singleton<GameManager>
 
     int score = 0;
     int bestScore = 0;
+
+    public Action onBestScoreChange;
 
     public Bird Player => player;
     //public Bird Player { get => player}; // 위와 같은 코드
@@ -93,6 +96,7 @@ public class GameManager : Singleton<GameManager>
         if( bestScore < Score )
         {
             bestScore = score;
+            onBestScoreChange?.Invoke();
             SaveGameData();
         }
     }
