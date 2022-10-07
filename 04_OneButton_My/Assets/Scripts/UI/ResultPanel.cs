@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class ResultPanel : MonoBehaviour
@@ -35,40 +34,41 @@ public class ResultPanel : MonoBehaviour
         // 그것을 방지하기 위해 OnDisable에서 실행
 
         // GameManager가 삭제되기 전에 연결 해제
-        GameManager.Inst.onBestScoreChange -= ShowNewMark;  // 이 패널이 닫힐 때(게임이 끝날 때) 델리게이트에 연결된 함수 해제
+
+        GameManager temp = GameManager.Inst;
+        if (temp != null)
+        {
+            temp.onBestScoreChange -= ShowNewMark;      // 이 패널이 닫힐 때(게임이 끝날 때) 델리게이트에 연결된 함수 해제
+        }
     }
 
     private void ShowNewMark()
     {
-        newMarkImage.color = Color.white;   // newMarkImage의 알파값을 1로 만들어서 newMarkImage 보이게 만들기
+        newMarkImage.color = Color.white;   // 뉴마크의 알파값을 1로 만들어서 뉴마크 보이게 만들기
     }
 
     public void RefreshScore()
     {
         int playerScore = GameManager.Inst.Score;
-        score.Number = playerScore;                         // 현재 점수 설정
-        bestScore.Number = GameManager.Inst.BestScore;      // 최고 점수 설정(새가 죽을 때 최고점수는 자동으로 갱신된다.)
+        score.Number = playerScore;                     // 현재 점수 설정
+        bestScore.Number = GameManager.Inst.BestScore;  // 최고 점수 설정(새가 죽을 때 최고점수는 자동으로 갱신된다.)
 
-        // 100점 이상이면 브론즈 메달
-        // 200점 이상이면 실버 메달
-        // 300점 이상이면 골드 메달
-        // 400점 이상이면 플래티넘 메달
-        if ( playerScore >= 400)
+        if (playerScore >= 400)
         {
             medalImage.sprite = medalSprits[0];
             medalImage.color = Color.white;
         }
-        else if( playerScore >= 300)
+        else if (playerScore >= 300)
         {
             medalImage.sprite = medalSprits[1];
             medalImage.color = Color.white;
         }
-        else if( playerScore >= 200)
+        else if (playerScore >= 200)
         {
             medalImage.sprite = medalSprits[2];
             medalImage.color = Color.white;
         }
-        else if( playerScore >= 100)
+        else if (playerScore >= 100)
         {
             medalImage.sprite = medalSprits[3];
             medalImage.color = Color.white;
@@ -77,8 +77,5 @@ public class ResultPanel : MonoBehaviour
         {
             medalImage.color = Color.clear;
         }
-
-        //GameManager.Inst.BestScoreUpdate();
-        
     }
 }

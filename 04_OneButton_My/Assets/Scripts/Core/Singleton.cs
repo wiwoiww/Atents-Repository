@@ -13,23 +13,30 @@ using UnityEngine.SceneManagement;
 
 // Singleton 클래스는 제네릭 타입의 클래스이다.(만들때 타입(T)을 하나 받아야 한다.)
 // where 이하에 있는 조건을 만족시켜야 한다.(T는 컴포넌트를 상속받은 타입이어야 한다.)
-public class Singleton<T> : MonoBehaviour where T : Component   
+public class Singleton<T> : MonoBehaviour where T : Component
 {
+    private static bool isShutDown = false;
     private static T _instance = null;
     public static T Inst
     {
         get
         {
-            if( _instance == null )
+            if (isShutDown)
+            {
+                //Debug.LogWarning($"{typeof(T)} 싱글톤은 이미 삭제되었음.");
+                return null;
+            }
+
+            if (_instance == null)
             {
                 // 한번도 사용된 적이 없다.
                 var obj = FindObjectOfType<T>();            // 같은 타입의 컴포넌트가 게임에 있는지 찾아보기
-                if(obj != null)
-                {                    
+                if (obj != null)
+                {
                     _instance = obj;                        // 다른 객체가 있다. 그러면 있는 객체를 사용한다.
                 }
                 else
-                {                    
+                {
                     GameObject gameObj = new GameObject();  // 다른 객체가 없다. 없으면 새로 만든다.
                     gameObj.name = $"{typeof(T).Name}";
                     _instance = gameObj.AddComponent<T>();
@@ -55,11 +62,17 @@ public class Singleton<T> : MonoBehaviour where T : Component
         else
         {
             // 첫번째 이후에 만들어진 싱글톤 게임 오브젝트
-            if( _instance != this )
+            if (_instance != this)
             {
                 Destroy(this.gameObject);       // 내가 아닌 같은 종류의 오브젝트가 이미 있으면 자신을 바로 삭제
             }
         }
+    }
+
+
+    private void OnApplicationQuit()
+    {
+        isShutDown = true;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
