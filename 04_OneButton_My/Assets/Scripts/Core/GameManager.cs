@@ -130,7 +130,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void SetHighScorerName(int rank, string name)
-    {
+    {       
         highScorerNames[rank] = name;   // 실제 데이터 변경
         onRankRefresh?.Invoke();        // UI 표시 갱신
         SaveGameData();                 // 갱신한 점수로 저장
