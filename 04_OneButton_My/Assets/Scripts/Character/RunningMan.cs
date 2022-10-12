@@ -7,15 +7,18 @@ using UnityEngine.InputSystem;
 public class RunningMan : MonoBehaviour
 {
     public float jumpPower = 10.0f;
-    BirdInputActions inputActions;
 
+    BirdInputActions inputActions;
 
     Rigidbody2D rigid;
     Animator anim;
 
     bool isJump = true;
 
-    // 유니티 이벤트 함수 ----------------------------------------------------------------------------------------
+    public Action onDead;
+
+
+    // 유니티 이벤트 함수 --------------------------------------------------------------------------
     private void Awake()    // 이 스크립트(컴포넌트)가 생성 완료 되었을 때
     {
         inputActions = new BirdInputActions();      // 인풋액션 객체 생성
@@ -28,6 +31,7 @@ public class RunningMan : MonoBehaviour
         inputActions.Bird.Enable();                 // 인풋 액션 활성화
         inputActions.Bird.Jump.performed += OnJump; // 점프 액션과 OnJump 함수 연결
     }
+
 
     private void OnDisable()
     {
@@ -46,9 +50,10 @@ public class RunningMan : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext _)
     {
-        if(!isJump)
+        if (!isJump)
         {
-            rigid.velocity = Vector2.up * jumpPower;
+            //rigid.velocity = Vector2.up * jumpPower;
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             isJump = true;
             anim.SetBool("IsJump", isJump);
         }
@@ -57,5 +62,7 @@ public class RunningMan : MonoBehaviour
     public void Die()
     {
         Debug.Log("사망");
+        onDead?.Invoke();
     }
 }
+

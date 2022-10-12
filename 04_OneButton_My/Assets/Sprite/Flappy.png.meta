@@ -566,7 +566,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flappy_28
+      name: Title
       rect:
         serializedVersion: 2
         x: 292
@@ -1689,6 +1689,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Title: 1753466319
       Flappy_60: 1515382778
       Flappy_67: -1728452449
       Background_Night: 967706007
@@ -1768,9 +1769,8 @@ TextureImporter:
       Flappy_27: -826813570
       Pipe_Top: 1966894741
       Number_Small_6: 684115028
-      Flappy_28: 1753466319
-      Bird1_3: -1781440847
       Number_Middle_3: 541011559
+      Bird1_3: -1781440847
       Flappy_0: 1500467382
   spritePackingTag: 
   pSDRemoveMatte: 0

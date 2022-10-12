@@ -13,7 +13,7 @@ public class Bird : MonoBehaviour
     public float jumpPower = 7.0f;
 
     /// <summary>
-    /// 위나 아래로 운직일 때 회전 최대값
+    /// 위나 아래로 움직일 때 회전 최대값
     /// </summary>
     public float pitchMaxAngle = 45.0f;
 
@@ -42,16 +42,27 @@ public class Bird : MonoBehaviour
     /// </summary>
     Rigidbody2D rigid;
 
-    // 유니티 이벤트 함수 ----------------------------------------------------------------------------------------
+    /// <summary>
+    /// 애니메이터
+    /// </summary>
+    Animator anim;
+
+
+    // 유니티 이벤트 함수 --------------------------------------------------------------------------
     private void Awake()    // 이 스크립트(컴포넌트)가 생성 완료 되었을 때
     {
         inputActions = new BirdInputActions();      // 인풋액션 객체 생성
         rigid = GetComponent<Rigidbody2D>();        // 리지드바디 컴포넌트 찾기
+        anim = GetComponent<Animator>();
     }
 
-    private void Start()                            // 첫번째 Update 함수가 실행되기 직전
+    private void Start()    // 첫번째 Update 함수가 실행되기 직전
     {
-        isDead = false;                             // 우선 살아있다고 표시
+        //Debug.Log("Bird - Start");
+        GameManager.Inst.onGameStart += OnGameStart;
+
+        isDead = true;                             // 우선 살아있다고 표시
+        rigid.simulated = false;
     }
 
     private void OnEnable() // 오브젝트가 활성화 될 때
@@ -67,27 +78,27 @@ public class Bird : MonoBehaviour
     }
 
     //private void Update()   // 매 프레임마다 호출
-    //{       
+    //{        
     //}
 
     private void FixedUpdate()  // 물리 업데이트 주기 마다(고정된 시간)
     {
-        if (!isDead)        // 살아있을 때만 아래 코드 실행
+        if (!isDead)    // 살아있을 때만 아래 코드 실행
         {
-            //rigid.velocity.y;       // +이면 새가 위로 올라가고 있다. -면 새가 아래로 내려가고 있다.
+            //rigid.velocity.y;   // +이면 새가 위로 올라가고 있다. -면 새가 아래로 내려가고 있다.
             float velocityY = Mathf.Clamp(rigid.velocity.y, -jumpPower, jumpPower); // jumpPower만큼 최대/최소값 지정
-            float angle = (velocityY / jumpPower) * pitchMaxAngle;              // 올라가거나 내려가는 정도에 따라 각도 설정
+            float angle = (velocityY / jumpPower) * pitchMaxAngle;  // 올라가거나 내려가는 정도에 따라 각도 설정
 
-            rigid.MoveRotation(angle);                                          // 설정된 각도로 회전
+            rigid.MoveRotation(angle);                              // 설정된 각도로 회전
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)      // 다른 컬라이더와 충돌했을 때 실행
+    private void OnCollisionEnter2D(Collision2D collision)  // 다른 컬라이더와 충돌했을 때 실행
     {
         Die(collision.GetContact(0));       // 사망처리하면서 충돌한 지점에 대한 정보 전달
     }
 
-    // 내부 함수들 --------------------------------------------------------------------------------------------------
+    // 내부 함수들 ---------------------------------------------------------------------------------
     /// <summary>
     /// 사망처리 함수
     /// </summary>
@@ -109,19 +120,37 @@ public class Bird : MonoBehaviour
         }
     }
 
-    // 입력 처리용 함수 ------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// 게임이 실행이 되었을 때 실행될 함수
+    /// </summary>
+    private void OnGameStart()
+    {
+        isDead = false;                 // 새를 살아있는 상태로 만들고
+        rigid.simulated = true;         // 리지드바디 물리 시뮬레이션 작동
+        anim.SetTrigger("GameStart");   // 새가 날개짓하도록 애니메이션 트리거 발동
+    }
+
+    // 입력 처리용 함수 ----------------------------------------------------------------------------
     /// <summary>
     /// 점프 입력이 들어왔을 때 실행되는 함수
     /// </summary>
     /// <param name="_">사용안함</param>
     private void OnJump(InputAction.CallbackContext _)
     {
-        //rigid.velocity = Vector2.zero;
-        //rigid.AddForce(Vector2.up * power, ForceMode2D.Impulse);
-        rigid.velocity = Vector2.up * jumpPower;        // 위쪽 방향으로 점프력만큼 velocity 변경
+        Jump();
     }
 
-    // 테스트용 함수 ------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// 실제 점프를 하는 함수
+    /// </summary>
+    public void Jump()
+    {
+        rigid.velocity = Vector2.up * jumpPower;    // 위쪽 방향으로 점프력만큼 velocity 변경
+    }
+
+
+
+    // 테스트용 함수 -------------------------------------------------------------------------------
     public void TestDie()
     {
         // 처음 죽었을 때만 처리하는 코드
