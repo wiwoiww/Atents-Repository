@@ -53,7 +53,6 @@ public class GameManager : Singleton<GameManager>
 
         scoreUI = GameObject.FindGameObjectWithTag("Score").GetComponent<ImageNumber>();
         Score = 0;
-        scoreUI.gameObject.SetActive(false);
 
         LoadGameData();
     }
@@ -142,8 +141,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GameStart()
     {
-        onGameStart?.Invoke();      // 게임이 시작되었음을 알림        
-        scoreUI.gameObject.SetActive(true);
+        onGameStart?.Invoke();      // 게임이 시작되었음을 알림   
     }
 
     public void TestSetScore(int newScore)
