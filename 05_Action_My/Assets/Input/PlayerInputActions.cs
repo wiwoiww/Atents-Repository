@@ -35,6 +35,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MoveModeChange"",
+                    ""type"": ""Button"",
+                    ""id"": ""6214368a-f64a-4dbe-9204-8bf20a5f555a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -50,59 +59,86 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": ""WASD"",
+                    ""id"": ""57c5ee6d-c519-4427-935f-b3cc4f5e4e09"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""up"",
-                    ""id"": ""91912a4d-1a12-4f00-b63f-9f258d6dfc77"",
+                    ""id"": ""0df546bc-520d-495d-802b-72440a13c4f2"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""KM"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""d83da11a-bd20-4876-b648-9b6c21108f50"",
+                    ""id"": ""d6a1e7c4-da72-480f-ba86-000c529ff87d"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""KM"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""09b0f305-928f-405c-b308-610d6c141e0c"",
+                    ""id"": ""b28b1705-33f6-4ec7-a3c7-33ad4f935cda"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""KM"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""ef1b3e0f-eddd-47af-9782-a0705d7b0532"",
+                    ""id"": ""d30a78ad-64f2-4c22-8a77-cdba3dbe4dae"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""KM"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eadb7585-43f5-4f7a-b502-3ed9d49e3684"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""MoveModeChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Keyboard"",
-            ""bindingGroup"": ""Keyboard"",
+            ""name"": ""KM"",
+            ""bindingGroup"": ""KM"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -113,6 +149,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_MoveModeChange = m_Player.FindAction("MoveModeChange", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -173,11 +210,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_MoveModeChange;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @MoveModeChange => m_Wrapper.m_Player_MoveModeChange;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -190,6 +229,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @MoveModeChange.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModeChange;
+                @MoveModeChange.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModeChange;
+                @MoveModeChange.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModeChange;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -197,21 +239,25 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @MoveModeChange.started += instance.OnMoveModeChange;
+                @MoveModeChange.performed += instance.OnMoveModeChange;
+                @MoveModeChange.canceled += instance.OnMoveModeChange;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
-    private int m_KeyboardSchemeIndex = -1;
-    public InputControlScheme KeyboardScheme
+    private int m_KMSchemeIndex = -1;
+    public InputControlScheme KMScheme
     {
         get
         {
-            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
-            return asset.controlSchemes[m_KeyboardSchemeIndex];
+            if (m_KMSchemeIndex == -1) m_KMSchemeIndex = asset.FindControlSchemeIndex("KM");
+            return asset.controlSchemes[m_KMSchemeIndex];
         }
     }
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnMoveModeChange(InputAction.CallbackContext context);
     }
 }
