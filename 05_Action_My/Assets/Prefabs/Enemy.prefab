@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: -7546663443381655496}
   - component: {fileID: -1272774418626161868}
   - component: {fileID: 7053077183710579805}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,6 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoints: {fileID: 0}
   moveSpeed: 3
+  sightRange: 10
+  sightHalfAngle: 50
   waitTime: 1
 --- !u!195 &7053077183710579805
 NavMeshAgent:
