@@ -134,6 +134,8 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetFloat("Speed", 1.0f);   // Run모드면 달리는 애니메이션
             }
+
+            inputDir.y = -2.0f;
         }
         else
         {
