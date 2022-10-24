@@ -16,7 +16,7 @@ public class Player : MonoBehaviour, IBattle, IHealth
     Transform weapon_r;
 
     /// <summary>
-    /// 방패가 붙어있을 게임 오브젝터의 트랜스폼
+    /// 방패가 붙어있을 게임 오브젝트의 트랜스폼
     /// </summary>
     Transform weapon_l;
 
@@ -25,10 +25,13 @@ public class Player : MonoBehaviour, IBattle, IHealth
     /// </summary>
     Collider weaponBlade;
 
+    Animator anim;  // 애니메이터 컴포넌트
+
     public float attackPower = 10.0f;      // 공격력
     public float defencePower = 3.0f;      // 방어력
     public float maxHP = 100.0f;    // 최대 HP
     float hp = 100.0f;              // 현재 HP
+    bool isAlive = true;            // 살았는지 죽었는지 확인용
 
     // 프로퍼티 ------------------------------------------------------------------------------------
     public float AttackPower => attackPower;
@@ -40,7 +43,7 @@ public class Player : MonoBehaviour, IBattle, IHealth
         get => hp;
         set
         {
-            if (hp != value)
+            if (isAlive && hp != value) // 살아있고 HP가 변경되었을 때만 실행
             {
                 hp = value;
 
@@ -51,13 +54,14 @@ public class Player : MonoBehaviour, IBattle, IHealth
 
                 hp = Mathf.Clamp(hp, 0.0f, maxHP);
 
-                onHealthChange?.Invoke(hp/maxHP);
+                onHealthChange?.Invoke(hp / maxHP);
             }
         }
     }
 
+    // 프로퍼티 ------------------------------------------------------------------------------------
     public float MaxHP => maxHP;
-    // --------------------------------------------------------------------------------------------
+    public bool IsAlive => isAlive;
 
     // 델리게이트 ----------------------------------------------------------------------------------
     public Action<float> onHealthChange { get; set; }
@@ -66,8 +70,10 @@ public class Player : MonoBehaviour, IBattle, IHealth
 
     private void Awake()
     {
-        weapon_r = GetComponentInChildren<WeaponPosition>().transform;  // 무기가 붙는 위치를 컴포넌트로 찾기
-        weapon_l = GetComponentInChildren<ShieldPositon>().transform;   // 방패가 붙는 위치를 컴포넌트로 찾기
+        anim = GetComponent<Animator>();
+
+        weapon_r = GetComponentInChildren<WeaponPosition>().transform;  // 무기가 붙는 위치를 컴포넌트의 타입으로 찾기
+        weapon_l = GetComponentInChildren<ShieldPositon>().transform;   // 방패가 붙는 위치를 컴포넌트의 타입으로 찾기
 
         // 장비교체가 일어나면 새로 설정해야 한다.
         weaponPS = weapon_r.GetComponentInChildren<ParticleSystem>();   // 무기에 붙어있는 파티클 시스템 가져오기
@@ -77,6 +83,7 @@ public class Player : MonoBehaviour, IBattle, IHealth
     private void Start()
     {
         hp = maxHP;
+        isAlive = true;
     }
 
     /// <summary>
@@ -123,7 +130,7 @@ public class Player : MonoBehaviour, IBattle, IHealth
     /// <summary>
     /// 무기와 방패를 표시하거나 표시하지 않는 함수
     /// </summary>
-    /// <param name="isShow">true면 표시하고, false면 표시하지 않는다.</param>
+    /// <param name="isShow">ture면 표시하고, false면 표시하지 않는다.</param>
     public void ShowWeaponAndShield(bool isShow)
     {
         weapon_r.gameObject.SetActive(isShow);
@@ -145,8 +152,11 @@ public class Player : MonoBehaviour, IBattle, IHealth
     /// <param name="damage">현재 입은 데미지</param>
     public void Defence(float damage)
     {
-        // 기본 공식 : 실제 입는 데미지 = 적 공격 데미지 - 방어력
-        HP -= (damage - DefencePower);
+        if (isAlive)                // 살아있을 때만 데미지 입음.
+        {
+            anim.SetTrigger("Hit"); // 피격 애니메이션 재생            
+            HP -= (damage - DefencePower);  // 기본 공식 : 실제 입는 데미지 = 적 공격 데미지 - 방어력
+        }
     }
 
     /// <summary>
@@ -154,6 +164,9 @@ public class Player : MonoBehaviour, IBattle, IHealth
     /// </summary>
     public void Die()
     {
+        isAlive = false;
+        anim.SetLayerWeight(1, 0.0f);       // 애니메이션 레이어 가중치 제거
+        anim.SetBool("IsAlive", isAlive);   // 죽었다고 표시해서 사망 애니메이션 재생
         onDie?.Invoke();
     }
 }

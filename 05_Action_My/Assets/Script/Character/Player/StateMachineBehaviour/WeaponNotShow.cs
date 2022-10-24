@@ -15,4 +15,5 @@ public class WeaponNotShow : StateMachineBehaviour
     {
         GameManager.Inst.Player.ShowWeaponAndShield(true);
     }
+
 }

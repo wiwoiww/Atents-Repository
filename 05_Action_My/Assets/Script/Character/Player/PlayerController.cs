@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     enum MoveMode
     {
-        Walk =0,
+        Walk = 0,
         Run
     }
 
@@ -60,16 +60,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     Animator anim;
 
+    /// <summary>
+    /// 캐릭터 컨트롤러 컴포넌트 캐싱용
+    /// </summary>
     CharacterController cc;
+
+    /// <summary>
+    /// 플레이어 스크립트 캐싱용
+    /// </summary>
+    Player player;
+
+
 
     private void Awake()
     {
         // 컴포넌트 만들어졌을 때 인풋 액션 인스턴스 생성
         inputActions = new PlayerInputActions();
-        
+
         // 컴포넌트 찾아오기
         anim = GetComponent<Animator>();
         cc = GetComponent<CharacterController>();
+        player = GetComponent<Player>();
     }
 
     private void OnEnable()
@@ -85,9 +96,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
+        // 액션과 함수 연결 해제
         inputActions.Player.Attack.performed -= OnAttack;
         inputActions.Player.MoveModeChange.performed -= OnMoveModeChange;
-        // 액션과 함수 연결 해제
         inputActions.Player.Move.canceled -= OnMove;
         inputActions.Player.Move.performed -= OnMove;
         // 액션맵 비활성화
@@ -96,11 +107,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // inputDir방향으로 초당 moveSpeed의 속도로 이동. 월드 스페이스 기준으로 이동
-        cc.Move(currentSpeed * Time.deltaTime * inputDir);
+        if (player.IsAlive) // 살아있을 때에만 업데이트
+        {
+            // inputDir방향으로 초당 moveSpeed의 속도로 이동.
+            cc.Move(currentSpeed * Time.deltaTime * inputDir);
 
-        // transform.rotation에서 targetRotation으로 초당 1/turnSpeed씩 보간.
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            // transform.rotation에서 targetRotation으로 초당 1/turnSpeed씩 보간.
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -116,7 +130,7 @@ public class PlayerController : MonoBehaviour
         inputDir.y = 0.0f;
         inputDir.z = input.y;
 
-        if (!context.canceled)
+        if (!context.canceled && player.IsAlive)    // 살아있을 때에만 입력 받기
         {
             // 입력이 들어왔을 때만 실행되는 코드
 
@@ -126,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
             targetRotation = Quaternion.LookRotation(inputDir); // inputDir 방향으로 바라보는 회전 만들기
 
-            if(moveMode == MoveMode.Walk)
+            if (moveMode == MoveMode.Walk)
             {
                 anim.SetFloat("Speed", 0.3f);   // Walk모드면 걷는 애니메이션
             }
@@ -135,12 +149,14 @@ public class PlayerController : MonoBehaviour
                 anim.SetFloat("Speed", 1.0f);   // Run모드면 달리는 애니메이션
             }
 
-            inputDir.y = -2.0f;
+            inputDir.y = -2.0f;     // 강제로 바닥에 내려가도록 처리
         }
         else
         {
-            anim.SetFloat("Speed", 0.0f);       // 입력이 안들어 왔으면 대기 애니메이션
+            inputDir = Vector3.zero;
+            anim.SetFloat("Speed", 0.0f);       // 입력이 안들어 왔으면 대기 애니메이션. 플레이어가 죽었을 때에도 실행
         }
+
     }
 
     /// <summary>
@@ -149,14 +165,14 @@ public class PlayerController : MonoBehaviour
     /// <param name="_"></param>
     private void OnMoveModeChange(InputAction.CallbackContext _)
     {
-        if(moveMode == MoveMode.Walk)
+        if (moveMode == MoveMode.Walk)
         {
             // Walk모드면 Run모드로 전환
             moveMode = MoveMode.Run;
             currentSpeed = runSpeed;            // 이동 속도도 달리는 속도로 변경
             if (inputDir != Vector3.zero)
             {
-                anim.SetFloat("Speed", 1.0f);   // 움직이는 중일 때만 재생하는 애니메이션도 변경
+                anim.SetFloat("Speed", 1.0f);   // 움직이는 중일 때만 재생하는 애니메이션 변경
             }
         }
         else
@@ -166,7 +182,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;           // 이동 속도를 걷는 속도로 변경
             if (inputDir != Vector3.zero)
             {
-                anim.SetFloat("Speed", 0.3f);   // 움직이는 중일 때만 재생하는 애니메이션도 변경
+                anim.SetFloat("Speed", 0.3f);   // 움직이는 중일 때만 재생하는 애니메이션 변경
             }
         }
     }
@@ -179,11 +195,13 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.Log(anim.GetCurrentAnimatorStateInfo(0).normalizedTime); // 현재 재생중인 애니메이션의 진행 상태를 알려줌(0~1)
 
-        int comboState = anim.GetInteger("ComboState"); // ComboState를 애니메이터에서 읽어와서
-        comboState++;       // 콤보 상태 1 증가 시키기
-        anim.SetInteger("ComboState", comboState);      // 애니메이터에 증가된 콤보 상태 설정
-        anim.SetTrigger("Attack");                      // Attack 트리거 발동
+        if (player.IsAlive)
+        {
+            int comboState = anim.GetInteger("ComboState"); // ComboState를 애니메이터에서 읽어와서 
+            comboState++;   // 콤보 상태 1 증가 시키기        
+            anim.SetInteger("ComboState", comboState);      // 애니메이터에 증가된 콤보 상태 설정
+            anim.SetTrigger("Attack");                      // Attack 트리거 발동
+        }
     }
-
 }
 

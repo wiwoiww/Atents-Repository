@@ -23,11 +23,13 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     /// </summary>
     Transform waypointTarget;
 
+
     // 이동 관련 변수 ------------------------------------------------------------------------------
     /// <summary>
     /// 적의 이동 속도
     /// </summary>
     public float moveSpeed = 3.0f;
+
 
     // 추적 관련 변수 ------------------------------------------------------------------------------
     /// <summary>
@@ -45,10 +47,12 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     /// </summary>
     Transform chaseTarget;
 
+
     // 상태 관련 변수 ------------------------------------------------------------------------------
     EnemyState state = EnemyState.Patrol; // 현재 적의 상태(대기 상태냐 순찰 상태냐)
     public float waitTime = 1.0f;   // 목적지에 도착했을 때 기다리는 시간
     float waitTimer;                // 남아있는 기다려야 하는 시간    
+
 
     // 컴포넌트 캐싱용 변수 -------------------------------------------------------------------------
     Animator anim;
@@ -56,6 +60,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     SphereCollider bodyCollider;
     Rigidbody rigid;
     ParticleSystem dieEffect;       // 죽을 때 표시될 이팩트
+
 
     // 추가 데이터 타입 ----------------------------------------------------------------------------
 
@@ -70,11 +75,13 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         Dead        // 사망 상태
     }
 
+
     // 전투용 데이터 -------------------------------------------------------------------------------
     public float attackPower = 10.0f;      // 공격력
     public float defencePower = 3.0f;      // 방어력
     public float maxHP = 100.0f;    // 최대 HP
-    float hp = 100.0f;              // 현재 HP
+    float hp = 100.0f;              // 현재 HP    
+
 
     // 델리게이트 ----------------------------------------------------------------------------------
     /// <summary>
@@ -91,6 +98,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     /// 상태별 업데이터 함수를 가질 델리게이트
     /// </summary>
     Action stateUpdate;
+    // --------------------------------------------------------------------------------------------
 
     // 프로퍼티 -----------------------------------------------------------------------------------
     public float AttackPower => attackPower;
@@ -173,7 +181,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
                         break;
                     case EnemyState.Dead:
                         agent.isStopped = true;     // 길찾기 정지
-                        anim.SetTrigger("Die");     // 사망 애니메이션 재생               
+                        anim.SetTrigger("Die");     // 사망 애니메이션 재생                                                                        
                         StartCoroutine(DeadRepresent());    // 시간이 지나면 서서히 가라앉는 연출 실행
                         stateUpdate = Update_Dead;  // FixedUpdate에서 실행될 델리게이트 변경
                         break;
@@ -411,15 +419,18 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
 
         yield return new WaitForSeconds(1.5f);  // 슬라임 사망 애니메이션이 1.33초라 그 이후에 떨어짐
 
-        agent.enabled = false;          // 네브매시 에이전트 컴포넌트를 끄기
+        // 바닥 아래로 떨어트리기
+        agent.enabled = false;          // 네브메시 에이전트 컴포넌트를 끄기
         bodyCollider.enabled = false;   // 컬라이더 컴포넌트 끄기
         rigid.isKinematic = false;      // 키네마틱 끄기
         rigid.drag = 10.0f;             // 마찰력은 천천히 떨어질 정도로
 
         yield return new WaitForSeconds(1.5f);  // 1.5초 뒤에
-        Destroy(dieEffect.gameObject);      // 이팩트 삭제
-        Destroy(this.gameObject, 5.0f);     // 적도 삭제
+        // 삭제 처리
+        Destroy(dieEffect.gameObject);  // 이팩트 삭제
+        Destroy(this.gameObject);       // 적도 삭제
     }
+
 
     public void Test()
     {
