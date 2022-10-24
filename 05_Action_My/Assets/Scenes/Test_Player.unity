@@ -181,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 9036980633323257398, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: e325b3a82083bc442a57905f323eee56, type: 2}
+      objectReference: {fileID: 9100000, guid: 1267129d07508cf44bf95682a32b55a4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
 --- !u!1 &262330811
@@ -406,6 +406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2fd1719a8619014096344bea6de5dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackPower: 10
+  defencePower: 3
+  maxHP: 100
 --- !u!1 &1394161755
 GameObject:
   m_ObjectHideFlags: 0
