@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7775541497779643322}
   - component: {fileID: 7775541497779643321}
-  m_Layer: 0
+  - component: {fileID: 2736881860147433762}
+  m_Layer: 9
   m_Name: TempItem_00_Ruby
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -44,4 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd5ff345cee9db44b61d076b3995b4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8606872615071780168, guid: b8b43514e1027ce4ca08098f9979eb2f, type: 3}
+  data: {fileID: 11400000, guid: 2adf2eae3201e4040b94ceefd132c747, type: 2}
+--- !u!135 &2736881860147433762
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7775541497779643320}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 1, z: 0}
