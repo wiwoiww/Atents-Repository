@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7775541497779643322}
   - component: {fileID: 7775541497779643321}
   m_Layer: 0
-  m_Name: TempItem_Ruby
+  m_Name: TempItem_00_Ruby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
