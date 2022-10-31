@@ -663,8 +663,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
       propertyPath: dropItemPrefabs.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.data[1].id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.data[2].id
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
       propertyPath: dropItemPrefabs.Array.data[0]
@@ -678,6 +690,18 @@ PrefabInstance:
       propertyPath: dropItemPrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 7775541497779643320, guid: 23849144c1980f94695ecd6ea7298182, type: 3}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.data[0].dropPercentage
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.data[1].dropPercentage
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: -1272774418626161868, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
+      propertyPath: dropItems.Array.data[2].dropPercentage
+      value: 0.33333334
+      objectReference: {fileID: 0}
     - target: {fileID: 657900745498327440, guid: 5e1682dc92e195e4b8342aa8089fe681, type: 3}
       propertyPath: m_Name
       value: Enemy

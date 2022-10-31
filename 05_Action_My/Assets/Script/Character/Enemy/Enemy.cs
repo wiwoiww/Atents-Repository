@@ -427,22 +427,32 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     /// </summary>
     void MakeDropItem()
     {
-        float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
-        int index = 0;
-        float checkPercentage = 0.0f;
-        for(int i=0;i<dropItems.Length;i++)
+        float percentage = UnityEngine.Random.Range(0.0f, 1.0f);        // 드랍할 아이템을 결정하기 위한 랜덤 숫자 가져오기
+        int index = 0;                                                  // 드랍할(내가 가지고 있는) 아이템의 인덱스
+        float max = 0;                                                  // 가장 드랍할 확율이 높은 아이템을 찾기 위한 임시값
+        for (int i = 0; i < dropItems.Length; i++)
         {
-            checkPercentage += dropItems[i].dropPercentage;
-            if(percentage <= checkPercentage)
+            if(max < dropItems[i].dropPercentage)
             {
-                index = i;
-                break;
+                max = dropItems[i].dropPercentage;                      // 가장 드랍 확률이 높은 아이템 찾기
+                index = i;                                              // index의 디폴트 값은 가장 드랍 확률이 높은 아이템
             }
         }
 
-        GameObject obj = ItemFactory.MakeItem(index);
-        obj.transform.position = transform.position;
-        obj.transform.rotation = transform.rotation;
+        float checkPercentage = 0.0f;                                   // 아이템의 드랍 확률을 누적하는 임시 값
+        for(int i=0;i<dropItems.Length;i++)
+        {
+            checkPercentage += dropItems[i].dropPercentage;             // checkPercentage를 단계별로 계속 누적 시킴
+
+            // checkPercentage와 percentage 비교(랜덤 숫자가 누적된 확률보다 낮은지 확인, 낮으면 해당 아이템 생성)
+            if (percentage <= checkPercentage)                           
+            {
+                index = i;                                              // 생성할 아이템 결정
+                break;                                                  // for문 종료
+            }
+        }
+
+        GameObject obj = ItemFactory.MakeItem(dropItems[index].id, transform.position, true);// 선택된 아이템 생성
     }
 
     /// <summary>
