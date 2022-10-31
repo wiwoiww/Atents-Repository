@@ -14,7 +14,7 @@ public class Test_Battle : TestBase
 
     protected override void Test1(InputAction.CallbackContext _)
     {
-        player.Defence(10);
+        player.Defence(60);
     }
 
     protected override void Test2(InputAction.CallbackContext _)
@@ -28,6 +28,11 @@ public class Test_Battle : TestBase
         //GameManager.Inst.ItemData.TestItemData[0]
 
         //GameManager.Inst.ItemData[ItemIDCode.Ruby];
+
         GameObject obj = ItemFactory.MakeItem(ItemIDCode.Ruby);
+        GameObject obj2 = ItemFactory.MakeItem(ItemIDCode.Emerald, new Vector3(0, 0, 1.2f));
+        GameObject obj3 = ItemFactory.MakeItem(ItemIDCode.Emerald, new Vector3(0, 0, 1.2f), true);
+
+        ItemFactory.MakeItem(0);
     }
 }
