@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     public float waitTime = 1.0f;   // 목적지에 도착했을 때 기다리는 시간
     float waitTimer;                // 남아있는 기다려야 하는 시간    
 
+
     // 컴포넌트 캐싱용 변수 -------------------------------------------------------------------------
     Animator anim;
     NavMeshAgent agent;
@@ -80,6 +81,21 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     public float defencePower = 3.0f;      // 방어력
     public float maxHP = 100.0f;    // 최대 HP
     float hp = 100.0f;              // 현재 HP    
+
+
+    // 아이템 드랍용 데이터 -------------------------------------------------------------------------
+    [System.Serializable]
+    public struct ItemDropInfo          // 드랍 아이템 정보
+    {
+        public ItemIDCode id;           // 아이템 종류
+        [Range(0.0f, 1.0f)]
+        public float dropPercentage;    // 아이템 드랍 확율
+    }
+
+    /// <summary>
+    /// 이 몬스터가 드랍할 아이템의 종류
+    /// </summary>    
+    public ItemDropInfo[] dropItems;
 
 
     // 델리게이트 ----------------------------------------------------------------------------------
@@ -180,7 +196,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
                         break;
                     case EnemyState.Dead:
                         agent.isStopped = true;     // 길찾기 정지
-                        anim.SetTrigger("Die");     // 사망 애니메이션 재생                                                                        
+                        anim.SetTrigger("Die");     // 사망 애니메이션 재생                                                    
                         StartCoroutine(DeadRepresent());    // 시간이 지나면 서서히 가라앉는 연출 실행
                         stateUpdate = Update_Dead;  // FixedUpdate에서 실행될 델리게이트 변경
                         break;
@@ -406,18 +422,21 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         MakeDropItem();
     }
 
+    /// <summary>
+    /// 아이템 드랍 함수
+    /// </summary>
     void MakeDropItem()
     {
         float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
-        uint index;
-        if( percentage < 0.6f)
+        int index;
+        if (percentage < 0.6f)
         {
             // 60% 확률로 들어옴
             index = 0;
         }
-        else if(percentage < 0.9f)
+        else if (percentage < 0.9f)
         {
-            // 30% 확률로 들어옴
+            // 30% 확율로 들어옴
             index = 1;
         }
         else
@@ -426,7 +445,6 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
             index = 2;
         }
 
-        //Instantiate(dropItemPrefabs[index], transform.position, transform.rotation);
         GameObject obj = ItemFactory.MakeItem(index);
         obj.transform.position = transform.position;
         obj.transform.rotation = transform.rotation;
@@ -499,6 +517,26 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         Handles.DrawWireArc(transform.position, transform.up, q1 * forward, sightHalfAngle * 2, sightRange, 5.0f);  // 호 그리기
 #endif
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// 인스펙터 창에서 성공적으로 값이 변경되었을 때 실행
+    /// </summary>
+    private void OnValidate()
+    {
+        // 드랍 아이템의 드랍 확률의 합을 1로 만들기
+        float total = 0.0f;
+        foreach (var item in dropItems)
+        {
+            total += item.dropPercentage;   // 전체 합 구하기
+        }
+
+        for (int i = 0; i < dropItems.Length; i++)
+        {
+            dropItems[i].dropPercentage /= total;   // 전체 합으로 나누어서 최종합을 1로 만들기
+        }
+    }
+#endif
 
 
 }
