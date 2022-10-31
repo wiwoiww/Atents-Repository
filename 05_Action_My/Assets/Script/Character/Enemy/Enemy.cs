@@ -428,21 +428,16 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     void MakeDropItem()
     {
         float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
-        int index;
-        if (percentage < 0.6f)
+        int index = 0;
+        float checkPercentage = 0.0f;
+        for(int i=0;i<dropItems.Length;i++)
         {
-            // 60% 확률로 들어옴
-            index = 0;
-        }
-        else if (percentage < 0.9f)
-        {
-            // 30% 확율로 들어옴
-            index = 1;
-        }
-        else
-        {
-            // 10% 확률로 들어옴
-            index = 2;
+            checkPercentage += dropItems[i].dropPercentage;
+            if(percentage <= checkPercentage)
+            {
+                index = i;
+                break;
+            }
         }
 
         GameObject obj = ItemFactory.MakeItem(index);
@@ -524,16 +519,19 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     /// </summary>
     private void OnValidate()
     {
-        // 드랍 아이템의 드랍 확률의 합을 1로 만들기
-        float total = 0.0f;
-        foreach (var item in dropItems)
+        if (State != EnemyState.Dead)
         {
-            total += item.dropPercentage;   // 전체 합 구하기
-        }
+            // 드랍 아이템의 드랍 확률의 합을 1로 만들기
+            float total = 0.0f;
+            foreach (var item in dropItems)
+            {
+                total += item.dropPercentage;   // 전체 합 구하기
+            }
 
-        for (int i = 0; i < dropItems.Length; i++)
-        {
-            dropItems[i].dropPercentage /= total;   // 전체 합으로 나누어서 최종합을 1로 만들기
+            for (int i = 0; i < dropItems.Length; i++)
+            {
+                dropItems[i].dropPercentage /= total;   // 전체 합으로 나누어서 최종합을 1로 만들기
+            }
         }
     }
 #endif
