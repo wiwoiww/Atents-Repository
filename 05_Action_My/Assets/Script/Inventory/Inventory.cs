@@ -35,6 +35,13 @@ public class Inventory
 
     public ItemSlot TempSlot => tempSlot;
 
+    /// <summary>
+    /// 특정 번째의 ItemSlot을 돌려주는 인덱서
+    /// </summary>
+    /// <param name="index">돌려줄 슬롯의 위치</param>
+    /// <returns>index번째에 있는 ItemSlot</returns>
+    public ItemSlot this[uint index] => slots[index];
+
     // 함수들 --------------------------------------------------------------------------------------
 
     public Inventory(int size = Default_Inventory_Size)
@@ -198,8 +205,18 @@ public class Inventory
             Debug.Log($"실패 : {slotIndex}는 잘못된 인덱스입니다.");
         }
 
-
         return result;
+    }
+
+    /// <summary>
+    /// 인벤토리의 모든 아이템을 비우는 함수
+    /// </summary>
+    public void ClearInventory()
+    {
+        foreach (var slot in slots)
+        {
+            slot.ClearSlotItem();
+        }
     }
 
     /// <summary>
