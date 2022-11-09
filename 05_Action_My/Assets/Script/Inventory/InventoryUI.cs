@@ -6,19 +6,47 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    // ItemSlotUI가 있는 프리팹. 인벤토리 크기 변화에 대비해서 가지고 있기.
+    /// <summary>
+    /// ItemSlotUI가 있는 프리팹. 인벤토리 크기 변화에 대비해서 가지고 있기.
+    /// </summary>
     public GameObject slotPrefab;
 
+    /// <summary>
+    /// 이 UI가 보여줄 인벤토리
+    /// </summary>
     Inventory inven;
 
+    /// <summary>
+    /// 이 인벤토리에 있는 아이템 슬롯 UI
+    /// </summary>
     ItemSlotUI[] slotUIs;
+
+    /// <summary>
+    /// 아이템 이동 및 나누기를 위한 임시 슬롯
+    /// </summary>
     TempItemSlotUI tempSlotUI;
+
+    /// <summary>
+    /// 아이템 상세 정보를 보여주는 UI창
+    /// </summary>
+    DetailInfoUI detail;
 
     private void Awake()
     {
         //Transform slotParent = transform.GetChild(0);
-        slotUIs = GetComponentsInChildren<ItemSlotUI>();
+        //slotUIs = GetComponentsInChildren<ItemSlotUI>();
+
+        // 컴포넌트 찾기
+        Transform slotParent = transform.GetChild(0);
+        slotUIs =new ItemSlotUI[slotParent.childCount];
+        for(int i=0;i<slotParent.childCount;i++)
+        {
+            Transform child = slotParent.GetChild(i);
+            slotUIs[i] = child.GetComponent<ItemSlotUI>();
+        }
+
         tempSlotUI = GetComponentInChildren<TempItemSlotUI>();
+        detail =GetComponentInChildren<DetailInfoUI>();
     }
 
     /// <summary>
@@ -64,25 +92,59 @@ public class InventoryUI : MonoBehaviour
         {
             slotUIs[i].InitializeSlot((uint)i, inven[i]);           // 각 슬롯 초기화
             slotUIs[i].Resize(grid.cellSize.x * 0.75f);             // 슬롯 크기에 맞게 내부 크기 리사이즈
-            slotUIs[i].onDragStart += OnItemDragStart;
-            slotUIs[i].onDragEnd += OnItemDragEnd;
+            slotUIs[i].onDragStart += OnItemMoveStart;              // 슬롯에서 드래그가 시작될 때 실행될 함수 연결
+            slotUIs[i].onDragEnd += OnItemMoveEnd;                  // 슬롯에서 드래그가 끝날때 실행될 함수 연결
+            slotUIs[i].onDragCancel += OnItemMoveEnd;               // 드래그가 실패했을 때 실행될 함수 연결
+            slotUIs[i].onClick += OnItemMoveEnd;                    // 클릭을 했을 때 실행될 함수 연결
+            slotUIs[i].onPointerEnter += OnItemDetailOn;            // 마우스가 들어갔을 때 실행될 함수 연결    
+            slotUIs[i].onPointerExit += OnItemDetailOff;            // 마우스가 나갔을 때 실행될 함수 연결
+
         }
 
-        tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot);
-        tempSlotUI.Close();
+        // 임시 슬롯 초기화 처리
+        tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot); // 임시 슬롯 초기화
+        tempSlotUI.Close(); // 기본적으로 닫아 놓기
 
     }
 
-    private void OnItemDragStart(uint slotID)
+    /// <summary>
+    /// 슬롯에 드래그를 시작했을 때 실행될 함수
+    /// </summary>
+    /// <param name="slotID">드래그가 시작된 슬롯의 ID</param>
+    private void OnItemMoveStart(uint slotID)
     {
-        inven.MoveItem(slotID, Inventory.TempSlotIndex);
-        tempSlotUI.Open();
+        inven.MoveItem(slotID, Inventory.TempSlotIndex);    // 슬롯에 있는 아이템들을 임시 슬롯으로 모두 옮김
+        tempSlotUI.Open();                                  // 임시 슬롯을 보여주기
     }
 
-    private void OnItemDragEnd(uint slotID)
+    /// <summary>
+    /// 드래그가 슬롯에서 끝났을 때, 실패했을 때, 클릭이 되었을 때 실행될 함수
+    /// </summary>
+    /// <param name="slotID">드래그가 끝난 슬롯의 ID</param>
+    private void OnItemMoveEnd(uint slotID)
     {
-        tempSlotUI.Close();
-        inven.MoveItem(Inventory.TempSlotIndex, slotID);
+        inven.MoveItem(Inventory.TempSlotIndex, slotID);    // 임시 슬롯의 아이템들을 슬롯에 모두 옮김
+        if (tempSlotUI.ItemSlot.IsEmpty)
+        {
+            tempSlotUI.Close();                             // 임시 슬롯을 안보이게 만들기
+        }
     }
 
+    /// <summary>
+    /// 마우스가 슬롯에 들어갔을 때 해당 슬롯에 있는 아이템을 상세 정보 창에서 볼 수 있도록 여는 함수
+    /// </summary>
+    /// <param name="slotID">대상 슬롯</param>
+    private void OnItemDetailOn(uint slotID)
+    {
+        detail.Open(slotUIs[slotID].ItemSlot.ItemData); // 대상 슬롯의 아이템 데이터 넘겨주며 열기
+    }
+
+    /// <summary>
+    /// 마우스가 슬롯에 나갔을 때 상세 정보창을 닫는 함수
+    /// </summary>
+    /// <param name="_">사용 안함</param>
+    private void OnItemDetailOff(uint _)
+    {
+        detail.Close();
+    }
 }
