@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
@@ -94,15 +95,17 @@ public class InventoryUI : MonoBehaviour
             slotUIs[i].Resize(grid.cellSize.x * 0.75f);             // 슬롯 크기에 맞게 내부 크기 리사이즈
             slotUIs[i].onDragStart += OnItemMoveStart;              // 슬롯에서 드래그가 시작될 때 실행될 함수 연결
             slotUIs[i].onDragEnd += OnItemMoveEnd;                  // 슬롯에서 드래그가 끝날때 실행될 함수 연결
-            slotUIs[i].onDragCancel += OnItemMoveEnd;               // 드래그가 실패했을 때 실행될 함수 연결
+            slotUIs[i].onDragCancel += OnItemMoveCancel;            // 드래그가 실패했을 때 실행될 함수 연결
             slotUIs[i].onClick += OnItemMoveEnd;                    // 클릭을 했을 때 실행될 함수 연결
             slotUIs[i].onPointerEnter += OnItemDetailOn;            // 마우스가 들어갔을 때 실행될 함수 연결    
             slotUIs[i].onPointerExit += OnItemDetailOff;            // 마우스가 나갔을 때 실행될 함수 연결
+            slotUIs[i].onPointerMove += OnPointerMove;              // 마우스가 슬롯 안에서 움직일 때 실행될 함수 연결
 
         }
 
         // 임시 슬롯 초기화 처리
         tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot); // 임시 슬롯 초기화
+        tempSlotUI.onTempSlotOpenClose += OnDetailPause;
         tempSlotUI.Close(); // 기본적으로 닫아 놓기
 
     }
@@ -118,10 +121,20 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 드래그가 슬롯에서 끝났을 때, 실패했을 때, 클릭이 되었을 때 실행될 함수
+    /// 드래그가 슬롯에서 끝났을 때, 클릭이 되었을 때 실행될 함수
     /// </summary>
     /// <param name="slotID">드래그가 끝난 슬롯의 ID</param>
     private void OnItemMoveEnd(uint slotID)
+    {
+        OnItemMoveCancel(slotID);
+        detail.Open(inven[slotID].ItemData);
+    }
+
+    /// <summary>
+    /// 드래그가 실패했을 때 실행될 함수
+    /// </summary>
+    /// <param name="slotID">드래그가 끝난 슬롯의 ID</param>
+    private void OnItemMoveCancel(uint slotID)
     {
         inven.MoveItem(Inventory.TempSlotIndex, slotID);    // 임시 슬롯의 아이템들을 슬롯에 모두 옮김
         if (tempSlotUI.ItemSlot.IsEmpty)
@@ -146,5 +159,27 @@ public class InventoryUI : MonoBehaviour
     private void OnItemDetailOff(uint _)
     {
         detail.Close();
+    }
+
+    /// <summary>
+    /// 마우스가 슬롯안에서 움직일 때 실행되는 함수
+    /// </summary>
+    /// <param name="pointerPos">마우스 포인터의 스크린 좌표</param>
+    private void OnPointerMove(Vector2 pointerPos)
+    {
+        if (detail.IsOpen)  // 상세정보 창이 열려있을 때만
+        {
+            detail.MovePosition(pointerPos);
+        }
+    }
+
+    /// <summary>
+    /// TempItemSlotUI가 열리고 닫힐 때 실행되는 함수
+    /// </summary>
+    /// <param name="isPause">true면 열려서 실행된 것, false면 닫혀서 실행되었던 것</param>
+    private void OnDetailPause(bool isPause)
+    {
+        detail.IsPause = isPause;   // 임시 슬롯이 열리면 상세정보창을 일시정지
+                                    // 임시 슬롯이 닫히면 상세정보창 일시정지 해제
     }
 }
