@@ -62,14 +62,19 @@ public class ItemSpliterUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// OK 버튼을 눌렀을 때 실행될 델리게이트
+    /// </summary>
+    public Action<uint, uint> onOKClick;
+
     private void Awake()
     {
         // 각종 초기화
 
         // 인풋필드 컴포넌트 찾기
-        inputField = GetComponentInChildren<TMP_InputField>();                                          
+        inputField = GetComponentInChildren<TMP_InputField>();
         // 인풋필드의 값이 변경될 때 변경된 값이 ItemSplitCount에 적용
-        inputField.onValueChanged.AddListener((text) => ItemSplitCount = uint.Parse(text));             
+        inputField.onValueChanged.AddListener((text) => ItemSplitCount = uint.Parse(text));
 
         // 슬라이더 컴포넌트 찾기
         slider = GetComponentInChildren<Slider>();
@@ -80,15 +85,24 @@ public class ItemSpliterUI : MonoBehaviour
         // 증가버튼 컴포넌트 찾기
         Button increase = transform.GetChild(1).GetComponent<Button>();
         // 증가버튼이 눌러질 때 마다 ItemSplitCount 1씩 증가
-        increase.onClick.AddListener( () => ItemSplitCount++);
+        increase.onClick.AddListener(() => ItemSplitCount++);
         // 감소버튼 컴포넌트 찾기
         Button decrease = transform.GetChild(2).GetComponent<Button>();
         // 감소버튼이 눌러질 때 마다 ItemSplitCount 1씩 감소
-        decrease.onClick.AddListener( () => ItemSplitCount--);
+        decrease.onClick.AddListener(() => ItemSplitCount--);
 
-
+        // OK 버튼이 눌러지면 InventoryUI에 알림  
         Button ok = transform.GetChild(4).GetComponent<Button>();
+        ok.onClick.AddListener(() =>
+        {
+            onOKClick?.Invoke(targetSlot.Index, ItemSplitCount);    // 어떤 슬롯에서 몇개의 아이템을 옮길지 알려주기
+            Close();                                                // 아이템 분리창 닫기
+        });
+
+
+        // 캔슬 버튼이 눌러지면 아이템 분리창 닫기
         Button cancel = transform.GetChild(5).GetComponent<Button>();
+        cancel.onClick.AddListener(() => Close());
 
         /// 아이템 아이콘을 표시할 이미지 컴포넌트 찾기
         itemImage = transform.GetChild(6).GetComponent<Image>();
