@@ -5,8 +5,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.InputSystem;
 
-public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler,
+public class ItemSlotUI
+    : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler,
     IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     // 변수 ---------------------------------------------------------------------------------------
@@ -27,9 +29,10 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public Action<uint> onDragEnd;          // 드래그가 끝났을 때(자신 안에서 끝)
     public Action<uint> onDragCancel;       // 드래그가 실패했을 때(자신 밖에서 끝)
     public Action<uint> onClick;            // 클릭이 되었을 때
-    public Action<uint> onPointerEnter;     // 마우스 포인터가 안에 들어왔을 때
-    public Action<uint> onPointerExit;      // 마우스 포인터가 밖으로 나갔을 때
-    public Action<Vector2> onPointerMove;   // 마우스 포인터가 안에서 움직일 때
+    public Action<uint> onShiftClick;       // 쉬프트 클릭이 되었을 때
+    public Action<uint> onPointerEnter;      // 마우스 포인터가 안에 들어왔을 때
+    public Action<uint> onPointerExit;       // 마우스 포인터가 밖으로 나갔을 때
+    public Action<Vector2> onPointerMove;    // 마우스 포인터가 안에서 움직일 때
 
     // 함수 ---------------------------------------------------------------------------------------
 
@@ -54,6 +57,7 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         onDragEnd = null;
         onDragCancel = null;
         onClick = null;
+        onShiftClick = null;
         onPointerEnter = null;
         onPointerExit = null;
         onPointerMove = null;
@@ -122,17 +126,17 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if (obj != null)
         {
             // 피킹된 것이 있다.(대부분 UI)
-            ItemSlotUI endSlot = obj.GetComponent<ItemSlotUI>();            // 피킹된 오브젝트에서 ItemSlotUI 가져오기
+            ItemSlotUI endSlot = obj.GetComponent<ItemSlotUI>();        // 피킹된 오브젝트에서 ItemSlotUI 가져오기
 
             if (endSlot != null)
             {
                 Debug.Log($"드래그 종료 : {endSlot.ID}번 슬롯");
-                onDragEnd?.Invoke(endSlot.ID);                              // 피킹된 슬롯에서 드래그가 끝났음을 알림
+                onDragEnd?.Invoke(endSlot.ID);                          // 피킹된 슬롯에서 드래그가 끝났음을 알림
             }
             else
             {
-                Debug.Log($"드래그 실패 : {ID}번째 슬롯에서 실패");           // 드래그가 실패했음을 알림
-                onDragCancel?.Invoke(ID);
+                Debug.Log($"드래그 실패 : {ID}번째 슬롯에서 실패");
+                onDragCancel?.Invoke(ID);                               // 드래그가 실패했음을 알림
             }
         }
     }
@@ -143,7 +147,14 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     /// <param name="eventData">관련 이벤트 정보들</param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClick.Invoke(ID);
+        if (Keyboard.current.leftShiftKey.ReadValue() > 0)
+        {
+            onShiftClick?.Invoke(ID);
+        }
+        else
+        {
+            onClick?.Invoke(ID);
+        }
     }
 
     /// <summary>
@@ -165,11 +176,11 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
 
     /// <summary>
-    /// EventSystems에서 마우스 포인터가 이 UI영역안에서 움직이면 실행되는 함수
+    /// EventSystems에서 마우스 포인터가 이 UI 영역안에서 움직이면 실행되는 함수
     /// </summary>
     /// <param name="eventData">관련 이벤트 정보들</param>
     public void OnPointerMove(PointerEventData eventData)
     {
-        onPointerMove?.Invoke(eventData.position);      // 스크린 좌표값 넘겨주기
+        onPointerMove?.Invoke(eventData.position);   // 스크린 좌표값 넘겨주기
     }
 }
