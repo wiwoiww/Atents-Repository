@@ -112,6 +112,8 @@ public class ItemSpliterUI : MonoBehaviour
     {
         targetSlot = target.ItemSlot;           // 슬롯 가져오고
 
+        ItemSplitCount = 1;                     // 아이템 분리갯수 초기화
+
         //Debug.Log($"{targetSlot.ItemData.itemName} : {targetSlot.ItemCount}개");
         itemImage.sprite = targetSlot.ItemData.itemIcon;    // 아이콘 설정
 
