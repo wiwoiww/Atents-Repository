@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEngine.InputSystem;
-using UnityEngine.Device;
 
 public class TempItemSlotUI : ItemSlotUI
 {
@@ -33,11 +32,11 @@ public class TempItemSlotUI : ItemSlotUI
     }
 
     /// <summary>
-    /// TempItemSlotUI를 영는 함수
+    /// TempItemSlotUI를 여는 함수
     /// </summary>
     public void Open()
     {
-        if (!ItemSlot.IsEmpty)              // 아이템이 들어있을 때만 열기
+        if (!ItemSlot.IsEmpty)               // 아이템이 들어있을 때만 열기
         {
             transform.position = Mouse.current.position.ReadValue();    // 열릴 때 마우스 위치로 이동
             onTempSlotOpenClose?.Invoke(true);  // 열었다고 알림
@@ -50,7 +49,23 @@ public class TempItemSlotUI : ItemSlotUI
     /// </summary>
     public void Close()
     {
-        onTempSlotOpenClose?.Invoke(false); // 닫혔다고 알림
-        gameObject.SetActive(false);        // 비활성화
+        onTempSlotOpenClose?.Invoke(false);     // 닫혔다고 알림
+        gameObject.SetActive(false);            // 비활성화
+    }
+
+    public void OnDrop(InputAction.CallbackContext _)
+    {
+        if (!ItemSlot.IsEmpty)
+        {
+            Vector2 screenPos = Mouse.current.position.ReadValue();
+            Ray ray = Camera.main.ScreenPointToRay(screenPos);
+            //Debug.Log(ray);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+            {
+                ItemFactory.MakeItem((int)ItemSlot.ItemData.id, (int)ItemSlot.ItemCount, hit.point, true);
+                ItemSlot.ClearSlotItem();
+                Close();
+            }
+        }
     }
 }
