@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70397ef033ef8ae40976f08328905944, type: 3}
+  m_Script: {fileID: 11500000, guid: 2caa56d0842ee0b4aa9d2c6a59b6b00e, type: 3}
   m_Name: 04_ManaPotion
   m_EditorClassIdentifier: 
   id: 4
@@ -20,4 +20,5 @@ MonoBehaviour:
   maxStackCount: 10
   itemDescription: "\uB9C8\uB098\uD3EC\uC158.3\uCD08\uAC04 \uCD1D 30\uC758 \uB9C8\uB098\uAC00
     \uD68C\uBCF5\uB41C\uB2E4."
-  healPoint: 20
+  totalRegenPoint: 30
+  duration: 3

@@ -8,5 +8,14 @@ public enum ItemIDCode
     Emerald,
     Sapphire,
     HealingPotion,
-    ManaPotion
+    ManaPotion,
+    CopperCoin,
+    SilverCoin,
+    GoldCoin
+}
+
+public enum EquipPartType
+{
+    Weapon = 0,
+    Shield
 }
