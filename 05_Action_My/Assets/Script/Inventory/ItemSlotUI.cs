@@ -147,6 +147,7 @@ public class ItemSlotUI
     /// <param name="eventData">관련 이벤트 정보들</param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        //Debug.Log("OnPointerClick");
         if (Keyboard.current.leftShiftKey.ReadValue() > 0)
         {
             // 쉬프트 클릭으로 아이템 분리

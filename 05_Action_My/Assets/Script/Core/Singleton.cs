@@ -1,3 +1,5 @@
+//#define PRINT_DEBUG_INFO
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,36 +15,39 @@ using UnityEngine.SceneManagement;
 
 // Singleton 클래스는 제네릭 타입의 클래스이다.(만들때 타입(T)을 하나 받아야 한다.)
 // where 이하에 있는 조건을 만족시켜야 한다.(T는 컴포넌트를 상속받은 타입이어야 한다.)
-public class Singleton<T> : MonoBehaviour where T : Component   
+public class Singleton<T> : MonoBehaviour where T : Component
 {
-    //private static bool isInitalized = false;
     private static bool isShutDown = false;
     private static T _instance = null;
     public static T Inst
     {
         get
         {
-            if(isShutDown)
+            if (isShutDown)
             {
-                //Debug.LogWarning($"{typeof(T)} 싱글톤은 이미 삭제되었음.");
+#if PRINT_DEBUG_INFO
+                Debug.LogWarning($"{typeof(T)} 싱글톤은 이미 삭제되었음.");
+#endif
                 return null;
             }
 
-            if( _instance == null )
+            if (_instance == null)
             {
                 // 한번도 사용된 적이 없다.
-                var obj = FindObjectOfType<T>();            // 같은 타입의 컴포넌트가 게임에 있는지 찾아보기
-                if(obj != null)
+                T obj = FindObjectOfType<T>();              // 같은 타입의 컴포넌트가 게임에 있는지 찾아보기
+                if (obj == null)
                 {
-                    _instance = obj;                        // 다른 객체가 있다. 그러면 있는 객체를 사용한다.
-                }
-                else
-                {                    
-                    GameObject gameObj = new GameObject();  // 다른 객체가 없다. 없으면 새로 만든다.
+                    GameObject gameObj = new GameObject();  // 다른 객체가 없으면 새로 만든다.
                     gameObj.name = $"{typeof(T).Name}";
-                    _instance = gameObj.AddComponent<T>();
+                    obj = gameObj.AddComponent<T>();
                 }
+
+                _instance = obj;                            // 찾거나 새로 만든 객체를 인스턴스로 설정한다.
+                DontDestroyOnLoad(_instance.gameObject);    // 씬이 사라지더라도 게임 오브젝트를 삭제하지 않게 하는 코드
             }
+#if PRINT_DEBUG_INFO
+            Debug.Log($"Singleton({_instance.gameObject.name}) : Get");
+#endif
             return _instance;   // 무조건 null이 아닌 값이 리턴된다.
         }
     }
@@ -52,52 +57,66 @@ public class Singleton<T> : MonoBehaviour where T : Component
     /// </summary>
     private void Awake()
     {
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : Awake");
+#endif
         if (_instance == null)
         {
             // 처음 생성 완료된 싱글톤 게임 오브젝트
-            _instance = this as T;              // _instance에 이 스크립트의 객체 저장
-            DontDestroyOnLoad(this.gameObject); // 씬이 사라지더라도 게임 오브젝트를 삭제하지 않게 하는 코드
-
-            Initialize();                       // 새로 만들어지면 초기화 함수 따로 실행
-
-            SceneManager.sceneLoaded += OnSceneLoaded;  // 씬 로드가 완료되면 Initialize 함수 실행
+            _instance = this as T;                      // _instance에 이 스크립트의 객체 저장
+            DontDestroyOnLoad(_instance.gameObject);    // 씬이 사라지더라도 게임 오브젝트를 삭제하지 않게 하는 코드
         }
         else
         {
             // 첫번째 이후에 만들어진 싱글톤 게임 오브젝트
-            if( _instance != this )
+            if (_instance != this)
             {
                 Destroy(this.gameObject);       // 내가 아닌 같은 종류의 오브젝트가 이미 있으면 자신을 바로 삭제
             }
         }
     }
 
+    private void OnEnable()
+    {
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : OnEnable");
+#endif
+        SceneManager.sceneLoaded += OnSceneLoaded;  // 씬 로드가 완료되면 Initialize 함수 실행
+    }
+
+    private void OnDisable()
+    {
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : OnDisable");
+#endif
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 
     private void OnApplicationQuit()
     {
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : Quit");
+#endif
         isShutDown = true;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Initialize();
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : SceneLoaded");
+#endif
+        Initialize();   // 씬이 로드 되면 초기화 함수 따로 실행
     }
-
-    //private void PreInitialize(T instance)
-    //{
-    //    _instance = this as T;              // _instance에 이 스크립트의 객체 저장
-    //    DontDestroyOnLoad(this.gameObject); // 씬이 사라지더라도 게임 오브젝트를 삭제하지 않게 하는 코드
-
-    //    Initialize();                       // 새로 만들어지면 초기화 함수 따로 실행
-
-    //    SceneManager.sceneLoaded += OnSceneLoaded;  // 씬 로드가 완료되면 Initialize 함수 실행
-    //}
 
     /// <summary>
     /// 게임 메니저가 새로 만들어지거나 씬이 로드 되었을 때 실행될 초기화 함수
     /// </summary>
     protected virtual void Initialize()
     {
+#if PRINT_DEBUG_INFO
+        Debug.Log($"Singleton({this.gameObject.name}) : Initialize");
+#endif
     }
 }
 

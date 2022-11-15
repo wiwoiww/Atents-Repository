@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,7 +16,7 @@ public class InventoryUI : MonoBehaviour
     Inventory inven;
 
     /// <summary>
-    /// 이 인벤토리에 있는 아이템 슬롯 UI
+    /// 이 인벤토리에 있는 아이템 슬롯의 UI
     /// </summary>
     ItemSlotUI[] slotUIs;
 
@@ -42,22 +40,25 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     PlayerInputActions inputActions;
 
+    /// <summary>
+    /// 인벤토리에서 인벤토리를 소유한 플레이어를 가져와 확인 시켜주는 프로퍼티
+    /// </summary>
+    public Player Owner => inven.Owner;
+
+
     private void Awake()
     {
-        //Transform slotParent = transform.GetChild(0);
-        //slotUIs = GetComponentsInChildren<ItemSlotUI>();
-
         // 컴포넌트 찾기
         Transform slotParent = transform.GetChild(0);
-        slotUIs =new ItemSlotUI[slotParent.childCount];
-        for(int i=0;i<slotParent.childCount;i++)
+        slotUIs = new ItemSlotUI[slotParent.childCount];
+        for (int i = 0; i < slotParent.childCount; i++)
         {
             Transform child = slotParent.GetChild(i);
             slotUIs[i] = child.GetComponent<ItemSlotUI>();
         }
 
         tempSlotUI = GetComponentInChildren<TempItemSlotUI>();
-        detail =GetComponentInChildren<DetailInfoUI>();
+        detail = GetComponentInChildren<DetailInfoUI>();
         spliter = GetComponentInChildren<ItemSpliterUI>();
         spliter.onOKClick += OnSplitOK;     // 스플리터가 가지고 있는 onOKClick 델리게이트에 함수 등록
 
@@ -122,21 +123,34 @@ public class InventoryUI : MonoBehaviour
             slotUIs[i].InitializeSlot((uint)i, inven[i]);           // 각 슬롯 초기화
             slotUIs[i].Resize(grid.cellSize.x * 0.75f);             // 슬롯 크기에 맞게 내부 크기 리사이즈
             slotUIs[i].onDragStart += OnItemMoveStart;              // 슬롯에서 드래그가 시작될 때 실행될 함수 연결
-            slotUIs[i].onDragEnd += OnItemMoveEnd;                  // 슬롯에서 드래그가 끝날때 실행될 함수 연결
+            slotUIs[i].onDragEnd += OnItemMoveEnd;                  // 슬롯에서 드래그가 끝날 때 실행될 함수 연결
             slotUIs[i].onDragCancel += OnItemMoveCancel;            // 드래그가 실패했을 때 실행될 함수 연결
-            slotUIs[i].onClick += OnItemMoveEnd;                    // 클릭을 했을 때 실행될 함수 연결
+            slotUIs[i].onClick += OnClick;                          // 클릭을 했을 때 실행될 함수 연결
             slotUIs[i].onShiftClick += OnItemSplit;                 // 쉬프트 클릭을 했을 때 실행될 함수 연결
-            slotUIs[i].onPointerEnter += OnItemDetailOn;            // 마우스가 들어갔을 때 실행될 함수 연결    
+            slotUIs[i].onPointerEnter += OnItemDetailOn;            // 마우스가 들어갔을 때 실행될 함수 연결
             slotUIs[i].onPointerExit += OnItemDetailOff;            // 마우스가 나갔을 때 실행될 함수 연결
             slotUIs[i].onPointerMove += OnPointerMove;              // 마우스가 슬롯 안에서 움직일 때 실행될 함수 연결
-
         }
 
         // 임시 슬롯 초기화 처리
         tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot); // 임시 슬롯 초기화
         tempSlotUI.onTempSlotOpenClose += OnDetailPause;
         tempSlotUI.Close(); // 기본적으로 닫아 놓기
+    }
 
+    /// <summary>
+    /// 확인할 스크린좌표가 인벤토리 영역 안인지 확인하는 함수
+    /// </summary>
+    /// <param name="screenPos">확인할 스크린 좌표</param>
+    /// <returns>인벤토리 영역 안에 있으면 true, 아니면 false</returns>
+    public bool IsInInventoryArea(Vector2 screenPos)
+    {
+        RectTransform rectTransform = (RectTransform)transform;
+
+        Vector2 min = new(rectTransform.position.x - rectTransform.sizeDelta.x, rectTransform.position.y);
+        Vector2 max = new(rectTransform.position.x, rectTransform.position.y + rectTransform.sizeDelta.y);
+
+        return (min.x < screenPos.x && screenPos.x < max.x && min.y < screenPos.y && screenPos.y < max.y);  // min,max 사이에 있는지 확인
     }
 
     /// <summary>
@@ -160,6 +174,25 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
+    /// 마우스가 슬롯에서 클릭이 되었을 때 실행될 함수
+    /// </summary>
+    /// <param name="slotID">클릭된 슬롯의 ID</param>
+    private void OnClick(uint slotID)
+    {
+        if(tempSlotUI.ItemSlot.IsEmpty)
+        {
+            // 아이템을 사용할 용도
+            ItemSlot useItemSlot = inven[slotID];
+            useItemSlot.UseSlotItem(Owner.gameObject);
+        }
+        else
+        {
+            // 임시 슬롯의 아이템을 slotID 슬롯에 넣을 용도
+            OnItemMoveCancel(slotID);
+        }
+    }
+
+    /// <summary>
     /// 슬롯을 쉬프트 클릭했을 때 실행될 함수
     /// </summary>
     /// <param name="slotID"></param>
@@ -167,7 +200,7 @@ public class InventoryUI : MonoBehaviour
     {
         ItemSlotUI targetSlot = slotUIs[slotID];
         spliter.transform.position = targetSlot.transform.position + Vector3.up * 100;
-        spliter.Open(slotUIs[slotID]);
+        spliter.Open(targetSlot);
         detail.Close();
         detail.IsPause = true;
     }
@@ -186,7 +219,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 마우스가 슬롯에 들어갔을 때 해당 슬롯에 있는 아이템을 상세 정보 창에서 볼 수 있도록 여는 함수
+    /// 마우스가 슬롯에 들어갔을 때 해당 슬롯에 있는 아이템을 상세 정보 창에서 볼 수 있도록 설정하고 여는 함수
     /// </summary>
     /// <param name="slotID">대상 슬롯</param>
     private void OnItemDetailOn(uint slotID)
@@ -195,7 +228,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 마우스가 슬롯에 나갔을 때 상세 정보창을 닫는 함수
+    /// 마우스가 슬롯을 나갔을 때 상세정보창을 닫는 함수
     /// </summary>
     /// <param name="_">사용 안함</param>
     private void OnItemDetailOff(uint _)
@@ -218,11 +251,11 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// TempItemSlotUI가 열리고 닫힐 때 실행되는 함수
     /// </summary>
-    /// <param name="isPause">true면 열려서 실행된 것, false면 닫혀서 실행되었던 것</param>
+    /// <param name="isPause">true면 열려서 실행되었던 것. false면 닫혀서 실행되었던 것</param>
     private void OnDetailPause(bool isPause)
     {
-        detail.IsPause = isPause;   // 임시 슬롯이 열리면 상세정보창을 일시정지
-                                    // 임시 슬롯이 닫히면 상세정보창 일시정지 해제
+        detail.IsPause = isPause;   // 임시 슬롯이 열리면 상세정보창을 일시 정지
+                                    // 임시 슬롯이 닫히면 상세정보창 일시 정지 해제
     }
 
     /// <summary>
