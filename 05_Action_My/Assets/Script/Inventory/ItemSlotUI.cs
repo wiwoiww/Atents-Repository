@@ -18,6 +18,7 @@ public class ItemSlotUI
 
     private Image itemImage;
     private TextMeshProUGUI itemCountText;
+    private TextMeshProUGUI itemEquipText;
 
     // 프로퍼티 ------------------------------------------------------------------------------------
 
@@ -40,6 +41,11 @@ public class ItemSlotUI
     {
         itemImage = transform.GetChild(0).GetComponent<Image>();
         itemCountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        if (transform.childCount > 2)
+        {
+            Transform equip = transform.GetChild(2);
+            itemEquipText = equip.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     /// <summary>
@@ -52,6 +58,7 @@ public class ItemSlotUI
         this.id = id;
         this.itemSlot = slot;
         this.itemSlot.onSlotItemChange = Refresh;
+        this.itemSlot.onSlotItemEquip = SetEquipMark;
 
         onDragStart = null;
         onDragEnd = null;
@@ -63,6 +70,7 @@ public class ItemSlotUI
         onPointerMove = null;
 
         Refresh();
+        ClearEquipMark();
     }
 
     /// <summary>
@@ -94,6 +102,16 @@ public class ItemSlotUI
             itemImage.color = Color.white;                  // 불투명화
             itemCountText.text = itemSlot.ItemCount.ToString(); // 아이템 갯수 설정
         }
+    }
+
+    public void SetEquipMark()
+    {
+        itemEquipText.color = Color.red;
+    }
+
+    public void ClearEquipMark()
+    {
+        itemEquipText.color = Color.clear;
     }
 
     public void OnDrag(PointerEventData eventData)

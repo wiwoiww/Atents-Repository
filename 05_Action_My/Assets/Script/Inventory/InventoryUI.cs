@@ -144,13 +144,32 @@ public class InventoryUI : MonoBehaviour
         tempSlotUI.onTempSlotOpenClose += OnDetailPause;
         tempSlotUI.Close(); // 기본적으로 닫아 놓기
 
+        // 특정 파트의 아이템이 해제되었을 때 실행될 델리게이트에 함수 연결
+        Owner.onEquipItemClear += OnEquipPartClear;
+
         // 돈이 변경되면 moneyPanel도 갱신되게 변경
         Owner.onMoneyChange += moneyPanel.Refresh;
         moneyPanel.Refresh(Owner.Money);
     }
 
     /// <summary>
-    /// 확인할 스크린좌표가 인벤토리 영역 안인지 확인하는 함수
+    /// 특정한 파트에 장착되는 아이템은 모두 장착해제로 표시
+    /// </summary>
+    /// <param name="part">장착 해제 표시할 파트</param>
+    private void OnEquipPartClear(EquipPartType part)
+    {
+        foreach (var slotUI in slotUIs)      // 모든 슬롯을 돌면서
+        {
+            ItemData_EquipItem equipItem = slotUI.ItemSlot.ItemData as ItemData_EquipItem;
+            if (equipItem != null && equipItem.EquipPart == part)    // 같은 종류의 파츠면
+            {
+                slotUI.ClearEquipMark();    // 장착 해제
+            }
+        }
+    }
+
+    /// <summary>
+    /// 확인할 스크린 좌표가 인벤토리 영역 안인지 확인하는 함수
     /// </summary>
     /// <param name="screenPos">확인할 스크린 좌표</param>
     /// <returns>인벤토리 영역 안에 있으면 true, 아니면 false</returns>
@@ -161,7 +180,7 @@ public class InventoryUI : MonoBehaviour
         Vector2 min = new(rectTransform.position.x - rectTransform.sizeDelta.x, rectTransform.position.y);
         Vector2 max = new(rectTransform.position.x, rectTransform.position.y + rectTransform.sizeDelta.y);
 
-        return (min.x < screenPos.x && screenPos.x < max.x && min.y < screenPos.y && screenPos.y < max.y);  // min,max 사이에 있는지 확인
+        return (min.x < screenPos.x && screenPos.x < max.x && min.y < screenPos.y && screenPos.y < max.y);  // min, max 사이에 있는지 확인
     }
 
     /// <summary>
@@ -190,7 +209,7 @@ public class InventoryUI : MonoBehaviour
     /// <param name="slotID">클릭된 슬롯의 ID</param>
     private void OnClick(uint slotID)
     {
-        if(tempSlotUI.ItemSlot.IsEmpty)
+        if (tempSlotUI.ItemSlot.IsEmpty)
         {
             // 아이템을 사용할 용도
             ItemSlot useItemSlot = inven[slotID];
@@ -199,7 +218,7 @@ public class InventoryUI : MonoBehaviour
         else
         {
             // 임시 슬롯의 아이템을 slotID 슬롯에 넣을 용도
-            OnItemMoveCancel(slotID);
+            OnItemMoveEnd(slotID);
         }
     }
 

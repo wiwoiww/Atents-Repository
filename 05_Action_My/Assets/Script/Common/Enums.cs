@@ -11,7 +11,9 @@ public enum ItemIDCode
     ManaPotion,
     CopperCoin,
     SilverCoin,
-    GoldCoin
+    GoldCoin,
+    IronSword,
+    SilverSword
 }
 
 public enum EquipPartType

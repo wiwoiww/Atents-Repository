@@ -1,14 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-#if UNITY_EDITER
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class Player : MonoBehaviour, IBattle, IHealth, IMana
+public class Player : MonoBehaviour, IBattle, IHealth, IMana, IEquipTarget
 {
     /// <summary>
     /// 무기에 붙어있는 파티클 시스템 컴포넌트
@@ -47,6 +46,11 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
     public float itemPickupRange = 2.0f;
 
     int money = 0;
+
+    /// <summary>
+    /// 파츠별 아이템 장비 현황을 나타내는 변수
+    /// </summary>
+    ItemData_EquipItem[] partsItems;
 
     // 프로퍼티 ------------------------------------------------------------------------------------
     public float AttackPower => attackPower;
@@ -89,6 +93,7 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
             }
         }
     }
+
     public float MaxMP => maxMP;
 
     public int Money
@@ -96,7 +101,7 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
         get => money;
         set
         {
-            if(money != value)
+            if (money != value)
             {
                 money = value;
                 onMoneyChange?.Invoke(money);
@@ -104,14 +109,24 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
         }
     }
 
+    /// <summary>
+    /// 아이템 장비 현황을 확인할 수 있는 프로퍼티
+    /// </summary>
+    public ItemData_EquipItem[] PartsItems => partsItems;
+
+
     // 델리게이트 ----------------------------------------------------------------------------------
     public Action<int> onMoneyChange;   // 돈이 변경되면 실행될 델리게이트
 
     public Action<float> onHealthChange { get; set; }
 
-    public Action<float> onManaChange { get; set; } 
+    public Action<float> onManaChange { get; set; }
 
     public Action onDie { get; set; }
+
+
+    public Action<EquipPartType> onEquipItemClear;   // 장비 아이템이 변경되었음을 알리는 델리게이트
+
 
     // --------------------------------------------------------------------------------------------
 
@@ -120,11 +135,9 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
         anim = GetComponent<Animator>();
 
         weapon_r = GetComponentInChildren<WeaponPosition>().transform;  // 무기가 붙는 위치를 컴포넌트의 타입으로 찾기
-        weapon_l = GetComponentInChildren<ShieldPositon>().transform;   // 방패가 붙는 위치를 컴포넌트의 타입으로 찾기
+        weapon_l = GetComponentInChildren<ShieldPosition>().transform;   // 방패가 붙는 위치를 컴포넌트의 타입으로 찾기               
 
-        // 장비교체가 일어나면 새로 설정해야 한다.
-        weaponPS = weapon_r.GetComponentInChildren<ParticleSystem>();   // 무기에 붙어있는 파티클 시스템 가져오기
-        weaponBlade = weapon_r.GetComponentInChildren<Collider>();      // 무기의 충돌 영역 가져오기
+        partsItems = new ItemData_EquipItem[Enum.GetValues(typeof(EquipPartType)).Length];
 
         inven = new Inventory(this);
     }
@@ -136,6 +149,13 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
 
         GameManager.Inst.InvenUI.InitializeInventory(inven);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawWireDisc(transform.position, transform.up, itemPickupRange);
+    }
+#endif
 
     /// <summary>
     /// 무기의 이팩트를 키고 끄는 함수
@@ -229,17 +249,17 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
     {
         Collider[] items = Physics.OverlapSphere(transform.position, itemPickupRange, LayerMask.GetMask("Item"));
 
-        foreach(var itemCollider in items)
+        foreach (var itemCollider in items)
         {
             Item item = itemCollider.gameObject.GetComponent<Item>();
 
             // 즉시 사용해야 하는 아이템인지 확인
             IConsumable consumable = item.data as IConsumable;
-            if(consumable != null)
+            if (consumable != null)
             {
                 // 즉시 사용되는 아이템
-                consumable.Consume(this.gameObject);        // 즉시 사용
-                Destroy(itemCollider.gameObject);           // 삭제
+                consumable.Consume(this.gameObject);    // 즉시 사용
+                Destroy(itemCollider.gameObject);       // 삭제
             }
             else
             {
@@ -273,15 +293,15 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
     {
         //float timeStart = Time.realtimeSinceStartup;    // 시작 시간 기록
         //Debug.Log($"Regen Start");
-        float regenPerSec = totalRegen / duration;       // 초당 회복량 계산
-        float timeElapsed = 0.0f;                        // 진행 시간 기록용
-        while(timeElapsed < duration)                    // 진행시간이 duration을 지날 때까지 반복
+        float regenPerSec = totalRegen / duration;      // 초당 회복량 계산
+        float timeElapsed = 0.0f;                       // 진행 시간 기록용
+        while (timeElapsed < duration)                   // 진행시간이 duration을 지날 때까지 반복
         {
-            timeElapsed += Time.deltaTime;               // 진행시간 누적시키기
-            MP += Time.deltaTime * regenPerSec;          // MP를 1초에 초당 회복량만큼 증가
-            yield return null;                           // 다음 프레임 시작까지 대기
+            timeElapsed += Time.deltaTime;              // 진행시간 누적시키기
+            MP += Time.deltaTime * regenPerSec;         // MP를 1초에 초당 회복량만큼 증가
+            yield return null;                          // 다음 프레임 시작까지 대기
         }
-        //Debug.Log($"Regen End time : ({Time.realtimeSinceStartup - timeStart})");   // 전체 걸린 시간 측정용
+        //Debug.Log($"Regen End : ({Time.realtimeSinceStartup - timeStart})");    // 전체 걸린 시간 측정용
     }
 
     /// <summary>
@@ -295,7 +315,7 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
         float tick = 1.0f;                                  // 1번 회복하는 시간 간격(1초에 한번씩 회복이 발생한다)
         int regenCount = Mathf.FloorToInt(duration / tick); // 전체 회복 횟수
         float regenPerTick = totalRegen / regenCount;       // 한 틱당 회복량
-        for(int i=0; i<regenCount;i++)                      // 전체 반복 횟수만큼 for 진행
+        for (int i = 0; i < regenCount; i++)                       // 전체 반복 횟수만큼 for 진행
         {
             MP += regenPerTick;                             // 한 틱당 회복량을 추가
             //Debug.Log($"Regen : {regenPerTick}");
@@ -303,13 +323,59 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana
         }
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
+    /// <summary>
+    /// 아이템을 장비하는 함수
+    /// </summary>
+    /// <param name="part">아이템 장비할 부위</param>
+    /// <param name="itemData">장비할 아이템</param>
+    public void EquipItem(EquipPartType part, ItemData_EquipItem itemData)
     {
-        Handles.DrawWireDisc(transform.position, transform.up, itemPickupRange);
+        Transform partTransform = GetPartTransform(part);   // 아이템이 장착될 부모 트랜드폼 가져오기
+        Instantiate(itemData.equipPrefab, partTransform);   // 아이템을 생성해서 partTransform의 자식으로 붙임
+        partsItems[(int)part] = itemData;                   // 아이템이 장비되었다고 표시
+                                                            
+        if (part == EquipPartType.Weapon)
+        {
+            weaponPS = weapon_r.GetComponentInChildren<ParticleSystem>();   // 무기에 붙어있는 파티클 시스템 가져오기
+            weaponBlade = weapon_r.GetComponentInChildren<Collider>();      // 무기의 충돌 영역 가져오기      
+        }
     }
-#endif
 
+    /// <summary>
+    /// 아이템을 장비해제하는 함수
+    /// </summary>
+    /// <param name="part">아이템을 장비해제할 부위</param>
+    public void UnEquipItem(EquipPartType part)
+    {
+        Transform partTransform = GetPartTransform(part);   // 아이템이 장착 해제될 부모 트랜드폼 가져오기
+        while (partTransform.childCount > 0)
+        {
+            Transform child = partTransform.GetChild(0);    // 자식들 모두 제거
+            child.parent = null;
+            Destroy(child.gameObject);
+        }
+        partsItems[(int)part] = null;                       // 아이템 장비가 해제되었다고 표시
+        onEquipItemClear?.Invoke(part);                     // 아이템이 해제된 장비를 알림
+    }
 
+    /// <summary>
+    /// 아이템이 장비될 트랜스폼을 돌려주는 함수
+    /// </summary>
+    /// <param name="part">확인할 부위</param>
+    /// <returns>확인할 부위에 아이템이 붙을 부모 트랜스폼</returns>
+    private Transform GetPartTransform(EquipPartType part)
+    {
+        Transform result = null;
+        switch (part)
+        {
+            case EquipPartType.Weapon:
+                result = weapon_r;
+                break;
+            case EquipPartType.Shield:
+                result = weapon_l;
+                break;
+        }
+        return result;
+    }
 }
 
