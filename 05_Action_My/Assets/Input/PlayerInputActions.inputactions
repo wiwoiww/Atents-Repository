@@ -299,6 +299,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Effect",
+            "id": "ed65e1f7-5d01-47f1-9b08-647fb91ab954",
+            "actions": [
+                {
+                    "name": "CursorMove",
+                    "type": "Value",
+                    "id": "41f38368-db81-4e53-8d36-9942fc8c8d64",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2dfff120-fd89-4636-9cd4-328dbebfbd29",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KM",
+                    "action": "CursorMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

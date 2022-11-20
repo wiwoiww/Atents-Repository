@@ -321,6 +321,34 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Effect"",
+            ""id"": ""ed65e1f7-5d01-47f1-9b08-647fb91ab954"",
+            ""actions"": [
+                {
+                    ""name"": ""CursorMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""41f38368-db81-4e53-8d36-9942fc8c8d64"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2dfff120-fd89-4636-9cd4-328dbebfbd29"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""CursorMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -359,6 +387,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_Wheel = m_UI.FindAction("Wheel", throwIfNotFound: true);
+        // Effect
+        m_Effect = asset.FindActionMap("Effect", throwIfNotFound: true);
+        m_Effect_CursorMove = m_Effect.FindAction("CursorMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -577,6 +608,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Effect
+    private readonly InputActionMap m_Effect;
+    private IEffectActions m_EffectActionsCallbackInterface;
+    private readonly InputAction m_Effect_CursorMove;
+    public struct EffectActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public EffectActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @CursorMove => m_Wrapper.m_Effect_CursorMove;
+        public InputActionMap Get() { return m_Wrapper.m_Effect; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EffectActions set) { return set.Get(); }
+        public void SetCallbacks(IEffectActions instance)
+        {
+            if (m_Wrapper.m_EffectActionsCallbackInterface != null)
+            {
+                @CursorMove.started -= m_Wrapper.m_EffectActionsCallbackInterface.OnCursorMove;
+                @CursorMove.performed -= m_Wrapper.m_EffectActionsCallbackInterface.OnCursorMove;
+                @CursorMove.canceled -= m_Wrapper.m_EffectActionsCallbackInterface.OnCursorMove;
+            }
+            m_Wrapper.m_EffectActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @CursorMove.started += instance.OnCursorMove;
+                @CursorMove.performed += instance.OnCursorMove;
+                @CursorMove.canceled += instance.OnCursorMove;
+            }
+        }
+    }
+    public EffectActions @Effect => new EffectActions(this);
     private int m_KMSchemeIndex = -1;
     public InputControlScheme KMScheme
     {
@@ -605,5 +669,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnClick(InputAction.CallbackContext context);
         void OnWheel(InputAction.CallbackContext context);
+    }
+    public interface IEffectActions
+    {
+        void OnCursorMove(InputAction.CallbackContext context);
     }
 }
