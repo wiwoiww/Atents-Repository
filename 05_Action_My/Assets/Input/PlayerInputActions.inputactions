@@ -273,6 +273,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "InventotyOnOff",
+                    "type": "Button",
+                    "id": "aa4982ab-ad66-4fff-ac02-91225f6d8511",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -295,6 +304,17 @@
                     "processors": "",
                     "groups": "KM",
                     "action": "Wheel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fcca9a2a-3a87-401b-ad13-a69aabc644ae",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KM",
+                    "action": "InventotyOnOff",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -295,6 +295,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""InventotyOnOff"",
+                    ""type"": ""Button"",
+                    ""id"": ""aa4982ab-ad66-4fff-ac02-91225f6d8511"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -317,6 +326,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KM"",
                     ""action"": ""Wheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fcca9a2a-3a87-401b-ad13-a69aabc644ae"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""InventotyOnOff"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -387,6 +407,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_Wheel = m_UI.FindAction("Wheel", throwIfNotFound: true);
+        m_UI_InventotyOnOff = m_UI.FindAction("InventotyOnOff", throwIfNotFound: true);
         // Effect
         m_Effect = asset.FindActionMap("Effect", throwIfNotFound: true);
         m_Effect_CursorMove = m_Effect.FindAction("CursorMove", throwIfNotFound: true);
@@ -573,12 +594,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Click;
     private readonly InputAction m_UI_Wheel;
+    private readonly InputAction m_UI_InventotyOnOff;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
         public UIActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputAction @Wheel => m_Wrapper.m_UI_Wheel;
+        public InputAction @InventotyOnOff => m_Wrapper.m_UI_InventotyOnOff;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -594,6 +617,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Wheel.started -= m_Wrapper.m_UIActionsCallbackInterface.OnWheel;
                 @Wheel.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnWheel;
                 @Wheel.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnWheel;
+                @InventotyOnOff.started -= m_Wrapper.m_UIActionsCallbackInterface.OnInventotyOnOff;
+                @InventotyOnOff.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnInventotyOnOff;
+                @InventotyOnOff.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnInventotyOnOff;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -604,6 +630,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Wheel.started += instance.OnWheel;
                 @Wheel.performed += instance.OnWheel;
                 @Wheel.canceled += instance.OnWheel;
+                @InventotyOnOff.started += instance.OnInventotyOnOff;
+                @InventotyOnOff.performed += instance.OnInventotyOnOff;
+                @InventotyOnOff.canceled += instance.OnInventotyOnOff;
             }
         }
     }
@@ -669,6 +698,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnClick(InputAction.CallbackContext context);
         void OnWheel(InputAction.CallbackContext context);
+        void OnInventotyOnOff(InputAction.CallbackContext context);
     }
     public interface IEffectActions
     {
