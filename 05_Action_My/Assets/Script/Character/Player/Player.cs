@@ -52,6 +52,16 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana, IEquipTarget
     /// </summary>
     ItemSlot[] partsSlots;
 
+    /// <summary>
+    /// 락온 이펙트
+    /// </summary>
+    LockOnEffect lockOnEffect;
+
+    /// <summary>
+    /// 락온 범위
+    /// </summary>
+    float lockOnRange = 5.0f;
+
     // 프로퍼티 ------------------------------------------------------------------------------------
     public float AttackPower => attackPower;
 
@@ -114,6 +124,11 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana, IEquipTarget
     /// </summary>
     public ItemSlot[] PartsSlots => partsSlots;
 
+    /// <summary>
+    /// 락온한 대상의 트랜스폼
+    /// </summary>
+    public Transform LockOnTransform => lockOnEffect.transform.parent;
+
 
     // 델리게이트 ----------------------------------------------------------------------------------
     public Action<int> onMoneyChange;   // 돈이 변경되면 실행될 델리게이트
@@ -138,6 +153,9 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana, IEquipTarget
         weapon_l = GetComponentInChildren<ShieldPosition>().transform;   // 방패가 붙는 위치를 컴포넌트의 타입으로 찾기               
 
         partsSlots = new ItemSlot[Enum.GetValues(typeof(EquipPartType)).Length];
+
+        lockOnEffect = GetComponentInChildren<LockOnEffect>();
+        LockOff();
 
         inven = new Inventory(this);
     }
@@ -381,6 +399,63 @@ public class Player : MonoBehaviour, IBattle, IHealth, IMana, IEquipTarget
                 break;
         }
         return result;
+    }
+
+    public void LockOnToggle()
+    {
+        LockOn();
+    }
+
+    void LockOn()
+    {
+        // lockOnRange 거리 안에 있는 Enemy오브젝트 찾기
+        Collider[] enemies = Physics.OverlapSphere(transform.position, lockOnRange, LayerMask.GetMask("AttackTarger"));
+        if (enemies.Length > 0)
+        {
+            // 찾은 적 중 가장 가까이에 있는 적 찾기
+            Transform nearest = null;
+            float nearestDistance = float.MaxValue;
+            foreach(var enemy in enemies)
+            {
+                Vector3 dir = enemy.transform.position - transform.position;
+                float distanceSqr = dir.sqrMagnitude;   // root 연산은 느리기 때문에 sqrMagnitude 사용
+                if(dir.sqrMagnitude<nearestDistance)
+                {
+                    nearestDistance = distanceSqr;
+                    nearest = enemy.transform;
+                }
+            }
+
+            // 가장 가까이에 있는 적에게 LockOnEffect 붙이기
+            lockOnEffect.SetLockOnTarget(nearest);              // 부모지정과 위치 변경
+        }
+        else
+        {
+            LockOff();  // 주변에 적이 없는데 락온을 시도하면 락온 해제
+        }
+    }
+
+    void LockOff()
+    {
+        lockOnEffect.SetLockOnTarget(null);
+    }
+
+    /// <summary>
+    /// 테스트용 함수. 아이템 추가하기
+    /// </summary>
+    /// <param name="itemData">추가할 아이템 종류</param>
+    public void Test_AddItem(ItemData itemData)
+    {
+        inven.AddItem(itemData);
+    }
+
+    /// <summary>
+    /// 테스트용 함수.아이템 사용하기(장비도 가능)
+    /// </summary>
+    /// <param name="index">아이템을 사용할 슬롯</param>
+    public void Test_UseItem(uint index)
+    {
+        inven[index].UseSlotItem(this.gameObject);
     }
 }
 

@@ -83,6 +83,13 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
     }
 
+    private void Start()
+    {
+        InventoryUI invenUI = GameManager.Inst.InvenUI;
+        invenUI.onInventoryOpen += () => inputActions.Player.Disable();
+        invenUI.onInventoryClose += () => inputActions.Player.Enable();
+    }
+
     private void OnEnable()
     {
         // 인풋 액션에서 액션맵 활성화
@@ -93,11 +100,13 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.MoveModeChange.performed += OnMoveModeChange;
         inputActions.Player.Attack.performed += OnAttack;
         inputActions.Player.Pickup.performed += OnPickup;
+        inputActions.Player.LockOn.performed += OnLockOn;
     }
 
     private void OnDisable()
     {
         // 액션과 함수 연결 해제
+        inputActions.Player.LockOn.performed -= OnLockOn;
         inputActions.Player.Pickup.performed -= OnPickup;
         inputActions.Player.Attack.performed -= OnAttack;
         inputActions.Player.MoveModeChange.performed -= OnMoveModeChange;
@@ -113,6 +122,12 @@ public class PlayerController : MonoBehaviour
         {
             // inputDir방향으로 초당 moveSpeed의 속도로 이동.
             cc.Move(currentSpeed * Time.deltaTime * inputDir);
+
+            // 락온한 대상이 있으면 락온한 대상의 위치를 바라보게 만들기
+            if(player.LockOnTransform !=null)
+            {
+                targetRotation = Quaternion.LookRotation(player.LockOnTransform.position - player.transform.position);
+            }
 
             // transform.rotation에서 targetRotation으로 초당 1/turnSpeed씩 보간.
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
@@ -214,6 +229,15 @@ public class PlayerController : MonoBehaviour
     private void OnPickup(InputAction.CallbackContext _)
     {
         player.ItemPickup();
+    }
+
+    /// <summary>
+    /// 몬스터 락온 버튼을 눌렀을 때 실행
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnLockOn(InputAction.CallbackContext context)
+    {
+        player.LockOnToggle();
     }
 }
 

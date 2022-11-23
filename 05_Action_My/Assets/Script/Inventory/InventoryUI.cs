@@ -41,6 +41,11 @@ public class InventoryUI : MonoBehaviour
     MoneyPanelUI moneyPanel;
 
     /// <summary>
+    /// 인벤토리 창 닫기용 버튼
+    /// </summary>
+    Button closeButton;
+
+    /// <summary>
     /// 입력 처리용 인풋 액션 클래스
     /// </summary>
     PlayerInputActions inputActions;
@@ -55,6 +60,8 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public Player Owner => inven.Owner;
 
+    public Action onInventoryOpen;
+    public Action onInventoryClose;
 
     private void Awake()
     {
@@ -73,6 +80,9 @@ public class InventoryUI : MonoBehaviour
         spliter.onOKClick += OnSplitOK;     // 스플리터가 가지고 있는 onOKClick 델리게이트에 함수 등록
 
         moneyPanel = GetComponentInChildren<MoneyPanelUI>();
+
+        closeButton = transform.GetChild(5).GetComponent<Button>();
+        closeButton.onClick.AddListener(Close);
 
         canvasGroup = GetComponent<CanvasGroup>();
 
@@ -172,6 +182,7 @@ public class InventoryUI : MonoBehaviour
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+        onInventoryOpen?.Invoke();
     }
 
     /// <summary>
@@ -182,6 +193,7 @@ public class InventoryUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false; // 레이케스트가 작동이 안되게 만들어서 클릭이 안되게 만들기
         canvasGroup.interactable = false;
         canvasGroup.alpha = 0;
+        onInventoryClose?.Invoke();
     }
 
     /// <summary>
