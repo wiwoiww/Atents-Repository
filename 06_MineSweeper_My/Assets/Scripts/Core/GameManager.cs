@@ -1,4 +1,5 @@
 #define TEST_CODE
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    // 타이머 관련 ----------------------------------------------------------------------------------
+    // 타이머 관련 ---------------------------------------------------------------------------------
     private Timer timer;
     private int timeCount = 0;
     public int TimeCount
@@ -23,7 +24,7 @@ public class GameManager : Singleton<GameManager>
     }
     public Action<int> onTimeCountChange;
 
-    // 깃발 갯수 관련 -------------------------------------------------------------------------------
+    // 깃발 갯수 관련 ------------------------------------------------------------------------------
     private int flagCount = 0;
     public int FlagCount
     {
@@ -36,7 +37,7 @@ public class GameManager : Singleton<GameManager>
     }
     public Action<int> onFlagCountChange;
 
-    // 난이도 관련 ------------------------------------------------------------------------------------------
+    // 난이도 관련 ---------------------------------------------------------------------------------
     public int mineCount = 10;
     public int boardWidth = 8;
     public int boardHeight = 8;
@@ -45,9 +46,8 @@ public class GameManager : Singleton<GameManager>
     public Board Board => board;
 
 
-   
-    
-    // 함수 ---------------------------------------------------------------------------------------------------
+
+    // 함수 ---------------------------------------------------------------------------------------
     protected override void Initialize()
     {
         base.Initialize();

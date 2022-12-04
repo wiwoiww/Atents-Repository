@@ -1,26 +1,25 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell : MonoBehaviour
-{ 
+{
     /// <summary>
     /// 닫힌 셀에 어떤 표시가 있는지 나타내는 enum
     /// </summary>
     enum CellMarkState
     {
-        None =0,    // 아무것도 표시 안됨
+        None = 0,   // 아무것도 표시 안됨
         Flag,       // 깃발 설치됨
         Question    // 물음표 표시됨
     }
-    
-    // 변수 ------------------------------------------------------------------------------------------------------------------------------------
+
+    // 변수  --------------------------------------------------------------------------------------
 
     /// <summary>
     /// ID가 잘못되었다고 알려주는 const
     /// </summary>
-    const int ID_NOT_VALID = -1;
+    public const int ID_NOT_VALID = -1;
 
     /// <summary>
     /// 셀의 ID이면서 위치를 표시하는 역할
@@ -47,7 +46,16 @@ public class Cell : MonoBehaviour
     /// </summary>
     int aroundMineCount = 0;
 
-    // 프로퍼티 ------------------------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// 이 셀이 들어있는 보드
+    /// </summary>
+    Board parentBoard;
+
+    SpriteRenderer cover;
+    SpriteRenderer inside;
+
+
+    // 프로퍼티 ------------------------------------------------------------------------------------
 
     /// <summary>
     /// ID 확인 및 설정용 프로퍼티(설정은 한번만 가능)
@@ -57,9 +65,24 @@ public class Cell : MonoBehaviour
         get => id;
         set
         {
-            if( id == ID_NOT_VALID)     // ID는 처음 한번만 설정 가능
+            if (id == ID_NOT_VALID)    // ID는 처음 한번만 설정 가능
             {
                 id = value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 이 셀이 소속되어있는 보드 확인 및 설정용 프로퍼티(설정은 한번만 가능)
+    /// </summary>
+    public Board Board
+    {
+        get => parentBoard;
+        set
+        {
+            if (parentBoard == null)
+            {
+                parentBoard = value;
             }
         }
     }
@@ -75,7 +98,7 @@ public class Cell : MonoBehaviour
     public bool HasMine => hasMine;
 
     /// <summary>
-    /// 셀에 깃발이 표시되어있는지 확인하는 프로퍼티
+    /// 셀에 깃발이 표시되어 있는지 확인하는 프로퍼티
     /// </summary>
     public bool IsFlaged => markState == CellMarkState.Flag;
 
@@ -84,14 +107,22 @@ public class Cell : MonoBehaviour
     /// </summary>
     public bool IsQuestion => markState == CellMarkState.Question;
 
-    // 함수 ----------------------------------------------------------------------------------------------------------------------------------
+    // 함수 ---------------------------------------------------------------------------------------
 
     // 확인해야 할 마우스 이벤트
-    // 1. 셀이 눌러졌다.
+    // 1. 셀이 눌려졌다.
     // 2. 셀이 때졌다.
     // 3. 마우스가 안으로 들어왔다.
     // 4. 마우스가 밖으로 나갔다.
-    // 5. 마우스가 눌려져 있는지 때져있는지. - 인풋 시스템 활용하기 
+    // 5. 마우스가 눌려져 있는지 때져있는지. - 인풋 시스템 활용하기
+
+    private void Awake()
+    {
+        Transform child = transform.GetChild(0);
+        cover = child.GetComponent<SpriteRenderer>();
+        child = transform.GetChild(1);
+        inside = child.GetComponent<SpriteRenderer>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -115,7 +146,7 @@ public class Cell : MonoBehaviour
     }
 
     /// <summary>
-    /// 셀에 빈것->깃발->물음표->빈것->..... 순서로 표시하는 함수
+    /// 셀에 빈것->깃발->물음표->빈것->... 순서로 표시하는 함수
     /// </summary>
     void SetMark()
     {
@@ -140,11 +171,15 @@ public class Cell : MonoBehaviour
     }
 
     /// <summary>
-    /// 주변에 8칸에 지뢰가 추가될 때 실행되는 함수
+    /// 주변 8칸에 지뢰가 추가될 때 실행되는 함수
     /// </summary>
     public void IncreaseAroundMineCount()
     {
-        aroundMineCount++;
+        if (!hasMine)
+        {
+            aroundMineCount++;
+            inside.sprite = Board[(OpenCellType)aroundMineCount];   // 주변 지뢰 숫자에 맞게 이미지 설정
+        }
     }
 
     /// <summary>
@@ -152,6 +187,14 @@ public class Cell : MonoBehaviour
     /// </summary>
     public void SetMine()
     {
-        hasMine = true;
+        hasMine = true;     // 지뢰 설치 되었다고 표시
+        inside.sprite = Board[OpenCellType.Mine_NotFound];  // 지뢰로 이미지 변경
+
+        // 이 셀 주변 셀들의 IncreaseAroundMineCount함수 실행(aroundMineCount를 1씩 증가)
+        List<Cell> cellList = Board.GetNeighbors(ID);
+        foreach (var cell in cellList)
+        {
+            cell.IncreaseAroundMineCount();
+        }
     }
 }
