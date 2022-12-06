@@ -208,22 +208,22 @@ public class Cell : MonoBehaviour
     {
         if (!IsOpen)
         {
-            // markState가 none이면 flag가 된다.      -> 깃발 갯수가 줄어든다. 셀 이미지 변경된다.
-            // markState가 flag이면 question이 된다.  -> 깃발 갯수가 늘어난다. 셀 이미지 변경된다.
-            // markState가 question이면 none이 된다.  -> 셀 이미지 변경된다.
             switch (markState)
             {
                 case CellMarkState.None:
+                    // markState가 none이면 flag가 된다.      -> 깃발 갯수가 줄어든다. 셀 이미지 변경된다.
                     markState = CellMarkState.Flag;
                     cover.sprite = Board[CloseCellType.Flag];
                     onFlagUse?.Invoke();
                     break;
                 case CellMarkState.Flag:
+                    // markState가 flag이면 question이 된다.  -> 깃발 갯수가 늘어난다. 셀 이미지 변경된다.
                     markState = CellMarkState.Question;
                     cover.sprite = Board[CloseCellType.Question];
                     onFlagReturn?.Invoke();
                     break;
                 case CellMarkState.Question:
+                    // markState가 question이면 none이 된다.  -> 셀 이미지 변경된다.
                     markState = CellMarkState.None;
                     cover.sprite = Board[CloseCellType.Close];
                     break;
