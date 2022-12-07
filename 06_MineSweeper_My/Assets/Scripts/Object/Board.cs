@@ -5,10 +5,17 @@ using UnityEngine.InputSystem;
 
 public class Board : MonoBehaviour
 {
+    // 변수 ---------------------------------------------------------------------------------------
+
     /// <summary>
     /// 생성할 셀의 프리팹
     /// </summary>
     public GameObject cellPrefab;
+
+    /// <summary>
+    /// 인풋 액션
+    /// </summary>
+    PlayerInputActions inputActions;
 
     /// <summary>
     /// 보드가 가지는 가로 셀의 길이. (가로 줄의 셀 갯수)
@@ -19,6 +26,11 @@ public class Board : MonoBehaviour
     /// 보드가 가지는 세로 셀의 길이. (세로 줄의 셀 갯수)
     /// </summary>
     private int height = 16;
+
+    /// <summary>
+    /// 보드에 설치될 지뢰의 갯수
+    /// </summary>
+    private int mineCount = 10;
 
     /// <summary>
     /// 셀 한 변의 길이(셀은 정사각형)
@@ -41,6 +53,13 @@ public class Board : MonoBehaviour
     public Sprite[] closeCellImages;
 
     /// <summary>
+    /// 현재 마우스가 올라가 있는 셀
+    /// </summary>
+    Cell currentCell = null;
+
+    // 프로퍼티 ------------------------------------------------------------------------------------
+
+    /// <summary>
     /// OpenCellType으로 이미지를 받아오는 인덱서
     /// </summary>
     /// <param name="type">필요한 이미지의 enum타입</param>
@@ -54,7 +73,21 @@ public class Board : MonoBehaviour
     /// <returns>enum타입에 맞는 이미지</returns>
     public Sprite this[CloseCellType type] => closeCellImages[(int)type];
 
-    PlayerInputActions inputActions;
+    /// <summary>
+    /// 현재 마우스가 올라가 있는 셀을 확인하는 프로퍼티
+    /// </summary>
+    Cell CurrentCell
+    {
+        get => currentCell;
+        set
+        {
+            currentCell?.OnExitCell();  // 셀에서 마우스 나가는 처리
+            currentCell = value;
+            currentCell?.OnEnterCell(); // 셀에 마우스가 들어가는 처리
+        }
+    }
+
+    // 함수 ---------------------------------------------------------------------------------------
 
     private void Awake()
     {
@@ -67,10 +100,12 @@ public class Board : MonoBehaviour
         inputActions.Player.RightClick.performed += OnRightClick;
         inputActions.Player.LeftClick.performed += OnLeftPress;
         inputActions.Player.LeftClick.canceled += OnLeftRelease;
+        inputActions.Player.MouseMove.performed += OnMouseMove;
     }
 
     private void OnDisable()
     {
+        inputActions.Player.MouseMove.performed -= OnMouseMove;
         inputActions.Player.LeftClick.canceled -= OnLeftRelease;
         inputActions.Player.LeftClick.performed -= OnLeftPress;
         inputActions.Player.RightClick.performed -= OnRightClick;
@@ -80,13 +115,14 @@ public class Board : MonoBehaviour
     /// <summary>
     /// 이 보드가 가질 모든 셀을 생성하고 배치하는 함수
     /// </summary>
-    public void Initialize(int newWidth, int newHeight, int mineCount)
+    public void Initialize(int newWidth, int newHeight, int newMineCount)
     {
         // 기존에 존재하던 셀 다 지우기
         ClearCells();
 
         width = newWidth;
         height = newHeight;
+        mineCount = newMineCount;
 
         Vector3 basePos = transform.position;       // 기준 위치 설정(보드의 위치)
 
@@ -112,6 +148,20 @@ public class Board : MonoBehaviour
                 cell.transform.position = basePos + offset + new Vector3(x * Distance, -y * Distance);  // 적절한 위치에 배치
                 cells[cell.ID] = cell;                                      // cells 배열에 저장
             }
+        }
+
+        ResetBoard();
+    }
+
+    /// <summary>
+    /// 보드를 초기 상태로 되돌리고 랜덤으로 지뢰설치
+    /// </summary>
+    public void ResetBoard()
+    {
+        // 모든 셀 초기화
+        foreach (var cell in cells)
+        {
+            cell.ResetCell();
         }
 
         // 만들어진 셀에 지뢰를 mineCount만큼 설치하기
@@ -260,6 +310,10 @@ public class Board : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 마우스 왼쪽 버튼을 눌렀을 때 실행될 함수
+    /// </summary>
+    /// <param name="_"></param>
     private void OnLeftPress(InputAction.CallbackContext _)
     {
         Debug.Log("왼쪽 눌렀다.");
@@ -267,11 +321,16 @@ public class Board : MonoBehaviour
         Vector2Int grid = ScreenToGrid(screenPos);                  // 스크린 좌표를 Grid좌표로 변환
         if (IsValidGrid(grid))                                      // 결과 그리드 좌표가 적합한지 확인 => 적합하지 않으면 보드 밖이라는 의미
         {
+            GameManager.Inst.GameStart();                           // 매번 Play 상태로 변경 시도(Ready 상태일 때만 진행됨)
             Cell target = cells[GridToID(grid.x, grid.y)];          // 해당 셀 가져오기
             target.CellPress();
         }
     }
 
+    /// <summary>
+    /// 마우스 왼쪽 버튼을 땠을 때 실행될 함수
+    /// </summary>
+    /// <param name="_"></param>
     private void OnLeftRelease(InputAction.CallbackContext _)
     {
         Debug.Log("왼쪽 땠다.");
@@ -284,6 +343,10 @@ public class Board : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 마우스 오른쪽 버튼을 클릭했을 때 실행될 함수
+    /// </summary>
+    /// <param name="_"></param>
     private void OnRightClick(InputAction.CallbackContext _)
     {
         Debug.Log("오른쪽 클릭");
@@ -298,6 +361,24 @@ public class Board : MonoBehaviour
         else
         {
             Debug.Log("셀 없음");
+        }
+    }
+
+    /// <summary>
+    /// 마우스가 움직일 때 실행되는 함수
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnMouseMove(InputAction.CallbackContext context)
+    {
+        Vector2 screenPos = context.ReadValue<Vector2>();
+        Vector2Int grid = ScreenToGrid(screenPos);                  // 스크린 좌표를 Grid좌표로 변환
+        if (IsValidGrid(grid))                                      // 결과 그리드 좌표가 적합한지 확인 => 적합하지 않으면 보드 밖이라는 의미
+        {
+            CurrentCell = cells[GridToID(grid.x, grid.y)];          // 해당 셀을 CurrentCell에 기록
+        }
+        else
+        {
+            CurrentCell = null; // CurrentCell 비우기
         }
     }
 }
