@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Test_ImageNumber : TestBase
 {
-    [Range(-99,999)]
+    [Range(-99, 999)]
     public int testNumber = 0;
 
     ImageNumber imageNumber;
@@ -17,7 +17,7 @@ public class Test_ImageNumber : TestBase
 
     private void OnValidate()
     {
-        if(imageNumber != null)
+        if (imageNumber != null)
         {
             imageNumber.Number = testNumber;
         }
@@ -25,18 +25,18 @@ public class Test_ImageNumber : TestBase
 
     protected override void Test1(InputAction.CallbackContext _)
     {
-        GameManager.Inst.TestTimer_Play();
+        //GameManager.Inst.TestTimer_Play();
         GameManager.Inst.TestFlag_Increase();
     }
 
     protected override void Test2(InputAction.CallbackContext _)
     {
-        GameManager.Inst.TestTimer_Stop();
+        //GameManager.Inst.TestTimer_Stop();
         GameManager.Inst.TestFlag_Decrease();
     }
 
     protected override void Test3(InputAction.CallbackContext _)
     {
-        GameManager.Inst.TestTimer_Reset();
+        //GameManager.Inst.TestTimer_Reset();
     }
 }
