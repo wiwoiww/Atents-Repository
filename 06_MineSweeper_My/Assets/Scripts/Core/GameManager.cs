@@ -121,6 +121,18 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("GameOver 상태");
     }
 
+    /// <summary>
+    /// 플레이어의 행동이 끝날 때 실행될 함수
+    /// </summary>
+    public void FinishPlayerAction()
+    {
+        // 클리어 조건을 만족시키는지 확인
+        // Board.FoundMineCount == (boardWidth * boardHeight - Board.OpenCellCount)
+        if (flagCount == 0 && ((Board.OpenCellCount + Board.FoundMineCount) == boardWidth * boardHeight))
+        {
+            GameClear();
+        }
+    }
 
 #if TEST_CODE
     public void TestFlag_Increase()

@@ -58,6 +58,16 @@ public class Board : MonoBehaviour
     /// </summary>
     Cell currentCell = null;
 
+    /// <summary>
+    /// 이 보드에서 열려있는 셀의 숫자
+    /// </summary>
+    private int openCellCount = 0;
+
+    /// <summary>
+    /// 이 보드에서 찾은 지뢰의 숫자
+    /// </summary>
+    private int foundMineCount = 0;
+
     // 델리게이트 ----------------------------------------------------------------------------------
     public Action onBoardPress;
     public Action onBoardRelease;
@@ -91,6 +101,16 @@ public class Board : MonoBehaviour
             currentCell?.OnEnterCell(); // 셀에 마우스가 들어가는 처리
         }
     }
+
+    /// <summary>
+    /// 열린 셀의 갯수를 확인만 가능한 프로퍼티
+    /// </summary>
+    public int OpenCellCount => openCellCount;
+
+    /// <summary>
+    /// 찾은 지뢰의 갯수를 확인만 가능한 프로퍼티
+    /// </summary>
+    public int FoundMineCount => foundMineCount;
 
     // 함수 ---------------------------------------------------------------------------------------
 
@@ -148,7 +168,13 @@ public class Board : MonoBehaviour
                 cell.ID = y * width + x;                                    // ID 설정(ID를 통해 위치도 확인 가능)
                 cell.Board = this;                                          // 보드 설정
                 cell.onFlagUse += gameManager.DecreaseFlagCount;
+                cell.onFlagUse += gameManager.FinishPlayerAction;
                 cell.onFlagReturn += gameManager.IncreaseFlagCount;
+                cell.onFlagReturn += gameManager.FinishPlayerAction;        // 존재가 애매함(실질적인 의미없음)
+                cell.onOpen += () => openCellCount++;
+                cell.onOpen += gameManager.FinishPlayerAction;
+                cell.onMineFound += () => foundMineCount++;
+                cell.onMineFoundCancel += () => foundMineCount--;
                 cellObj.name = $"Cell_{cell.ID}_({x},{y})";                 // 오브젝트 이름 지정
                 cell.transform.position = basePos + offset + new Vector3(x * Distance, -y * Distance);  // 적절한 위치에 배치
                 cells[cell.ID] = cell;                                      // cells 배열에 저장
@@ -182,6 +208,9 @@ public class Board : MonoBehaviour
         {
             cells[ids[i]].SetMine();
         }
+
+        openCellCount = 0;  // 모든 셀이 다 닫혀있음.
+        foundMineCount = 0; // 찾은 지뢰 갯수 초기화
     }
 
     /// <summary>
@@ -349,9 +378,8 @@ public class Board : MonoBehaviour
         {
             Cell target = cells[GridToID(grid.x, grid.y)];          // 해당 셀 가져오기
             target.CellRelease();
-
-            onBoardRelease?.Invoke();
         }
+        onBoardRelease?.Invoke();
     }
 
     /// <summary>
