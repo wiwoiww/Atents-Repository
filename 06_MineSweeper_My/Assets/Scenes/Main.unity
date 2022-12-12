@@ -1195,6 +1195,7 @@ GameObject:
   - component: {fileID: 635467131}
   - component: {fileID: 635467130}
   - component: {fileID: 635467129}
+  - component: {fileID: 635467132}
   m_Layer: 5
   m_Name: TimeRankTab
   m_TagString: Untagged
@@ -1306,6 +1307,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635467127}
   m_CullTransparentMesh: 1
+--- !u!114 &635467132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635467127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfaf9831697c434b908a22f96319988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &659415151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,6 +2363,7 @@ GameObject:
   - component: {fileID: 1416848707}
   - component: {fileID: 1416848706}
   - component: {fileID: 1416848705}
+  - component: {fileID: 1416848708}
   m_Layer: 5
   m_Name: ActionRankTab
   m_TagString: Untagged
@@ -2461,6 +2475,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416848703}
   m_CullTransparentMesh: 1
+--- !u!114 &1416848708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416848703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfaf9831697c434b908a22f96319988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1425119162
 GameObject:
   m_ObjectHideFlags: 0
