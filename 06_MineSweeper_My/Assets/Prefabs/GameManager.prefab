@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7781589808365308470}
   - component: {fileID: 107019400970905382}
+  - component: {fileID: -7119300376856615127}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -47,3 +48,16 @@ MonoBehaviour:
   mineCount: 10
   boardWidth: 8
   boardHeight: 8
+--- !u!114 &-7119300376856615127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5498574412698717954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f4ca2c5b29c8dd4c9509c368d9a527b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rankCount: 5
