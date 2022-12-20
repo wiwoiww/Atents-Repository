@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_EmissionObject
-  m_Shader: {fileID: -6465566751694194690, guid: af0863c947f7830418f9c29ab4991bcc, type: 3}
+  m_Name: Shader Graphs_PhaseReverse
+  m_Shader: {fileID: -6465566751694194690, guid: de0e4a05d18b790428ba2f3dfabfca8d, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,16 +20,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Emession:
-        m_Texture: {fileID: 2800000, guid: db95020888e5f6744a541fb862d16957, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmessionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
+        m_Texture: {fileID: 2800000, guid: b5a9a306cae42cd41a5beb6b5fd0aed8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -45,7 +37,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Split: 1
+    - _Thickness: 0.1
     m_Colors:
-    - _Color: {r: 4, g: 1.0352942, b: 0, a: 0}
+    - _Color: {r: 0, g: 2.807843, b: 4, a: 0}
   m_BuildTextureStacks: []
