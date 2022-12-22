@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 6160513}
   - component: {fileID: 6160512}
   m_Layer: 0
-  m_Name: Slime
+  m_Name: OutLineSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 29674428}
   - component: {fileID: 29674427}
   m_Layer: 0
-  m_Name: Slime (3)
+  m_Name: DissolveSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 697539819}
   - component: {fileID: 697539818}
   m_Layer: 0
-  m_Name: Slime (2)
+  m_Name: PhaseReverseSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,7 +734,7 @@ Tilemap:
       - {fileID: 1028183023, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 515240329, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 1959578558, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
-      m_AnimationSpeed: 8.885706
+      m_AnimationSpeed: 9.814201
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 1, y: 1, z: 0}
@@ -744,7 +744,7 @@ Tilemap:
       - {fileID: -2004709627, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 969657483, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 902760647, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
-      m_AnimationSpeed: 7.453953
+      m_AnimationSpeed: 5.995446
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 7, y: 1, z: 0}
@@ -754,7 +754,7 @@ Tilemap:
       - {fileID: -1293940057, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 1190473526, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
       - {fileID: 2100109543, guid: ce9a449a95320994188caa9d2dcfde14, type: 3}
-      m_AnimationSpeed: 11.662246
+      m_AnimationSpeed: 8.913006
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   m_TileAssetArray:
@@ -893,7 +893,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   phaseSlime: {fileID: 1892933026}
   phaseReverseSlime: {fileID: 697539817}
+  dessolveSlime: {fileID: 29674426}
+  allSlime: {fileID: 1297998625335168307}
   phaseDuration: 2
+  dessolveDuration: 2
+  allDuration: 1.5
 --- !u!4 &1869701838
 Transform:
   m_ObjectHideFlags: 0
@@ -921,7 +925,7 @@ GameObject:
   - component: {fileID: 1892933028}
   - component: {fileID: 1892933027}
   m_Layer: 0
-  m_Name: Slime (1)
+  m_Name: PhaseSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1014,3 +1018,65 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1297998625335168306
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829361, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297998625311829362, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+      propertyPath: m_Name
+      value: AllSlime
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+--- !u!1 &1297998625335168307 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1297998625311829362, guid: d97b0c5a2a1b22b4eba5994a625af4e0, type: 3}
+  m_PrefabInstance: {fileID: 1297998625335168306}
+  m_PrefabAsset: {fileID: 0}
