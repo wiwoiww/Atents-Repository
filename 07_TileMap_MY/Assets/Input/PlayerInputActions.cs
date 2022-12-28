@@ -163,6 +163,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbb2c92e-a4ee-485c-8641-61e1f1a8a9ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ed2ab47-46c0-46b5-ba1e-66a569d7d003"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,6 +238,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Test5"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b161f41-fdf3-476b-a701-65e721ba7bfe"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyBoardMouse"",
+                    ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2290803-0c93-4b40-bec5-224314d1ecef"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyBoardMouse"",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -254,6 +294,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Test_Test3 = m_Test.FindAction("Test3", throwIfNotFound: true);
         m_Test_Test4 = m_Test.FindAction("Test4", throwIfNotFound: true);
         m_Test_Test5 = m_Test.FindAction("Test5", throwIfNotFound: true);
+        m_Test_LeftClick = m_Test.FindAction("LeftClick", throwIfNotFound: true);
+        m_Test_RightClick = m_Test.FindAction("RightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -359,6 +401,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Test_Test3;
     private readonly InputAction m_Test_Test4;
     private readonly InputAction m_Test_Test5;
+    private readonly InputAction m_Test_LeftClick;
+    private readonly InputAction m_Test_RightClick;
     public struct TestActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -368,6 +412,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Test3 => m_Wrapper.m_Test_Test3;
         public InputAction @Test4 => m_Wrapper.m_Test_Test4;
         public InputAction @Test5 => m_Wrapper.m_Test_Test5;
+        public InputAction @LeftClick => m_Wrapper.m_Test_LeftClick;
+        public InputAction @RightClick => m_Wrapper.m_Test_RightClick;
         public InputActionMap Get() { return m_Wrapper.m_Test; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -392,6 +438,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Test5.started -= m_Wrapper.m_TestActionsCallbackInterface.OnTest5;
                 @Test5.performed -= m_Wrapper.m_TestActionsCallbackInterface.OnTest5;
                 @Test5.canceled -= m_Wrapper.m_TestActionsCallbackInterface.OnTest5;
+                @LeftClick.started -= m_Wrapper.m_TestActionsCallbackInterface.OnLeftClick;
+                @LeftClick.performed -= m_Wrapper.m_TestActionsCallbackInterface.OnLeftClick;
+                @LeftClick.canceled -= m_Wrapper.m_TestActionsCallbackInterface.OnLeftClick;
+                @RightClick.started -= m_Wrapper.m_TestActionsCallbackInterface.OnRightClick;
+                @RightClick.performed -= m_Wrapper.m_TestActionsCallbackInterface.OnRightClick;
+                @RightClick.canceled -= m_Wrapper.m_TestActionsCallbackInterface.OnRightClick;
             }
             m_Wrapper.m_TestActionsCallbackInterface = instance;
             if (instance != null)
@@ -411,6 +463,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Test5.started += instance.OnTest5;
                 @Test5.performed += instance.OnTest5;
                 @Test5.canceled += instance.OnTest5;
+                @LeftClick.started += instance.OnLeftClick;
+                @LeftClick.performed += instance.OnLeftClick;
+                @LeftClick.canceled += instance.OnLeftClick;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
             }
         }
     }
@@ -436,5 +494,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnTest3(InputAction.CallbackContext context);
         void OnTest4(InputAction.CallbackContext context);
         void OnTest5(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
     }
 }
