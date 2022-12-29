@@ -5,6 +5,45 @@ using UnityEngine;
 
 public class Slime : MonoBehaviour
 {
+    // 일반 변수들 ---------------------------------------------------------------------------------
+
+    bool isActivate = false;
+
+    /// <summary>
+    /// 이 슬라임의 그리드 좌표를 확인하기 위한 프로퍼티
+    /// </summary>
+    Vector2Int Position => map.WorldToGrid(transform.position);
+
+    // 길찾기 관련 변수들 --------------------------------------------------------------------------
+    public Test_TilemapAStarSlime test; // 이 후에 반드시 삭제할 코드.
+
+    /// <summary>
+    /// 슬라임의 이동 속도
+    /// </summary>
+    public float moveSpeed = 2.0f;
+
+    /// <summary>
+    /// 경로 표시 여부. true면 보이고 false면 안보인다. (테스트 편의를 위한 것)
+    /// </summary>
+    public bool isShowPath = true;
+
+    /// <summary>
+    /// 길찾기를 수행할 그리드맵
+    /// </summary>
+    GridMap map;
+
+    /// <summary>
+    /// 슬라임이 이동해야 할 경로
+    /// </summary>
+    List<Vector2Int> path;
+
+    /// <summary>
+    /// 이 슬라임의 경로를 그리기 위한 변수
+    /// </summary>
+    PathLineDraw pathLine;
+
+
+    // 쉐이더 관련 변수들 --------------------------------------------------------------------------
     /// <summary>
     /// 페이즈가 진행되는 시간(스폰 후 딜레이)
     /// </summary>
@@ -25,6 +64,7 @@ public class Slime : MonoBehaviour
     /// </summary>
     Material mainMaterial;
 
+    // 델리게이트들 --------------------------------------------------------------------------------
     /// <summary>
     /// 페이즈가 끝났을 때 실행될 델리게이트
     /// </summary>
@@ -40,10 +80,23 @@ public class Slime : MonoBehaviour
     /// </summary>
     public Action onDisable;
 
+    /// <summary>
+    /// 슬라임이 목적지에 도착했을 때 실행되는 델리게이트
+    /// </summary>
+    public Action onGoalArrive;
+
+    // 함수들 --------------------------------------------------------------------------------------
     private void Awake()
     {
         Renderer renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;       // 머티리얼 미리 찾아 놓기
+
+        pathLine = GetComponentInChildren<PathLineDraw>();
+
+        path = new List<Vector2Int>();
+
+        onDie += () => isActivate = false;              // 죽으면 비활성화
+        onPhaseEnd += () => isActivate = true;          // 페이즈가 끝나면 활성화
     }
 
     private void OnEnable()
@@ -57,6 +110,50 @@ public class Slime : MonoBehaviour
     private void OnDisable()
     {
         onDisable?.Invoke();            // 비활성화 되었다고 알림(레디 큐에 다시 돌려주라는 신호를 보내는 것이 주 용도)
+    }
+
+    private void Start()
+    {
+        map = test.Map;                             // 맵 받아오기(수정되어야 할 코드)
+        onGoalArrive += () =>
+        {
+            //Vector2Int pos = Position;              // 현재 내 위치를 기록
+            //while( pos == Position )                // pos가 내 위치이면 계속 반복 => 내 위치와 다른 위치가 나올 때까지 반복
+            //{
+            //    pos = map.GetRandomMovablePosition();   // 맵에서 이동 가능한 위치를 랜덤으로 가져오기
+            //}
+            Vector2Int pos;
+            do
+            {
+                pos = map.GetRandomMovablePosition();
+            } while (pos == Position);
+
+            SetDestination(pos);                    // 랜덤으로 가져온 위치로 이동하기
+        };
+        pathLine.transform.SetParent(pathLine.transform.parent.parent);    // 부모를 슬라임의 부모로 설정
+        pathLine.gameObject.SetActive(isShowPath);  // isShowPath에 따라 경로 활성화/비활성화 설정
+    }
+
+    private void Update()
+    {
+        if (isActivate)     // 활성화 상태일 때만 움직이기
+        {
+            if (path.Count > 0)                              // path에 위치가 기록되어있으면 진행
+            {
+                Vector3 dest = map.GridToWorld(path[0]);    // path의 첫번째 위치로 항상 이동            
+                Vector3 dir = dest - transform.position;    // 방향 계산
+                transform.Translate(Time.deltaTime * moveSpeed * dir.normalized);   // 계산한 방향으로 1초에 moveSpeed만큼 이동
+
+                if (dir.sqrMagnitude < 0.001f)              // 목적지(path의 첫번째 위치)에 도착했는지 확인
+                {
+                    path.RemoveAt(0);                       // 목적지에 도착했으면 그 노드를 제거
+                }
+            }
+            else
+            {
+                onGoalArrive?.Invoke();
+            }
+        }
     }
 
     /// <summary>
@@ -134,6 +231,16 @@ public class Slime : MonoBehaviour
         {
             mainMaterial.SetFloat("_Outline_Thickness", 0.0f);              // 아웃라인의 두께를 제거해서 안보이게 만들기
         }
+    }
+
+    /// <summary>
+    /// 슬라임이 이동할 목적지 설정.
+    /// </summary>
+    /// <param name="goal">목적지의 그리드 좌표</param>
+    public void SetDestination(Vector2Int goal)
+    {
+        path = AStar.PathFind(map, Position, goal); // 경로 계산해서 받아옴
+        pathLine.DrawPath(map, path);               // 경로 그리기
     }
 }
 
