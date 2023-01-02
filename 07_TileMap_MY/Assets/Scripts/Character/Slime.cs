@@ -15,7 +15,6 @@ public class Slime : MonoBehaviour
     Vector2Int Position => map.WorldToGrid(transform.position);
 
     // 길찾기 관련 변수들 --------------------------------------------------------------------------
-    public Test_TilemapAStarSlime test; // 이 후에 반드시 삭제할 코드.
 
     /// <summary>
     /// 슬라임의 이동 속도
@@ -94,13 +93,15 @@ public class Slime : MonoBehaviour
         pathLine = GetComponentInChildren<PathLineDraw>();
 
         path = new List<Vector2Int>();
-
-        onDie += () => isActivate = false;              // 죽으면 비활성화
-        onPhaseEnd += () => isActivate = true;          // 페이즈가 끝나면 활성화
     }
 
     private void OnEnable()
     {
+        onDie = () => isActivate = false;               // 죽으면 비활성화        
+        onPhaseEnd = () => isActivate = true;           // 페이즈가 끝나면 활성화
+
+        pathLine.gameObject.SetActive(isShowPath);      // isShowPath에 따라 경로 활성화/비활성화 설정
+
         // 쉐이더 프로퍼티 값들 초기화
         ShowOutline(false);                             // 아웃라인 끄기
         mainMaterial.SetFloat("_Dissolve_Fade", 1.0f);  // 디졸브 진행 안된 상태로 만들기
@@ -114,7 +115,6 @@ public class Slime : MonoBehaviour
 
     private void Start()
     {
-        map = test.Map;                             // 맵 받아오기(수정되어야 할 코드)
         onGoalArrive += () =>
         {
             //Vector2Int pos = Position;              // 현재 내 위치를 기록
@@ -130,8 +130,7 @@ public class Slime : MonoBehaviour
 
             SetDestination(pos);                    // 랜덤으로 가져온 위치로 이동하기
         };
-        pathLine.transform.SetParent(pathLine.transform.parent.parent);    // 부모를 슬라임의 부모로 설정
-        pathLine.gameObject.SetActive(isShowPath);  // isShowPath에 따라 경로 활성화/비활성화 설정
+        pathLine.transform.SetParent(pathLine.transform.parent.parent);    // 부모를 슬라임의 부모로 설정        
     }
 
     private void Update()
@@ -157,10 +156,25 @@ public class Slime : MonoBehaviour
     }
 
     /// <summary>
+    /// 슬라임 초기화용 함수. 슬라임이 맵에 나타날 때 실행되어야 함.
+    /// </summary>
+    /// <param name="gridMap">슬라임이 존재하는 맵</param>
+    /// <param name="pos">슬라임의 나타날 위치</param>
+    public void Initialize(GridMap gridMap, Vector3 pos)
+    {
+        map = gridMap;
+        transform.position = pos;
+    }
+
+    /// <summary>
     /// 이 슬라임을 죽일 때 실행할 함수
     /// </summary>
     public void Die()
     {
+        // 움직이던 경로 삭제
+        path.Clear();           // 재활용 되었을 때 이전 경로를 찾아가던 문제를 수정하기 위해 추가
+        pathLine.ClearPath();   // 재활용 된 직후에 이전 경로가 보이던 것을 수정하기 위해 추가
+
         // 디졸브 실행
         StartCoroutine(StartDissolve());
 
@@ -213,6 +227,8 @@ public class Slime : MonoBehaviour
 
             yield return null;                      // 다음 프레임까지 대기
         }
+
+        transform.SetParent(SlimeFactory.Inst.gameObject.transform);  // 슬라임을 다시 팩토리의 자식으로
 
         this.gameObject.SetActive(false);           // 게임 오브젝트 비활성화(오브젝트 풀로 되돌리기)
     }
