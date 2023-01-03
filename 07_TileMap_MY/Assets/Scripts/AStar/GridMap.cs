@@ -23,7 +23,7 @@ public class GridMap
     int height;
 
     /// <summary>
-    /// 원점의 그리즈 좌표(맵 왼쪽 아래 끝 부분의 그리드 좌표)
+    /// 원점의 그리드 좌표(맵 왼쪽 아래 끝 부분의 그리드 좌표)
     /// </summary>
     Vector2Int origin;
 
@@ -136,11 +136,21 @@ public class GridMap
     /// <summary>
     /// 그리드 맵에서 특정 그리드 좌표에 존재하는 노드 찾는 함수
     /// </summary>
-    /// <param name="pos">타일맵 기준으로 한 좌표</param>
+    /// <param name="gridPos">타일맵 기준으로 한 좌표</param>
     /// <returns>찾은 노드(없으면 null)</returns>
-    public Node GetNode(Vector2Int pos)
+    public Node GetNode(Vector2Int gridPos)
     {
-        return GetNode(pos.x, pos.y);
+        return GetNode(gridPos.x, gridPos.y);
+    }
+
+    /// <summary>
+    /// 월드 좌표를 기준으로 노드를 찾는 함수
+    /// </summary>
+    /// <param name="worldPos">찾을 노드가 있을 월드 좌표</param>
+    /// <returns>찾은 노드(없으면 null)</returns>
+    public Node GetNode(Vector3 worldPos)
+    {
+        return GetNode(WorldToGrid(worldPos));
     }
 
     /// <summary>
@@ -195,6 +205,28 @@ public class GridMap
     public bool IsWall(Vector2Int pos)
     {
         return IsWall(pos.x, pos.y);
+    }
+
+    /// <summary>
+    /// 해당 위치가 몬스터인지 아닌지 확인하는 함수
+    /// </summary>
+    /// <param name="x">확인할 위치의 X</param>
+    /// <param name="y">확인할 위치의 Y</param>
+    /// <returns>몬스터면 true, 아니면 false</returns>
+    public bool IsMonster(int x, int y)
+    {
+        Node node = GetNode(x, y);
+        return node != null && node.gridType == Node.GridType.Monster;
+    }
+
+    /// <summary>
+    /// 해당 위치가 몬스터인지 아닌지 확인하는 함수
+    /// </summary>
+    /// <param name="pos">확인할 위치의 좌표</param>
+    /// <returns>몬스터면 true, 아니면 false</returns>
+    public bool IsMonster(Vector2Int pos)
+    {
+        return IsMonster(pos.x, pos.y);
     }
 
     /// <summary>
