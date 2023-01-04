@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Test_LoadSceneASync.unity
     guid: 6d20260a61f1a724c8cfa32c8bce71c8
   - enabled: 1
-    path: Assets/Scenes/Test_AsyncSample1.unity
+    path: Assets/Scenes/Test_Seemless_00.unity
     guid: 34a991eae3feecf47b0a8fcb786d26c8
   m_configObjects: {}
