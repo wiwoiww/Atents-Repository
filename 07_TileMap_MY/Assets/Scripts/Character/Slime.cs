@@ -9,6 +9,8 @@ public class Slime : MonoBehaviour
 
     bool isActivate = false;
 
+    //Collider2D bodyCollider;
+
     /// <summary>
     /// 이 슬라임의 그리드 좌표를 확인하기 위한 프로퍼티
     /// </summary>
@@ -64,6 +66,7 @@ public class Slime : MonoBehaviour
     /// 이 슬라임의 경로를 그리기 위한 변수
     /// </summary>
     PathLineDraw pathLine;
+    public PathLineDraw PathLine => pathLine;
 
     /// <summary>
     /// 다른 슬라임에 의해 경로가 막혀서 기다린 시간
@@ -129,7 +132,10 @@ public class Slime : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainMaterial = spriteRenderer.material;             // 머티리얼 미리 찾아 놓기
 
+        //bodyCollider = GetComponent<Collider2D>();
+
         pathLine = GetComponentInChildren<PathLineDraw>();
+
 
         path = new List<Vector2Int>();
     }
@@ -139,6 +145,7 @@ public class Slime : MonoBehaviour
         onDie = () => isActivate = false;               // 죽으면 비활성화        
         onPhaseEnd = () => isActivate = true;           // 페이즈가 끝나면 활성화
 
+        //bodyCollider.enabled = true;                    // 컬라이더 켜기
         pathLine.gameObject.SetActive(isShowPath);      // isShowPath에 따라 경로 활성화/비활성화 설정
 
         // 쉐이더 프로퍼티 값들 초기화
@@ -149,6 +156,7 @@ public class Slime : MonoBehaviour
 
     private void OnDisable()
     {
+        //Debug.Log($"Slime disable - {gameObject.name}");
         onDisable?.Invoke();            // 비활성화 되었다고 알림(레디 큐에 다시 돌려주라는 신호를 보내는 것이 주 용도)
     }
 
@@ -169,7 +177,6 @@ public class Slime : MonoBehaviour
 
             SetDestination(pos);                    // 랜덤으로 가져온 위치로 이동하기
         };
-        pathLine.transform.SetParent(pathLine.transform.parent.parent);    // 부모를 슬라임의 부모로 설정        
     }
 
     private void Update()
@@ -241,15 +248,31 @@ public class Slime : MonoBehaviour
     /// </summary>
     public void Die()
     {
+        if (isActivate)
+        {
+            //bodyCollider.enabled = false;           // 더 이상 충돌 안하도록 끄기
+
+            // 슬라임을 제거하기 위한 처리들 수행
+            ClearData();
+
+            // 디졸브 실행
+            StartCoroutine(StartDissolve());
+
+            // 죽었다고 신호보내기
+            onDie?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// 슬라임이 없어져야 하는 상황일 때 해야하는 처리를 수행하는 함수
+    /// </summary>
+    public void ClearData()
+    {
+        transform.SetParent(SlimeFactory.Inst.gameObject.transform);  // 슬라임을 다시 팩토리의 자식으로
+
         // 움직이던 경로 삭제
         path.Clear();           // 재활용 되었을 때 이전 경로를 찾아가던 문제를 수정하기 위해 추가
         pathLine.ClearPath();   // 재활용 된 직후에 이전 경로가 보이던 것을 수정하기 위해 추가
-
-        // 디졸브 실행
-        StartCoroutine(StartDissolve());
-
-        // 죽었다고 신호보내기
-        onDie?.Invoke();
     }
 
     /// <summary>
@@ -298,7 +321,7 @@ public class Slime : MonoBehaviour
             yield return null;                      // 다음 프레임까지 대기
         }
 
-        transform.SetParent(SlimeFactory.Inst.gameObject.transform);  // 슬라임을 다시 팩토리의 자식으로
+        CurrentNode.gridType = Node.GridType.Plain; // 슬라임이 죽었으니 다시 지나갈 수 있게 만들기
 
         this.gameObject.SetActive(false);           // 게임 오브젝트 비활성화(오브젝트 풀로 되돌리기)
     }
@@ -329,4 +352,5 @@ public class Slime : MonoBehaviour
         pathLine.DrawPath(map, path);               // 경로 그리기
     }
 }
+
 
