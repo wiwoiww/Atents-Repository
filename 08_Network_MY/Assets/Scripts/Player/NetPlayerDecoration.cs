@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -22,12 +23,24 @@ public class NetPlayerDecoration : NetworkBehaviour
     /// </summary>
     TextMeshPro namePlate;
 
+    /// <summary>
+    /// 플레이어의 랜더러 컴포넌트
+    /// </summary>
+    Renderer playerRenderer;
+
     private void Awake()
     {
         namePlate = GetComponentInChildren<TextMeshPro>();
+        playerRenderer = GetComponentInChildren<Renderer>();
 
         // 이름이 변경될 때 실행되는 델리게이트에 함수 등록
         playerName.OnValueChanged += OnNameChange;
+        color.OnValueChanged += OnColorChange;
+    }
+
+    private void OnColorChange(Color previousValue, Color newValue)
+    {
+        playerRenderer.material.color = newValue;   // 새 color 값으로 머티리얼 컬러 설정
     }
 
     /// <summary>
@@ -57,8 +70,8 @@ public class NetPlayerDecoration : NetworkBehaviour
             color.Value = Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
         }
 
-        Renderer renderer = GetComponentInChildren<Renderer>(); // 랜더러 가져와서
-        renderer.material.color = color.Value;                  // color 값으로 머티리얼 컬러 설정
+        playerRenderer.material.color = color.Value;        // 스폰할 때 저장되어 있던 색상으로 설정
+        namePlate.text = playerName.Value.ToString();       // 스폰할 때 저장되어 있던 이름으로 설정
     }
 
     /// <summary>
@@ -69,5 +82,11 @@ public class NetPlayerDecoration : NetworkBehaviour
     public void SetPlayerNameServerRpc(string text)
     {
         playerName.Value = text;
+    }
+
+    [ServerRpc]
+    public void SetPlayerColorServerRpc(Color newColor)
+    {
+        color.Value = newColor;
     }
 }
