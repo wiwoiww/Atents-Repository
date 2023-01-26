@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +16,7 @@ using UnityEngine.SceneManagement;
 
 // Singleton 클래스는 제네릭 타입의 클래스이다.(만들때 타입(T)을 하나 받아야 한다.)
 // where 이하에 있는 조건을 만족시켜야 한다.(T는 컴포넌트를 상속받은 타입이어야 한다.)
-public class Singleton<T> : MonoBehaviour where T : Component
+public class NetSingleton<T> : NetworkBehaviour where T : Component
 {
     /// <summary>
     /// 초기화를 한번만 진행하기 위한 플래그
