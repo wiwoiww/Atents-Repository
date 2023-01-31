@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 using System;
-using Unity.Collections.LowLevel.Unsafe;
 
 public class NetPlayer : NetworkBehaviour
 {
@@ -21,6 +20,13 @@ public class NetPlayer : NetworkBehaviour
     public GameObject ballPrefab;
     public GameObject bulletPrefab;
     Transform fireTransform;
+
+    public float attack01_Interval = 3.0f;   // 총알 공격 전체 쿨타임
+    public float attack02_Interval = 0.5f;   // 공 공격 전체 쿨타임
+    float attack01_Cooltime = 0.0f;
+    float attack02_Cooltime = 0.0f;
+    public Action<float> onAttack01_CoolTimeChange;
+    public Action<float> onAttack02_CoolTimeChange;
 
     // NetworkVariable
     // Netcode for GameObjects에서 네트웨크를 통해 데이터를 공유하기 위해 사용하는 데이터 타입.
@@ -119,6 +125,12 @@ public class NetPlayer : NetworkBehaviour
 
     private void Update()
     {
+        attack01_Cooltime -= Time.deltaTime;
+        attack02_Cooltime -= Time.deltaTime;
+
+        onAttack01_CoolTimeChange?.Invoke(attack01_Cooltime / attack01_Interval);
+        onAttack02_CoolTimeChange?.Invoke(attack02_Cooltime / attack02_Interval);
+
         ClientMoveAndRotate();
     }
 
@@ -127,7 +139,16 @@ public class NetPlayer : NetworkBehaviour
         if (IsOwner)    // 내 NetPlayer가 스폰이 되었을 때만 
         {
             GameManager.Inst.VCamera.Follow = transform.GetChild(0);    // 카메라가 이 NetPlayer를 따라다니게 만들기            
+            transform.position = GameManager.Inst.GetRandomSpawnPosition();
+            transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360.0f), 0);
         }
+    }
+
+    public void OnDie()
+    {
+        // 위치 리셋
+        transform.position = GameManager.Inst.GetRandomSpawnPosition();
+        transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360.0f), 0);
     }
 
     private void ClientMoveAndRotate()
@@ -160,18 +181,12 @@ public class NetPlayer : NetworkBehaviour
 
     private void OnAttack1(InputAction.CallbackContext _)
     {
-        if (IsOwner)
-        {
-            SpawnBulletServerRpc();
-        }
+        Attack01();
     }
 
     private void OnAttack2(InputAction.CallbackContext _)
     {
-        if (IsOwner)
-        {
-            SpawnBallServerRpc();
-        }
+        Attack02();
     }
 
     [ServerRpc]
@@ -275,5 +290,25 @@ public class NetPlayer : NetworkBehaviour
     {
         // 값 변경하기
         networkEffectState.Value = isOn;
+    }
+
+    public void Attack01()
+    {
+        if (attack01_Cooltime < 0.0f && IsOwner)
+        {
+            //Debug.Log("Attack01");
+            SpawnBulletServerRpc();
+            attack01_Cooltime = attack01_Interval;
+        }
+    }
+
+    public void Attack02()
+    {
+        if (attack02_Cooltime < 0.0f && IsOwner)
+        {
+            //Debug.Log("Attack02");
+            SpawnBallServerRpc();
+            attack02_Cooltime = attack02_Interval;
+        }
     }
 }

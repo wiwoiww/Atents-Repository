@@ -20,6 +20,8 @@ public class GameManager : NetSingleton<GameManager>
 
     VirtualPad virtualPad;
 
+    VirtualButton[] virtualButtons;
+
     /// <summary>
     /// 이 게임에 접속한 플레이어의 숫자
     /// </summary>
@@ -100,6 +102,12 @@ public class GameManager : NetSingleton<GameManager>
 
         virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
         virtualPad = FindObjectOfType<VirtualPad>();
+
+        virtualButtons = new VirtualButton[2];
+        virtualButtons[(int)VirtualButton.AttackType.Bullet]
+            = GameObject.Find("VirtualButton_Bullet").GetComponent<VirtualButton>();
+        virtualButtons[(int)VirtualButton.AttackType.Ball]
+            = GameObject.Find("VirtualButton_Ball").GetComponent<VirtualButton>();
     }
 
     private void OnClientConnect(ulong id)
@@ -111,6 +119,10 @@ public class GameManager : NetSingleton<GameManager>
         {
             player = netObj.GetComponent<NetPlayer>();      // 게임메니저에 기록해 놓기
             virtualPad.onMoveInput = player.SetInputDir;    // 새로 접속한 플레이어를 가상패드에 연결(이전 플레이어를 대체)
+            virtualButtons[(int)VirtualButton.AttackType.Bullet].onClick = player.Attack01;
+            virtualButtons[(int)VirtualButton.AttackType.Ball].onClick = player.Attack02;
+            player.onAttack01_CoolTimeChange += virtualButtons[(int)VirtualButton.AttackType.Bullet].RefreshCooltime;
+            player.onAttack02_CoolTimeChange += virtualButtons[(int)VirtualButton.AttackType.Ball].RefreshCooltime;
 
             // 내 게임 오브젝트 이름 설정하기
             TMP_InputField inputField = FindObjectOfType<TMP_InputField>();
@@ -147,5 +159,16 @@ public class GameManager : NetSingleton<GameManager>
     public void SetPlayerNameServerRpc(string name)
     {
         connectName.Value = name;
+    }
+
+    public Vector3 GetRandomSpawnPosition()
+    {
+        Vector3 result = new Vector3(UnityEngine.Random.Range(-11.0f, 20.0f), 0, UnityEngine.Random.Range(-1.0f, 28.0f));
+        Vector3 origin = result + Vector3.up * 100;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 150.0f, LayerMask.GetMask("Enviroment")))
+        {
+            result = hit.point;
+        }
+        return result;
     }
 }

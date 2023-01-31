@@ -113,17 +113,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bd926fcd-0912-409e-b3fa-48e20cff9666"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KMT"",
-                    ""action"": ""Attack1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""43e9023c-f429-408a-93cd-988b3a2a9a25"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -136,7 +125,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5b18e5f8-8d96-42b6-9c8b-1135af1dfe93"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KMT"",
