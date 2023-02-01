@@ -55,6 +55,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TestClick",
+                    "type": "Button",
+                    "id": "00e50f44-5dcd-4036-9a42-aaaf5b704d6f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -110,6 +119,17 @@
                     "processors": "",
                     "groups": "KMT",
                     "action": "Test5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5afd5992-72be-43c8-b64e-a7bfece70ffb",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KMT",
+                    "action": "TestClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
